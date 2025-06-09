@@ -5,6 +5,9 @@ import { PrismaClient, Role } from "@prisma/client";
 
 const crypto = require('crypto');
 
+function hashpswd(password: string) {
+  return crypto.createHash('sha256').update(password).digest('hex');
+}
 
 const prisma = new PrismaClient()
 
@@ -17,22 +20,13 @@ const app = new Elysia()
       id: t.Numeric(),
     }),
   })
-  .post('/test', ({ body }) => body, {
-    body: t.Object({
-      username: t.String(),
-      password: t.String(),
-      role: t.Optional(t.Enum({
-        USER: 'USER',
-        ADMIN: 'ADMIN'
-      })),
-    }),
-  })
   
+  //create user directly
   .group('/user', (app) => 
     app
       .post('/add', async ({ body }) => {
         const { username, password, role } = body;
-        const hashed = crypto.createHash('sha256').update(password).digest('hex');
+        const hashed = hashpswd(password);
         const user = await prisma.user.create({
           data: {
             username,
@@ -55,6 +49,27 @@ const app = new Elysia()
             ADMIN: 'ADMIN'
           })),
         }),
+      })
+      .post('/remove', async ({ body }) => {
+        const { username, password } = body;
+        const hashed = hashpswd(password);
+        const deluser = await prisma.user.delete({
+          where: {
+            username: username,
+            password: hashed
+          }
+        });
+
+        return {
+          id: deluser.id,
+        };
+
+      }, {
+        body: t.Object({
+          username: t.String(),
+          password: t.String()
+        })
+
       })
   )
   .listen(3000);
