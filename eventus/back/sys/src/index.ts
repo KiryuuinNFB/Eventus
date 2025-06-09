@@ -1,7 +1,12 @@
 import swagger from "@elysiajs/swagger";
 import { logger } from "@tqman/nice-logger";
 import { Elysia, t } from "elysia";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
+
+const crypto = require('crypto');
+
+
+const prisma = new PrismaClient()
 
 const app = new Elysia()
   .use(swagger())
@@ -12,9 +17,46 @@ const app = new Elysia()
       id: t.Numeric(),
     }),
   })
-  .post('/test', ({ body }) =>  {
-    return body
+  .post('/test', ({ body }) => body, {
+    body: t.Object({
+      username: t.String(),
+      password: t.String(),
+      role: t.Optional(t.Enum({
+        USER: 'USER',
+        ADMIN: 'ADMIN'
+      })),
+    }),
   })
+  
+  .group('/user', (app) => 
+    app
+      .post('/add', async ({ body }) => {
+        const { username, password, role } = body;
+        const hashed = crypto.createHash('sha256').update(password).digest('hex');
+        const user = await prisma.user.create({
+          data: {
+            username,
+            password: hashed,
+            role: role ?? 'USER'
+          },
+        });
+
+        return {
+          id: user.id,
+          username: user.username,
+          role: user.role
+        };
+      }, {
+        body: t.Object({
+          username: t.String(),
+          password: t.String(),
+          role: t.Optional(t.Enum({
+            USER: 'USER',
+            ADMIN: 'ADMIN'
+          })),
+        }),
+      })
+  )
   .listen(3000);
 
 console.log(
