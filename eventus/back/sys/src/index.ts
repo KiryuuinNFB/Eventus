@@ -1,7 +1,7 @@
 import swagger from "@elysiajs/swagger";
 import { logger } from "@tqman/nice-logger";
 import { Elysia, t } from "elysia";
-import { PrismaClient, Role } from "@prisma/client";
+import { PrismaClient} from "@prisma/client";
 
 const crypto = require('crypto');
 
