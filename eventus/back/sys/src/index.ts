@@ -1,7 +1,7 @@
 import swagger from "@elysiajs/swagger";
 import { logger } from "@tqman/nice-logger";
 import { Elysia, t } from "elysia";
-import { PrismaClient} from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const crypto = require('crypto');
 
@@ -15,11 +15,6 @@ const app = new Elysia()
   .use(swagger())
   .use(logger())
   .get("/", () => "amongus")
-  .get("/user/:id", ({ params: { id } }) => id, {
-    params: t.Object({
-      id: t.Numeric(),
-    }),
-  })
   
   //create user directly
   .group('/user', (app) => 
@@ -69,7 +64,24 @@ const app = new Elysia()
           username: t.String(),
           password: t.String()
         })
+      })
+      .get('/:username', async ({ params: {username} }) => {
+        const getuser = await prisma.user.findUnique({
+          where: {
+            username: username
+          }
+        });
 
+        return {
+          username: getuser?.username,
+          id: getuser?.id,
+          role: getuser?.role
+        };
+
+      } , {
+        body: t.Object({
+          username: t.String()
+        })
       })
   )
   .listen(3000);
