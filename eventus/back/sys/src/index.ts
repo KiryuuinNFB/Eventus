@@ -1,7 +1,10 @@
 import swagger from "@elysiajs/swagger";
 import { logger } from "@tqman/nice-logger";
-import { Elysia, t } from "elysia";
+import { Elysia, status, t } from "elysia";
+import { admin } from "./admin"
 import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient()
 
 const crypto = require('crypto');
 
@@ -9,81 +12,37 @@ function hashpswd(password: string) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
-const prisma = new PrismaClient()
-
 const app = new Elysia()
   .use(swagger())
   .use(logger())
+  //admin commands for adding, removing and reading users
+  .use(admin)
   .get("/", () => "amongus")
-  
-  //create user directly
-  .group('/user', (app) => 
+  .group('/auth', (app) => 
     app
-      .post('/add', async ({ body }) => {
-        const { username, password, role } = body;
-        const hashed = hashpswd(password);
-        const user = await prisma.user.create({
-          data: {
-            username,
-            password: hashed,
-            role: role ?? 'USER'
-          },
-        });
-
-        return {
-          id: user.id,
-          username: user.username,
-          role: user.role
-        };
-      }, {
-        body: t.Object({
-          username: t.String(),
-          password: t.String(),
-          role: t.Optional(t.Enum({
-            USER: 'USER',
-            ADMIN: 'ADMIN'
-          })),
-        }),
-      })
-      .post('/remove', async ({ body }) => {
+      .post('/signin', async ({ jwt, body }) => {
         const { username, password } = body;
         const hashed = hashpswd(password);
-        const deluser = await prisma.user.delete({
+        const signin = await prisma.user.findUnique({
           where: {
             username: username,
             password: hashed
           }
         });
-
-        return {
-          id: deluser.id,
-        };
-
+        if (hashed != signin?.password) {
+          return status(401, "Unauthorized")
+        }
+        return jwt.sign(body)
       }, {
         body: t.Object({
           username: t.String(),
-          password: t.String()
+          password: t.String(),
         })
       })
-      .get('/:username', async ({ params: {username} }) => {
-        const getuser = await prisma.user.findUnique({
-          where: {
-            username: username
-          }
-        });
 
-        return {
-          username: getuser?.username,
-          id: getuser?.id,
-          role: getuser?.role
-        };
 
-      } , {
-        body: t.Object({
-          username: t.String()
-        })
-      })
   )
+  
   .listen(3000);
 
 console.log(
