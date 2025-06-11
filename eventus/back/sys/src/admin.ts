@@ -2,6 +2,10 @@ import { Elysia, status, t } from "elysia";
 import { PrismaClient } from "@prisma/client";
 import { jwt } from '@elysiajs/jwt'
 
+interface JwtPayload {
+  username: string
+}
+
 const crypto = require('crypto');
 
 function hashpswd(password: string) {
@@ -71,9 +75,14 @@ export const admin = new Elysia()
                 username: username
               }
             });
-            const skibidi = await jwt.verify(authorization)
 
-            if (!skibidi)
+            const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+            const decodeduser = await prisma.user.findUnique({
+              where: {
+                username: decoded?.username!
+              }
+            });
+            if (!decoded || decodeduser?.role !== 'ADMIN')
               return status(401, "Unauthorized")
             return {
               username: getuser?.username,

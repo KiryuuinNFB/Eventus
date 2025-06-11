@@ -32,7 +32,9 @@ const app = new Elysia()
         if (hashed != signin?.password) {
           return status(401, "Unauthorized")
         }
-        return jwt.sign(body)
+        return jwt.sign(
+          { username: signin?.username! }
+        )
       }, {
         body: t.Object({
           username: t.String(),
