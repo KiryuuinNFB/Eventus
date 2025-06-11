@@ -21,6 +21,7 @@ export const admin = new Elysia()
             secret: 'RIKUHACHIMA'
         })
     )
+    //admin user commands
     .group('/user', (app) => 
         app
           .post('/add', async ({ jwt, body, headers: { authorization }}) => {
