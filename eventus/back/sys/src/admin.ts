@@ -23,9 +23,18 @@ export const admin = new Elysia()
     )
     .group('/user', (app) => 
         app
-          .post('/add', async ({ body }) => {
+          .post('/add', async ({ jwt, body, headers: { authorization }}) => {
             const { username, password, role } = body;
             const hashed = hashpswd(password);
+
+            const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+            const decodeduser = await prisma.user.findUnique({
+              where: {
+                username: decoded?.username!
+              }
+            });
+            if (!decoded || decodeduser?.role !== 'ADMIN')
+              return status(401, "Unauthorized")
             const user = await prisma.user.create({
               data: {
                 username,
@@ -49,9 +58,18 @@ export const admin = new Elysia()
               })),
             }),
           })
-          .post('/remove', async ({ body }) => {
+          .post('/remove', async ({ jwt, body, headers: { authorization }}) => {
             const { username, password } = body;
             const hashed = hashpswd(password);
+            
+            const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+            const decodeduser = await prisma.user.findUnique({
+              where: {
+                username: decoded?.username!
+              }
+            });
+            if (!decoded || decodeduser?.role !== 'ADMIN')
+              return status(401, "Unauthorized")
             const deluser = await prisma.user.delete({
               where: {
                 username: username,
@@ -96,4 +114,3 @@ export const admin = new Elysia()
             })
           })
         )
-    
