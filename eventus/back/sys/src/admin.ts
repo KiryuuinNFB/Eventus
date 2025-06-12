@@ -4,6 +4,7 @@ import { jwt } from '@elysiajs/jwt'
 
 interface JwtPayload {
   username: string
+  
 }
 
 const crypto = require('crypto');
