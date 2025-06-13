@@ -18,6 +18,13 @@ model User {
   role     Role   @default(USER)
 }
 
+model Base {
+  id       Int    @id @default(autoincrement())
+  name     String
+  desc     String
+  location String
+}
+
 enum Role {
   USER
   ADMIN
