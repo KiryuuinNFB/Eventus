@@ -25,6 +25,12 @@ model Base {
   location String
 }
 
+model Completion {
+  id       String @id @default(ulid())
+  
+
+}
+
 enum Role {
   USER
   ADMIN
