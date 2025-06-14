@@ -12,10 +12,12 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  username String @unique
-  password String
-  role     Role   @default(USER)
+  id        String       @id @default(uuid())
+  username  String       @unique
+  password  String
+  role      Role         @default(USER)
+  completed Completion[]
+  
 }
 
 model Base {
@@ -23,12 +25,17 @@ model Base {
   name     String
   desc     String
   location String
+  userId     String?
+  Completion Completion[]
 }
 
 model Completion {
-  id       String @id @default(ulid())
-  
-
+  id          Int      @id @default(autoincrement())
+  completedOn DateTime @default(now())
+  base        Base     @relation(fields: [baseId], references: [id])
+  baseId      Int
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?
 }
 
 enum Role {
