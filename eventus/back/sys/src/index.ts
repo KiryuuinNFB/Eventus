@@ -33,7 +33,10 @@ const app = new Elysia()
           return status(401, "Unauthorized")
         }
         return jwt.sign(
-          { username: signin?.username! }
+          {
+            username: signin?.username!,
+            exp: '15m'
+          },
         )
       }, {
         body: t.Object({
