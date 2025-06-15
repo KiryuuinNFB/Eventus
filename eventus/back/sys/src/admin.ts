@@ -3,14 +3,14 @@ import { PrismaClient } from "@prisma/client";
 import { jwt } from '@elysiajs/jwt'
 
 interface JwtPayload {
-  username: string
-  
+    username: string
+
 }
 
 const crypto = require('crypto');
 
 function hashpswd(password: string) {
-  return crypto.createHash('sha256').update(password).digest('hex');
+    return crypto.createHash('sha256').update(password).digest('hex');
 }
 
 const prisma = new PrismaClient()
@@ -22,97 +22,100 @@ export const admin = new Elysia()
             secret: 'RIKUHACHIMA'
         })
     )
-    //admin user commands
-    .group('/user', (app) => 
+    .group('/user', (app) =>
         app
-          .post('/add', async ({ jwt, body, headers: { authorization }}) => {
-            const { username, password, role } = body;
-            const hashed = hashpswd(password);
+            .post('/add', async ({ jwt, body, headers: { authorization } }) => {
+                const { username, password, role } = body;
+                const hashed = hashpswd(password);
 
-            const decoded = await jwt.verify(authorization) as unknown as JwtPayload
-            const decodeduser = await prisma.user.findUnique({
-              where: {
-                username: decoded?.username!
-              }
-            });
-            if (!decoded || decodeduser?.role !== 'ADMIN')
-              return status(401, "Unauthorized")
-            const user = await prisma.user.create({
-              data: {
-                username,
-                password: hashed,
-                role: role ?? 'USER'
-              },
-            });
-    
-            return {
-              id: user.id,
-              username: user.username,
-              role: user.role
-            };
-          }, {
-            body: t.Object({
-              username: t.String(),
-              password: t.String(),
-              role: t.Optional(t.Enum({
-                USER: 'USER',
-                ADMIN: 'ADMIN'
-              })),
-            }),
-          })
-          .post('/remove', async ({ jwt, body, headers: { authorization }}) => {
-            const { username, password } = body;
-            const hashed = hashpswd(password);
-            
-            const decoded = await jwt.verify(authorization) as unknown as JwtPayload
-            const decodeduser = await prisma.user.findUnique({
-              where: {
-                username: decoded?.username!
-              }
-            });
-            if (!decoded || decodeduser?.role !== 'ADMIN')
-              return status(401, "Unauthorized")
-            const deluser = await prisma.user.delete({
-              where: {
-                username: username,
-                password: hashed
-              }
-            });
-    
-            return {
-              id: deluser.id,
-            };
-    
-          }, {
-            body: t.Object({
-              username: t.String(),
-              password: t.String()
-            })
-          })
-          .get('/:username', async ({ jwt, params: {username}, headers: { authorization }}) => {
-            const getuser = await prisma.user.findUnique({
-              where: {
-                username: username
-              }
-            });
+                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+                const decodeduser = await prisma.user.findUnique({
+                    where: {
+                        username: decoded?.username!
+                    }
+                });
+                if (!decoded || decodeduser?.role !== 'ADMIN')
+                    return status(401, "Unauthorized")
+                const user = await prisma.user.create({
+                    data: {
+                        username,
+                        password: hashed,
+                        role: role ?? 'USER'
+                    },
+                });
 
-            const decoded = await jwt.verify(authorization) as unknown as JwtPayload
-            const decodeduser = await prisma.user.findUnique({
-              where: {
-                username: decoded?.username!
-              }
-            });
-            if (!decoded || decodeduser?.role !== 'ADMIN')
-              return status(401, "Unauthorized")
-            return {
-              username: getuser?.username,
-              id: getuser?.id,
-              role: getuser?.role
-            };
-    
-          } , {
-            body: t.Object({
-              username: t.String()
+                return {
+                    id: user.id,
+                    username: user.username,
+                    role: user.role
+                };
+            }, {
+                body: t.Object({
+                    username: t.String(),
+                    password: t.String(),
+                    role: t.Optional(t.Enum({
+                        USER: 'USER',
+                        ADMIN: 'ADMIN'
+                    })),
+                }),
             })
-          })
-        )
+            .post('/remove', async ({ jwt, body, headers: { authorization } }) => {
+                const { username, password } = body;
+                const hashed = hashpswd(password);
+
+                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+                const decodeduser = await prisma.user.findUnique({
+                    where: {
+                        username: decoded?.username!
+                    }
+                });
+                if (!decoded || decodeduser?.role !== 'ADMIN')
+                    return status(401, "Unauthorized")
+                const deluser = await prisma.user.delete({
+                    where: {
+                        username: username,
+                        password: hashed
+                    }
+                });
+
+                return {
+                    id: deluser.id,
+                };
+
+            }, {
+                body: t.Object({
+                    username: t.String(),
+                    password: t.String()
+                })
+            })
+            .get('/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
+                const getuser = await prisma.user.findUnique({
+                    where: {
+                        username: username
+                    }
+                });
+
+                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+                const decodeduser = await prisma.user.findUnique({
+                    where: {
+                        username: decoded?.username!
+                    }
+                });
+                if (!decoded || decodeduser?.role !== 'ADMIN')
+                    return status(401, "Unauthorized")
+                return {
+                    username: getuser?.username,
+                    id: getuser?.id,
+                    role: getuser?.role
+                };
+
+            }, {
+                body: t.Object({
+                    username: t.String()
+                })
+            })
+    )
+
+/* 
+admin commands
+*/

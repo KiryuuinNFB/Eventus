@@ -25,7 +25,6 @@ model Base {
   name     String
   desc     String
   location String
-  userId     String?
   Completion Completion[]
 }
 
