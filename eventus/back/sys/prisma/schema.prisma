@@ -2,41 +2,40 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
+    provider = "prisma-client-js"
+    output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  username  String       @unique
-  password  String
-  role      Role         @default(USER)
-  completed Completion[]
-  
+    username  String       @unique
+    password  String
+    role      Role         @default(USER)
+    completed Completion[]
 }
 
 model Base {
-  id       Int    @id @default(autoincrement())
-  name     String
-  desc     String
-  location String
-  Completion Completion[]
+    id         Int          @id @default(autoincrement())
+    name       String
+    desc       String
+    location   String
+    Completion Completion[]
 }
 
 model Completion {
-  id          Int      @id @default(autoincrement())
-  completedOn DateTime @default(now())
-  base        Base     @relation(fields: [baseId], references: [id])
-  baseId      Int
-  User        User?    @relation(fields: [userId], references: [username])
-  userId      String?
+    id          Int      @id @default(autoincrement())
+    completedOn DateTime @default(now())
+    base        Base     @relation(fields: [baseId], references: [id])
+    baseId      Int
+    User        User?    @relation(fields: [userId], references: [username])
+    userId      String?
 }
 
 enum Role {
-  USER
-  ADMIN
+    USER
+    ADMIN
 }

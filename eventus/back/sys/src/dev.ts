@@ -60,7 +60,6 @@ export const dev = new Elysia({ prefix: '/dev' })
                 });
 
                 return {
-                    id: user.id,
                     username: user.username,
                     role: user.role
                 };
