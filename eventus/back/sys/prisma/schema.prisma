@@ -12,7 +12,6 @@ datasource db {
 }
 
 model User {
-  id        String       @id @default(uuid())
   username  String       @unique
   password  String
   role      Role         @default(USER)
@@ -33,7 +32,7 @@ model Completion {
   completedOn DateTime @default(now())
   base        Base     @relation(fields: [baseId], references: [id])
   baseId      Int
-  User        User?    @relation(fields: [userId], references: [id])
+  User        User?    @relation(fields: [userId], references: [username])
   userId      String?
 }
 

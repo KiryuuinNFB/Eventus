@@ -39,7 +39,6 @@ export const admin = new Elysia()
                 });
 
                 return {
-                    id: user.id,
                     username: user.username,
                     role: user.role
                 };
@@ -73,7 +72,7 @@ export const admin = new Elysia()
                 });
 
                 return {
-                    id: deluser.id,
+                    id: deluser.username,
                 };
 
             }, {
@@ -99,7 +98,6 @@ export const admin = new Elysia()
                     return status(401, "Unauthorized")
                 return {
                     username: getuser?.username,
-                    id: getuser?.id,
                     role: getuser?.role
                 };
 
