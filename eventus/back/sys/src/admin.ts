@@ -115,7 +115,29 @@ export const admin = new Elysia()
                 })
             })
     )
+    .post('/approve/:user/:base', async ({ jwt, params: { user, base }, headers: { authorization } }) => {
+        const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+        const decodeduser = await prisma.user.findUnique({
+            where: {
+                username: decoded?.username!
+            }
+        });
+        if (!decoded || decodeduser?.role !== 'ADMIN')
+            return status(401, "Unauthorized")
+        await prisma.completion.create({
+            data: {
+                baseId: base,
+                userId: user,
+            }
+        })
+    }, {
+        params: t.Object({
+            user: t.String(),
+            base: t.Numeric()
+        })
+    })
+
 
 /* 
-admin commands
+admin commands used in production. require admin token
 */

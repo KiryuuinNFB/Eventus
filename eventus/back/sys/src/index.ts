@@ -50,8 +50,6 @@ const app = new Elysia()
                         error: "Invalid credentials"
                     })
             })
-
-
     )
 
     .listen(3000);
