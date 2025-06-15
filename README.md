@@ -8,7 +8,6 @@ After finishing each events, The events UI will update showing that they've done
 
 - Error handling
 - Authorization with JWT
-- Event approval system
 
 ## To do
 
