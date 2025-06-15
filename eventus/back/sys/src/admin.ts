@@ -7,12 +7,6 @@ interface JwtPayload {
 
 }
 
-const crypto = require('crypto');
-
-function hashpswd(password: string) {
-    return crypto.createHash('sha256').update(password).digest('hex');
-}
-
 const prisma = new PrismaClient()
 
 export const admin = new Elysia()
@@ -26,7 +20,7 @@ export const admin = new Elysia()
         app
             .post('/add', async ({ jwt, body, headers: { authorization } }) => {
                 const { username, password, role } = body;
-                const hashed = hashpswd(password);
+                const hashed = await Bun.password.hash(password)
 
                 const decoded = await jwt.verify(authorization) as unknown as JwtPayload
                 const decodeduser = await prisma.user.findUnique({
@@ -61,7 +55,7 @@ export const admin = new Elysia()
             })
             .post('/remove', async ({ jwt, body, headers: { authorization } }) => {
                 const { username, password } = body;
-                const hashed = hashpswd(password);
+                const hashed = await Bun.password.hash(password)
 
                 const decoded = await jwt.verify(authorization) as unknown as JwtPayload
                 const decodeduser = await prisma.user.findUnique({

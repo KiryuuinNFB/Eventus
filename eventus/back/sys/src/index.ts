@@ -8,12 +8,6 @@ import { dev } from "./dev"
 
 const prisma = new PrismaClient()
 
-const crypto = require('crypto');
-
-function hashpswd(password: string) {
-    return crypto.createHash('sha256').update(password).digest('hex');
-}
-
 const app = new Elysia()
     .use(swagger())
     .use(logger())
@@ -24,15 +18,15 @@ const app = new Elysia()
     .group('/auth', (app) =>
         app
             .post('/signin', async ({ jwt, body }) => {
-                const { username, password } = body;
-                const hashed = hashpswd(password);
+                const { username, password} = body;
+                const hashed = await Bun.password.hash(password)
                 const signin = await prisma.user.findUnique({
                     where: {
-                        username: username,
-                        password: hashed
+                        username: username
                     }
                 });
-                if (hashed != signin?.password) {
+                const isMatch = Bun.password.verify(password, hashed)
+                if (!isMatch) {
                     return status(401, "Unauthorized")
                 }
                 return jwt.sign(
@@ -44,7 +38,7 @@ const app = new Elysia()
             }, {
                 body: t.Object({
                     username: t.String(),
-                    password: t.String(),
+                    password: t.String()
                 },
                     {
                         error: "Invalid credentials"

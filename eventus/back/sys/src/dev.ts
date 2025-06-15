@@ -45,3 +45,33 @@ export const dev = new Elysia({ prefix: '/dev' })
                 })
             })
     )
+    .group('/user', (app) =>
+        app
+            .post('/add', async ({ body }) => {
+                const { username, password, role } = body;
+                const hashed = await Bun.password.hash(password)
+
+                const user = await prisma.user.create({
+                    data: {
+                        username,
+                        password: hashed,
+                        role: role ?? 'USER'
+                    },
+                });
+
+                return {
+                    id: user.id,
+                    username: user.username,
+                    role: user.role
+                };
+            },{
+                body: t.Object({
+                    username: t.String(),
+                    password: t.String(),
+                    role: t.Optional(t.Enum({
+                        USER: 'USER',
+                        ADMIN: 'ADMIN'
+                    })),
+                })
+            })
+    )
