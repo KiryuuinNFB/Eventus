@@ -9,7 +9,7 @@ interface JwtPayload {
 
 const prisma = new PrismaClient()
 
-export const admin = new Elysia()
+export const admin = new Elysia( ({prefix: '/admin'}))
     .use(
         jwt({
             name: 'jwt',
@@ -118,6 +118,7 @@ export const admin = new Elysia()
             return status(401, "Unauthorized")
         await prisma.completion.create({
             data: {
+                completedOn: new Date(),
                 baseId: base,
                 userId: user,
             }
@@ -128,6 +129,7 @@ export const admin = new Elysia()
             base: t.Numeric()
         })
     })
+    
 
 
 /* 
