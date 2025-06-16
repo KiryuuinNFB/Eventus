@@ -19,7 +19,7 @@ export const admin = new Elysia( ({prefix: '/admin'}))
     .group('/user', (app) =>
         app
             .post('/add', async ({ jwt, body, headers: { authorization } }) => {
-                const { username, password, role } = body;
+                const { username, password, name, surname, role } = body;
                 const hashed = await Bun.password.hash(password)
 
                 const decoded = await jwt.verify(authorization) as unknown as JwtPayload
@@ -34,6 +34,8 @@ export const admin = new Elysia( ({prefix: '/admin'}))
                     data: {
                         username,
                         password: hashed,
+                        name,
+                        surname,
                         role: role ?? 'USER'
                     },
                 });
@@ -46,6 +48,8 @@ export const admin = new Elysia( ({prefix: '/admin'}))
                 body: t.Object({
                     username: t.String(),
                     password: t.String(),
+                    name: t.String(),
+                    surname: t.String(),
                     role: t.Optional(t.Enum({
                         USER: 'USER',
                         ADMIN: 'ADMIN'
@@ -98,6 +102,8 @@ export const admin = new Elysia( ({prefix: '/admin'}))
                     return status(401, "Unauthorized")
                 return {
                     username: getuser?.username,
+                    name: getuser?.name,
+                    surname: getuser?.surname,
                     role: getuser?.role
                 };
 
@@ -126,7 +132,7 @@ export const admin = new Elysia( ({prefix: '/admin'}))
     }, {
         params: t.Object({
             user: t.String(),
-            base: t.Numeric()
+            base: t.Number()
         })
     })
     

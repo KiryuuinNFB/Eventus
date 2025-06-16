@@ -14,7 +14,10 @@ const app = new Elysia()
     //admin commands for adding, removing and reading users
     .use(admin)
     .use(dev)
-    .get("/", () => "amongus")
+    .onError(({ error }) => {
+        return new Response(error.toString())
+    })
+    .get("/", () => "Connected to Elysia")
     .group('/auth', (app) =>
         app
             .post('/signin', async ({ jwt, body }) => {
@@ -45,6 +48,8 @@ const app = new Elysia()
                     })
             })
     )
+
+
 
     .listen(3000);
 
