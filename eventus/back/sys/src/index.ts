@@ -6,6 +6,11 @@ import { PrismaClient } from "@prisma/client";
 import { admin } from "./admin"
 import { dev } from "./dev"
 
+interface JwtPayload {
+    username: string
+
+}
+
 const prisma = new PrismaClient()
 
 const app = new Elysia()
@@ -17,11 +22,11 @@ const app = new Elysia()
     .onError(({ error }) => {
         return new Response(error.toString())
     })
-    .get("/", () => file("elysialmao.jpg"))
+    .get("/", () => file("elysialmao.jpeg"))
     .group('/auth', (app) =>
         app
             .post('/signin', async ({ jwt, body }) => {
-                const { username, password} = body;
+                const { username, password } = body;
                 const hashed = await Bun.password.hash(password)
                 const signin = await prisma.user.findUnique({
                     where: {
@@ -46,6 +51,38 @@ const app = new Elysia()
                     {
                         error: "Invalid credentials"
                     })
+            })
+    )
+    .group('/api', (app) =>
+        app
+            .get('/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
+                
+                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+                const decodeduser = await prisma.user.findUnique({
+                    where: {
+                        username: decoded?.username!
+                    }
+                });
+                if (!decoded || decodeduser?.username !== username)
+                    return status(401, "Unauthorized")
+                const getuser = await prisma.user.findUnique({
+                    where: {
+                        username: username
+                    }
+                })
+                const getevents = await prisma.completion.findMany({
+                    where: {
+                        userId: username
+                    }
+                })
+                return { 
+                    "studentId" : getuser?.username, 
+                    "ulid" : getuser?.id, 
+                    "name" : getuser?.name,
+                    "surname" : getuser?.surname,
+                    "events" : getevents,
+                    "role": getuser?.role
+                }
             })
     )
 

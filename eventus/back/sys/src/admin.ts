@@ -9,16 +9,16 @@ interface JwtPayload {
 
 const prisma = new PrismaClient()
 
-export const admin = new Elysia( ({prefix: '/admin'}))
+export const admin = new Elysia()
     .use(
         jwt({
             name: 'jwt',
             secret: 'RIKUHACHIMA'
         })
     )
-    .group('/user', (app) =>
+    .group('/admin', (app) =>
         app
-            .post('/add', async ({ jwt, body, headers: { authorization } }) => {
+            .put('/user', async ({ jwt, body, headers: { authorization } }) => {
                 const { username, password, name, surname, role } = body;
                 const hashed = await Bun.password.hash(password)
 
@@ -56,7 +56,7 @@ export const admin = new Elysia( ({prefix: '/admin'}))
                     })),
                 }),
             })
-            .post('/remove', async ({ jwt, body, headers: { authorization } }) => {
+            .delete('/user', async ({ jwt, body, headers: { authorization } }) => {
                 const { username, password } = body;
                 const hashed = await Bun.password.hash(password)
 
@@ -85,13 +85,7 @@ export const admin = new Elysia( ({prefix: '/admin'}))
                     password: t.String()
                 })
             })
-            .get('/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
-                const getuser = await prisma.user.findUnique({
-                    where: {
-                        username: username
-                    }
-                });
-
+            .get('/user/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
                 const decoded = await jwt.verify(authorization) as unknown as JwtPayload
                 const decodeduser = await prisma.user.findUnique({
                     where: {
@@ -100,6 +94,13 @@ export const admin = new Elysia( ({prefix: '/admin'}))
                 });
                 if (!decoded || decodeduser?.role !== 'ADMIN')
                     return status(401, "Unauthorized")
+                const getuser = await prisma.user.findUnique({
+                    where: {
+                        username: username
+                    }
+                });
+
+                
                 return {
                     username: getuser?.username,
                     name: getuser?.name,
