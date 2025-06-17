@@ -1,6 +1,6 @@
 import swagger from "@elysiajs/swagger";
 import { logger } from "@tqman/nice-logger";
-import { Elysia, status, t } from "elysia";
+import { Elysia, status, t, file } from "elysia";
 import { PrismaClient } from "@prisma/client";
 
 import { admin } from "./admin"
@@ -17,7 +17,7 @@ const app = new Elysia()
     .onError(({ error }) => {
         return new Response(error.toString())
     })
-    .get("/", () => "Connected to Elysia")
+    .get("/", () => file("elysialmao.jpg"))
     .group('/auth', (app) =>
         app
             .post('/signin', async ({ jwt, body }) => {
