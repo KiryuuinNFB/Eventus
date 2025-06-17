@@ -7,7 +7,7 @@ After finishing each events, The events UI will update showing that they've done
 ## Currently doing
 
 - Error handling
-- Authorization with JWT
+- Better API Endpoints
 
 ## To do
 
