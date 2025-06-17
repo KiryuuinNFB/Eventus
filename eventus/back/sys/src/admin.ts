@@ -99,14 +99,20 @@ export const admin = new Elysia({ prefix: '/admin'})
                         username: username
                     }
                 });
-
+                const getevents = await prisma.completion.findMany({
+                    where: {
+                        userId: username
+                    }
+                })
                 
                 return {
-                    username: getuser?.username,
-                    name: getuser?.name,
-                    surname: getuser?.surname,
-                    role: getuser?.role
-                };
+                    "studentId": getuser?.username,
+                    "ulid": getuser?.id,
+                    "name": getuser?.name,
+                    "surname": getuser?.surname,
+                    "events": getevents,
+                    "role": getuser?.role
+                }
 
             }, {
                 body: t.Object({

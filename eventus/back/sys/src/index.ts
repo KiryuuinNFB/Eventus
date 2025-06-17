@@ -56,7 +56,7 @@ const app = new Elysia()
     .group('/api', (app) =>
         app
             .get('/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
-                
+
                 const decoded = await jwt.verify(authorization) as unknown as JwtPayload
                 const decodeduser = await prisma.user.findUnique({
                     where: {
@@ -75,18 +75,16 @@ const app = new Elysia()
                         userId: username
                     }
                 })
-                return { 
-                    "studentId" : getuser?.username, 
-                    "ulid" : getuser?.id, 
-                    "name" : getuser?.name,
-                    "surname" : getuser?.surname,
-                    "events" : getevents,
+                return {
+                    "studentId": getuser?.username,
+                    "ulid": getuser?.id,
+                    "name": getuser?.name,
+                    "surname": getuser?.surname,
+                    "events": getevents,
                     "role": getuser?.role
                 }
             })
     )
-
-
 
     .listen(3000);
 
