@@ -4,9 +4,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient()
 
 export const dev = new Elysia({ prefix: '/dev' })
-    .group('/base', (app) =>
+    .group('', (app) =>
         app
-            .post('/add', async ({ body }) => {
+            .put('/base', async ({ body }) => {
                 const { name, desc, location } = body;
                 const base = await prisma.base.create({
                     data: {
@@ -27,7 +27,7 @@ export const dev = new Elysia({ prefix: '/dev' })
                     location: t.String()
                 })
             })
-            .post('/remove', async ({ body }) => {
+            .delete('/base', async ({ body }) => {
                 const { id } = body;
                 const base = await prisma.base.delete({
                     where: {
@@ -45,9 +45,9 @@ export const dev = new Elysia({ prefix: '/dev' })
                 })
             })
     )
-    .group('/user', (app) =>
+    .group('', (app) =>
         app
-            .post('/add', async ({ body }) => {
+            .put('/user', async ({ body }) => {
                 const { username, password, name, surname, role } = body;
                 const hashed = await Bun.password.hash(password)
 
@@ -75,6 +75,21 @@ export const dev = new Elysia({ prefix: '/dev' })
                         USER: 'USER',
                         ADMIN: 'ADMIN'
                     })),
+                })
+            })
+            .delete('/user', async ({ body }) => {
+                const { username } = body;
+                const deluser = await prisma.user.delete({
+                    where: {
+                        username: username,
+                    }
+                });
+                return {
+                        id: deluser.username
+                    }
+            }, {
+                body: t.Object({
+                    username: t.String()
                 })
             })
     )

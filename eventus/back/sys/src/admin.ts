@@ -9,14 +9,14 @@ interface JwtPayload {
 
 const prisma = new PrismaClient()
 
-export const admin = new Elysia()
+export const admin = new Elysia({ prefix: '/admin'})
     .use(
         jwt({
             name: 'jwt',
-            secret: 'RIKUHACHIMA'
+            secret: "CHANGE_THIS_IN_PROD"
         })
     )
-    .group('/admin', (app) =>
+    .group('', (app) =>
         app
             .put('/user', async ({ jwt, body, headers: { authorization } }) => {
                 const { username, password, name, surname, role } = body;
