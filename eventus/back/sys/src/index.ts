@@ -35,21 +35,25 @@ const app = new Elysia()
         app
             .post('/login', async ({ jwt, body }) => {
                 const { username, password } = body;
-                const signin = await prisma.user.findUnique({
+                const login = await prisma.user.findUnique({
                     where: { username }
                 });
-                console.log(body)
-                
-                const isMatch = Bun.password.verify(password, signin?.password!)
+                if (!login) {
+                    return status(404, "Not found")
+                }
+                const hashed = login?.password!
+                const isMatch = await Bun.password.verify(password, hashed)
                 if (!isMatch) {
                     return status(401, "Unauthorized")
                 }
-                return jwt.sign(
+                const jwttoken = await jwt.sign(
                     {
-                        username: signin?.username!,
+                        username: login?.username!,
                         exp: '15m'
                     },
                 )
+
+                return { "token": jwttoken }
             }, {
                 body: t.Object({
                     username: t.String(),

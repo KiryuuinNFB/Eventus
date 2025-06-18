@@ -49,7 +49,7 @@ export const dev = new Elysia({ prefix: '/dev' })
         app
             .put('/user', async ({ body }) => {
                 const { username, password, name, surname, role } = body;
-                const hashed = await Bun.password.hash(password)
+                const hashed = await Bun.password.hash(password, { algorithm: "argon2id", memoryCost: 4, timeCost: 3 })
 
                 const user = await prisma.user.create({
                     data: {

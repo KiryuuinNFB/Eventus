@@ -28,6 +28,7 @@ export const admin = new Elysia({ prefix: '/admin'})
                         username: decoded?.username!
                     }
                 });
+                
                 if (!decoded || decodeduser?.role !== 'ADMIN')
                     return status(401, "Unauthorized")
                 const user = await prisma.user.create({
