@@ -2,6 +2,7 @@ import swagger from "@elysiajs/swagger";
 import { logger } from "@tqman/nice-logger";
 import { Elysia, status, t, file } from "elysia";
 import { PrismaClient } from "@prisma/client";
+import { cors } from '@elysiajs/cors'
 
 import { admin } from "./admin"
 import { dev } from "./dev"
@@ -16,6 +17,13 @@ const prisma = new PrismaClient()
 const app = new Elysia()
     .use(swagger())
     .use(logger())
+    .use(
+        cors({
+            origin: '*',
+            methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+            allowedHeaders: ['Content-Type', 'authorization']
+        })
+    )
     //admin commands for adding, removing and reading users
     .use(admin)
     .use(dev)
@@ -25,15 +33,14 @@ const app = new Elysia()
     .get("/", () => file("elysialmao.jpeg"))
     .group('/auth', (app) =>
         app
-            .post('/signin', async ({ jwt, body }) => {
+            .post('/login', async ({ jwt, body }) => {
                 const { username, password } = body;
-                const hashed = await Bun.password.hash(password)
                 const signin = await prisma.user.findUnique({
-                    where: {
-                        username: username
-                    }
+                    where: { username }
                 });
-                const isMatch = Bun.password.verify(password, hashed)
+                console.log(body)
+                
+                const isMatch = Bun.password.verify(password, signin?.password!)
                 if (!isMatch) {
                     return status(401, "Unauthorized")
                 }
