@@ -5,6 +5,9 @@
 }
 
 body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("elysia1.png");
     min-height: 60vh;
     background-color: var(--main);
     margin: 0px;
@@ -16,6 +19,7 @@ body {
 
 :root {
     --white: #fcfcfc;
+    --white-clear: rgba(255, 255, 255, 0.137);
     --black: #474747;
     --main: #aae5a4;
     --secondary: #ffffff;
@@ -41,20 +45,21 @@ body {
 
 .loginbox {
     font-family: "Pridi", Arial;
-    background-color: var(--secondary);
+    backdrop-filter: blur(10px);
+    background-color: var(--white-clear);
     color: var(--black);
     width: 300px;
     margin: 1vw;
-    margin-top: 10vw;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-top: 10vh;
+    padding: 15px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.404), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .logintopic {
     font-family: "Pridi", Arial;
     margin: 10%;
-    font-size: 24px;
+    font-size: 36px;
     font-weight: 500;
     text-align: center;
 }
@@ -69,6 +74,8 @@ body {
 }
 
 .loginform {
+    backdrop-filter: blur(20px);
+    background-color: var(--white-clear);
     font-family: "Pridi", Arial;
     font-weight: 300;
     outline: none;
@@ -77,13 +84,14 @@ body {
     margin: 20px;
     width: 60%;
     padding: 15px;
-    background-color: var(--teritary);
-    border-radius: 4px;
+    border-radius: 8px;
     border: 2px solid var(--black);
     color: var(--black);
 }
 
 .loginform:focus {
+    backdrop-filter: blur(20px);
+    background-color: rgba(255, 255, 255, 0.349);
     transition: 0.3s;
     -webkit-transition: 0.3s;
     border: 2px solid var(--accent);
@@ -91,6 +99,8 @@ body {
 
 
 .loginsubmit {
+    backdrop-filter: blur(20px);
+    background-color: var(--white-clear);
     font-weight: 300;
     font-family: "Pridi", Arial;
     transition: 0.3s;
@@ -98,8 +108,7 @@ body {
     margin: 20px;
     width: 40%;
     padding: 10px;
-    background-color: var(--teritary);
-    border-radius: 4px;
+    border-radius: 8px;
     border: 2px solid var(--black);
     color: var(--black);
 }
@@ -107,4 +116,13 @@ body {
 .loginsubmit:hover {
     border: 2px solid var(--accent);
     background-color: var(--main);
+}
+
+.watermark {
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    padding: 4px;
 }

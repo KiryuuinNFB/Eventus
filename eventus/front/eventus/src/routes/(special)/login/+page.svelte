@@ -1,9 +1,10 @@
 <script>
+    import logo from '$lib/assets/logo.png';
     let username = "";
     let password = "";
 
     const login = async () => {
-        const res = await fetch("http://192.168.1.34:3000/auth/login", {
+        const res = await fetch("http://172.50.87.37:3000/auth/login", {
             method: "POST",
             headers: {
                 "Accept": "*/*",
@@ -11,18 +12,25 @@
             },
             body: JSON.stringify({ username, password }),
         });
-        const data = await res.json()
-        console.log(data)
-
-        alert(data.token)
+        if (res.status === 401) {
+            alert("Invalid Credentials")
+        } else if (res.status === 200) {
+            const data = await res.json()
+            alert(`Login Success with token ${data.token}`)
+        } else if (res.status === 404) {
+            alert(`User ${username} not found`)
+        }
+        
     };
 </script>
 
 <div class="content">
     <div class="centerdiv">
         <div class="loginbox">
+            <img src="{logo}" width="60px" alt="bodindecha2">
             <h2 class="logintopic">เข้าสู่ระบบ</h2>
             <div class="loginformlists">
+                
                 <input
                     bind:value={username}
                     placeholder="เลขประจำตัวนักเรียน"
@@ -38,5 +46,8 @@
                 >
             </div>
         </div>
+    </div>
+    <div class="watermark">
+        จัดทำโดยเด็ก AI
     </div>
 </div>
