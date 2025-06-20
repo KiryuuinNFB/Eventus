@@ -4,7 +4,7 @@
     let password = "";
 
     const login = async () => {
-        const res = await fetch("http://172.50.87.37:3000/auth/login", {
+        const res = await fetch("http://localhost:3000/auth/login", {
             method: "POST",
             headers: {
                 "Accept": "*/*",
@@ -24,7 +24,7 @@
     };
 </script>
 
-<div class="content">
+<div class="loginbg">
     <div class="centerdiv">
         <div class="loginbox">
             <img src="{logo}" width="60px" alt="bodindecha2">
