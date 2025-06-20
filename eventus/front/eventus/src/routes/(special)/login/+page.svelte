@@ -23,28 +23,31 @@
     };
 </script>
 
-<body class="min-h-[60vh] m-0 p-0 overflow-auto bg-(--main) ">
+<body class="min-h-[60vh] m-0 p-0 bg-(--main) ">
     <div class="ml-10vw mr-10vw min-h-[10vh] min-w-[100vh]">
         <div class="flex justify-center text-center min-h-[10vh]">
             <div
-                class="backdrop-blur-[10px] bg-light/15 border-r-[16px] 
-                text-dark w-[300px] mt-[10vh]"
+                class="m-[1vw] mt-[10vh] p-[15px] backdrop-blur-[10px] bg-(--white-clear) rounded-[16px] 
+                text-dark w-[300px] shadow-xl"
             >
                 <img src={logo} width="60px" alt="bodindecha2" />
-                <h2>เข้าสู่ระบบ</h2>
-                <div class="flex-column justify-between flex items-center shadow-loginbox">
+                <h2 class="text-center m-[10%]">เข้าสู่ระบบ</h2>
+                <div class="flex-col justify-between flex items-center">
                     <input
                         bind:value={username}
                         placeholder="เลขประจำตัวนักเรียน"
-                        class="backdrop-blur-[20px] bg-(--white-clear) outline-none "
+                        class="p-[10px] backdrop-blur-[20px] border-2 border-solid 
+                        bg-(--white-clear) outline-none rounded-[12px]"
                     />
                     <input
                         bind:value={password}
                         placeholder="รหัสผ่าน"
                         type="password"
+                        class="p-[10px] backdrop-blur-[20px] border-2 border-solid 
+                        bg-(--white-clear) outline-none rounded-[12px]"
                     />
-                    <button on:click={login}>เข้าสู่ระบบ</button>
                 </div>
+                <button on:click={login}>เข้าสู่ระบบ</button>
             </div>
         </div>
     </div>
