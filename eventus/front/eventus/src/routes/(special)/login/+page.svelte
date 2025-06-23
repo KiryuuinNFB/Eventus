@@ -7,7 +7,6 @@
         const res = await fetch("http://localhost:3000/auth/login", {
             method: "POST",
             headers: {
-                "Accept": "*/*",
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ username, password }),
@@ -19,8 +18,7 @@
             alert(`Login Success with token ${data.token}`)
         } else if (res.status === 404) {
             alert(`User ${username} not found`)
-        }
-        
+        }  
     };
 </script>
 

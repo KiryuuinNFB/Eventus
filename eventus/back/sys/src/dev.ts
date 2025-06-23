@@ -65,7 +65,7 @@ export const dev = new Elysia({ prefix: '/dev' })
                     username: user.username,
                     role: user.role
                 };
-            },{
+            }, {
                 body: t.Object({
                     username: t.String(),
                     password: t.String(),
@@ -85,11 +85,31 @@ export const dev = new Elysia({ prefix: '/dev' })
                     }
                 });
                 return {
-                        id: deluser.username
-                    }
+                    id: deluser.username
+                }
             }, {
                 body: t.Object({
                     username: t.String()
                 })
+            })
+            .get('/user/:username', async ({ params: { username } }) => {
+                const getuser = await prisma.user.findUnique({
+                    where: {
+                        username: username
+                    }
+                })
+                const getevents = await prisma.completion.findMany({
+                    where: {
+                        userId: username
+                    }
+                })
+                return {
+                    "studentId": getuser?.username,
+                    "ulid": getuser?.id,
+                    "name": getuser?.name,
+                    "surname": getuser?.surname,
+                    "events": getevents,
+                    "role": getuser?.role
+                }
             })
     )
