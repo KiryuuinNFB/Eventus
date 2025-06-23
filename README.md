@@ -8,8 +8,9 @@ After finishing each events, The events UI will update showing that they've done
 
 - Error handling
 - Better API Endpoints
+- Pulling data from backend to display on frontend
 
 ## To do
-
+- Reorganize code structure according to Elysia docs
 - Frontend UI with mobile/tablet layout
 - Clear documentation for reusing the system
