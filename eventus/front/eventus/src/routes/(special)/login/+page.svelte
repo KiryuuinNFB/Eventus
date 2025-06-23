@@ -22,7 +22,7 @@
     };
 </script>
 
-<div class="loginbg">
+<div>
     <div class="centerdiv">
         <div class="loginbox">
             <img src="{logo}" width="60px" alt="bodindecha2">

@@ -48,6 +48,14 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.404), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.bigtopic {
+    font-family: "Sarabun", Arial;
+    margin: 10%;
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+}
+
 .logintopic {
     font-family: "Sarabun", Arial;
     margin: 10%;

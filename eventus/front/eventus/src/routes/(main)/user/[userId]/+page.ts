@@ -1,4 +1,6 @@
-export const load = ({ fetch, params }) => {
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = async ({ fetch, params }) => {
 
     const getuser = async (id: string) => {
         const response = await fetch(`http://localhost:3000/dev/user/${id}`, {
@@ -10,6 +12,6 @@ export const load = ({ fetch, params }) => {
     }
 
     return {
-        user: getuser(params.userId)
+        user: await getuser(params.userId)
     }
 }
