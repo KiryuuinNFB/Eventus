@@ -145,7 +145,3 @@ export const admin = new Elysia({ prefix: '/admin'})
     })
     
 
-
-/* 
-admin commands used in production. require admin token
-*/
