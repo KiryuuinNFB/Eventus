@@ -17,20 +17,13 @@ export const admin = new Elysia({ prefix: '/admin' })
         })
     )
     .guard({
-        beforeHandle({ headers, status }) {
+        beforeHandle: async({ jwt, headers, status }) => {
             const auth = headers.authorization
             if (!auth) {
                 return status(401, "Unauthorized")
             }
-        }
-    })
-    .group('', (app) =>
-        app
-            .put('/user', async ({ jwt, body, headers: { authorization } }) => {
-                const { username, password, name, surname, role } = body;
-                const hashed = await Bun.password.hash(password)
+            const decoded = await jwt.verify(auth) as unknown as JwtPayload
 
-                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
                 const decodeduser = await prisma.user.findUnique({
                     where: {
                         username: decoded?.username!
@@ -39,6 +32,14 @@ export const admin = new Elysia({ prefix: '/admin' })
 
                 if (!decoded || decodeduser?.role !== 'ADMIN')
                     return status(401, "Unauthorized")
+        }
+    })
+    .group('', (app) =>
+        app
+            .put('/user', async ({ body }) => {
+                const { username, password, name, surname, role } = body;
+                const hashed = await Bun.password.hash(password)
+
                 const user = await prisma.user.create({
                     data: {
                         username,
@@ -65,18 +66,10 @@ export const admin = new Elysia({ prefix: '/admin' })
                     })),
                 }),
             })
-            .delete('/user', async ({ jwt, body, headers: { authorization } }) => {
+            .delete('/user', async ({ body }) => {
                 const { username, password } = body;
                 const hashed = await Bun.password.hash(password)
 
-                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
-                const decodeduser = await prisma.user.findUnique({
-                    where: {
-                        username: decoded?.username!
-                    }
-                });
-                if (!decoded || decodeduser?.role !== 'ADMIN')
-                    return status(401, "Unauthorized")
                 const deluser = await prisma.user.delete({
                     where: {
                         username: username,
@@ -94,15 +87,7 @@ export const admin = new Elysia({ prefix: '/admin' })
                     password: t.String()
                 })
             })
-            .get('/user/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
-                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
-                const decodeduser = await prisma.user.findUnique({
-                    where: {
-                        username: decoded?.username!
-                    }
-                });
-                if (!decoded || decodeduser?.role !== 'ADMIN')
-                    return status(401, "Unauthorized")
+            .get('/user/:username', async ({ params: { username } }) => {
                 const getuser = await prisma.user.findUnique({
                     where: {
                         username: username
@@ -129,15 +114,7 @@ export const admin = new Elysia({ prefix: '/admin' })
                 })
             })
     )
-    .post('/approve/:user/:base', async ({ jwt, params: { user, base }, headers: { authorization } }) => {
-        const decoded = await jwt.verify(authorization) as unknown as JwtPayload
-        const decodeduser = await prisma.user.findUnique({
-            where: {
-                username: decoded?.username!
-            }
-        });
-        if (!decoded || decodeduser?.role !== 'ADMIN')
-            return status(401, "Unauthorized")
+    .post('/approve/:user/:base', async ({ params: { user, base }}) => {
         await prisma.completion.create({
             data: {
                 completedOn: new Date(),

@@ -63,26 +63,28 @@ const app = new Elysia()
                     })
             })
     )
-    .group('/api', (app) =>
+    .group('/api/v1', (app) =>
         app
             .guard({
-                beforeHandle({ headers, status }) {
+                beforeHandle: async ({ jwt, headers, status }) => {
                     const auth = headers.authorization
                     if (!auth) {
                         return status(401, "Unauthorized")
                     }
+                    const decoded = await jwt.verify(auth) as unknown as JwtPayload
+
+                    const decodeduser = await prisma.user.findUnique({
+                        where: {
+                            username: decoded?.username!
+                        }
+                    });
+
+                    if (!decoded || decodeduser?.role !== 'ADMIN')
+                        return status(401, "Unauthorized")
                 }
             })
-            .get('/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
+            .get('/:username', async ({ params: { username } }) => {
 
-                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
-                const decodeduser = await prisma.user.findUnique({
-                    where: {
-                        username: decoded?.username!
-                    }
-                });
-                if (!decoded || decodeduser?.username !== username)
-                    return status(401, "Unauthorized")
                 const getuser = await prisma.user.findUnique({
                     where: {
                         username: username
