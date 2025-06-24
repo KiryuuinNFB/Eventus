@@ -3,7 +3,7 @@ import type { PageLoad } from './$types';
 export const load: PageLoad = async ({ fetch, params }) => {
 
     const getuser = async (id: string) => {
-        const response = await fetch(`http://localhost:3000/dev/user/${id}`, {
+        const response = await fetch(`http://172.50.87.37:3000/dev/user/${id}`, {
             method: "GET",
             headers: {}
         })

@@ -1,34 +1,34 @@
 <script>
-    import logo from '$lib/assets/logo.png';
+    import logo from "$lib/assets/logo.png";
+    import { goto } from "$app/navigation";
     let username = "";
     let password = "";
 
     const login = async () => {
-        const res = await fetch("http://localhost:3000/auth/login", {
+        const res = await fetch("http://172.50.87.37:3000/auth/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({ username, password }),
         });
         if (res.status === 401) {
-            alert("Invalid Credentials")
-        } else if (res.status === 200) {
-            const data = await res.json()
-            alert(`Login Success with token ${data.token}`)
+            alert("Invalid Credentials");
         } else if (res.status === 404) {
-            alert(`User ${username} not found`)
-        }  
+            alert(`User ${username} not found`);
+        } else if (res.status === 200) {
+            const data = await res.json();
+            goto(`/user/${username}`);
+        }
     };
 </script>
 
 <div>
     <div class="centerdiv">
         <div class="loginbox">
-            <img src="{logo}" width="60px" alt="bodindecha2">
+            <img src={logo} width="80px" alt="bodindecha2" />
             <h2 class="logintopic">เข้าสู่ระบบ</h2>
             <div class="loginformlists">
-                
                 <input
                     bind:value={username}
                     placeholder="เลขประจำตัวนักเรียน"
@@ -45,7 +45,5 @@
             </div>
         </div>
     </div>
-    <div class="watermark">
-        จัดทำโดยเด็ก AI
-    </div>
+    <div class="watermark">จัดทำโดยเฟมบอยนิรนามเพื่อเพื่อนๆทุกคน ♡</div>
 </div>

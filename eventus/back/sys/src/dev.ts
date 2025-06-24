@@ -77,6 +77,38 @@ export const dev = new Elysia({ prefix: '/dev' })
                     })),
                 })
             })
+            .patch('/user', async ({ body }) => {
+                const { username, password, name, surname, role } = body;
+                const hashed = await Bun.password.hash(password, { algorithm: "argon2id", memoryCost: 4, timeCost: 3 })
+
+                const user = await prisma.user.update({
+                    where: {
+                        username: username
+                    },
+                    data: {
+                        password: hashed,
+                        name,
+                        surname,
+                        role: role ?? 'USER'
+                    },
+                });
+
+                return {
+                    username: user.username,
+                    role: user.role
+                };
+            }, {
+                body: t.Object({
+                    username: t.String(),
+                    password: t.String(),
+                    name: t.String(),
+                    surname: t.String(),
+                    role: t.Optional(t.Enum({
+                        USER: 'USER',
+                        ADMIN: 'ADMIN'
+                    })),
+                })
+            })
             .delete('/user', async ({ body }) => {
                 const { username } = body;
                 const deluser = await prisma.user.delete({
