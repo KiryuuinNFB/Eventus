@@ -3,7 +3,6 @@ import { logger } from "@tqman/nice-logger";
 import { Elysia, status, t, file } from "elysia";
 import { PrismaClient } from "@prisma/client";
 import { cors } from '@elysiajs/cors'
-
 import { admin } from "./admin"
 import { dev } from "./dev"
 
@@ -66,6 +65,14 @@ const app = new Elysia()
     )
     .group('/api', (app) =>
         app
+            .guard({
+                beforeHandle({ headers, status }) {
+                    const auth = headers.authorization
+                    if (!auth) {
+                        return status(401, "Unauthorized")
+                    }
+                }
+            })
             .get('/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
 
                 const decoded = await jwt.verify(authorization) as unknown as JwtPayload

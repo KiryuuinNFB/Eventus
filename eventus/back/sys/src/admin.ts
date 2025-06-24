@@ -9,13 +9,21 @@ interface JwtPayload {
 
 const prisma = new PrismaClient()
 
-export const admin = new Elysia({ prefix: '/admin'})
+export const admin = new Elysia({ prefix: '/admin' })
     .use(
         jwt({
             name: 'jwt',
             secret: "CHANGE_THIS_IN_PROD"
         })
     )
+    .guard({
+        beforeHandle({ headers, status }) {
+            const auth = headers.authorization
+            if (!auth) {
+                return status(401, "Unauthorized")
+            }
+        }
+    })
     .group('', (app) =>
         app
             .put('/user', async ({ jwt, body, headers: { authorization } }) => {
@@ -28,7 +36,7 @@ export const admin = new Elysia({ prefix: '/admin'})
                         username: decoded?.username!
                     }
                 });
-                
+
                 if (!decoded || decodeduser?.role !== 'ADMIN')
                     return status(401, "Unauthorized")
                 const user = await prisma.user.create({
@@ -105,7 +113,7 @@ export const admin = new Elysia({ prefix: '/admin'})
                         userId: username
                     }
                 })
-                
+
                 return {
                     "studentId": getuser?.username,
                     "ulid": getuser?.id,
@@ -143,5 +151,5 @@ export const admin = new Elysia({ prefix: '/admin'})
             base: t.Number()
         })
     })
-    
+
 
