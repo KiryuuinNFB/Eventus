@@ -1,11 +1,12 @@
 <script>
     import logo from "$lib/assets/logo.png";
     import { goto } from "$app/navigation";
+    import { API_ELYSIA } from "$lib/config";
     let username = "";
     let password = "";
 
     const login = async () => {
-        const res = await fetch("http://172.50.87.37:3000/auth/login", {
+        const res = await fetch(`${API_ELYSIA}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -17,7 +18,6 @@
         } else if (res.status === 404) {
             alert(`User ${username} not found`);
         } else if (res.status === 200) {
-            const data = await res.json();
             goto(`/user/${username}`);
         }
     };

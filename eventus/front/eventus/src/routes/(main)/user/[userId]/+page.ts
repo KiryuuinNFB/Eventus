@@ -1,9 +1,10 @@
 import type { PageLoad } from './$types';
+import { API_ELYSIA } from '$lib/config';
 
 export const load: PageLoad = async ({ fetch, params }) => {
 
     const getuser = async (id: string) => {
-        const response = await fetch(`http://172.50.87.37:3000/dev/user/${id}`, {
+        const response = await fetch(`${API_ELYSIA}/dev/user/${id}`, {
             method: "GET",
             headers: {}
         })

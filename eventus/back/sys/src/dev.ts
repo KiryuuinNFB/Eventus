@@ -27,6 +27,31 @@ export const dev = new Elysia({ prefix: '/dev' })
                     location: t.String()
                 })
             })
+            .patch('/base', async ({ body }) => {
+                const { id, name, desc, location } = body;
+                const base = await prisma.base.update({
+                    where: {
+                        id: id
+                    },
+                    data: {
+                        name,
+                        desc,
+                        location
+                    }
+                });
+
+                return {
+                    id: base.id,
+                    name: base.name
+                };
+            }, {
+                body: t.Object({
+                    id: t.Number(),
+                    name: t.String(),
+                    desc: t.String(),
+                    location: t.String()
+                })
+            })
             .delete('/base', async ({ body }) => {
                 const { id } = body;
                 const base = await prisma.base.delete({

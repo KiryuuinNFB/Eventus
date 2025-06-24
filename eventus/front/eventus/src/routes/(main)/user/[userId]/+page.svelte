@@ -1,5 +1,15 @@
 <script lang="ts">
-    export let data;
+    type User = {
+        studentId: string;
+        ulid: string;
+        name: string;
+        surname: string;
+        role: string;
+    };
+
+    export let data: {
+        user: User;
+    };
     const user = data.user;
 </script>
 
