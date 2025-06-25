@@ -3,6 +3,8 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
+/*DO NOT USE dev.ts IN PRODUCTION. IT DOESN'T REQUIRE AUTHENTICATION */
+
 export const dev = new Elysia({ prefix: '/dev' })
     .group('', (app) =>
         app
@@ -68,6 +70,12 @@ export const dev = new Elysia({ prefix: '/dev' })
                 body: t.Object({
                     id: t.Number()
                 })
+            })
+            .get('/base', async () => {
+                const getbases = await prisma.base.findMany()
+
+                return getbases
+
             })
     )
     .group('', (app) =>

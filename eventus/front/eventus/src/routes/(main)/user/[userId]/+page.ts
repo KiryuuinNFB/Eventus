@@ -12,7 +12,16 @@ export const load: PageLoad = async ({ fetch, params }) => {
         return data
     }
 
+    const getbase = async () => {
+        const response = await fetch(`${API_ELYSIA}/dev/base/`, {
+            method: "GET",
+            headers: {}
+        })
+        const data = await response.json()
+        return data
+    }
     return {
-        user: await getuser(params.userId)
+        user: await getuser(params.userId),
+        base: await getbase()
     }
 }
