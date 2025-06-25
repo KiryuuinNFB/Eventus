@@ -6,8 +6,10 @@
 
 <title>{sitetitle}</title>
 
-<div>
+<div class="content">
+    <div class="contentbox">
     <h1>{page.status}</h1>
     <h1>{page.error?.message}</h1>
     <a href="/">Return to home page</a>
+    </div>
 </div>

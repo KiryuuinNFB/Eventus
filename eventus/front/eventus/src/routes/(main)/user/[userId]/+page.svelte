@@ -1,49 +1,27 @@
 <script lang="ts">
-    type Events = {
-        id: number;
-        completedOn: string;
-        baseId: number;
-        userId: string;
-    };
+    import qr from "$lib/assets/download.png";
 
-    type Bases = {
-        id: number;
-        name: string;
-        desc: string;
-        location: string;
-    };
+    export let data
 
-    type User = {
-        studentId: string;
-        ulid: string;
-        name: string;
-        surname: string;
-        role: string;
-        events: Events[];
-    };
-
-    export let data: {
-        user: User;
-        bases: Bases[];
-    };
-
-    const user = data.user;
-    const bases = data.bases
 </script>
 
 <div class="centerdiv">
     <div class="content">
         <div class="contentbox">
-            <h1 class="bigtopic">สวัสดีคุณ {user.name} {user.surname}</h1>
-            <p>ID : {user.studentId}</p>
-            <p>ULID : {user.ulid}</p>
-            <p>Role : {user.role}</p>
+            <h1 class="bigtopic">สวัสดีคุณ {data.name} {data.surname}</h1>
+            <p>ID : {data.studentId}</p>
         </div>
-        {#each user.events as event}
+        <div class="contentbox">
+            <div class="centerdiv">
+                <img src={qr} alt="qrcode">
+            </div>
+        </div>
+        {#each data.events as event}
             <div class="contentbox">
-                <p>{user.name}</p>
-                <p>{event.baseId}</p>
-                <p>{event.completedOn}</p>
+                <h3>{event.name}</h3>
+                <p>{event.desc}</p>
+                <p>ฐานอยู่ที่ : {event.location}</p>
+                <p>สถานะการทำ : {event.completed}</p>
             </div>
         {/each}
     </div>
