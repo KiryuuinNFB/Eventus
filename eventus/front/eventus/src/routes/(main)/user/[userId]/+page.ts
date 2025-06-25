@@ -42,7 +42,6 @@ export const load: PageLoad = async ({ fetch, params }) => {
     const checkUserCompletion = (user: Events[], bases: BaseStatus[]) => {
         const userCompleted: number[] = []
         const baseArr: BaseStatus[] = []
-        console.log(bases)
         for (var events of user) {
             userCompleted.push(events.baseId)
         }
@@ -67,7 +66,6 @@ export const load: PageLoad = async ({ fetch, params }) => {
         "surname": user.surname,
         "events": completedBase
     }
-    console.log(data)
 
     return data
 }
