@@ -1,16 +1,13 @@
 <script>
     import logo from "$lib/assets/logo.png";
     import { goto } from "$app/navigation";
-    import { API_ELYSIA } from "$lib/config";
     let username = "";
     let password = "";
 
     const login = async () => {
-        const res = await fetch(`${API_ELYSIA}/auth/login`, {
+        const res = await fetch("/api/login", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
         });
         if (res.status === 401) {

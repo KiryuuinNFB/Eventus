@@ -56,7 +56,6 @@ export const load: PageLoad = async ({ fetch, params }) => {
             baseArr.push(eachBase)
         }
 
-        
         return baseArr
     }
     const completedBase = checkUserCompletion(user.events, bases)
