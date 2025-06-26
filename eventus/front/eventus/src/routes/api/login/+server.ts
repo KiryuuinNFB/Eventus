@@ -18,6 +18,7 @@ export async function POST({ request, cookies, fetch }) {
 
     cookies.set('jwt', token, {
 		httpOnly: true,
+        secure: false,
 		path: '/',
 		sameSite: 'strict',
 		maxAge: 60 * 60

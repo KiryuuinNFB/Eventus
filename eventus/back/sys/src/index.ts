@@ -62,6 +62,21 @@ const app = new Elysia()
                         error: "Invalid credentials"
                     })
             })
+            .post('/verify', async ({ jwt, headers, status, body }) => {
+                const auth = headers.authorization
+                    if (!auth) {
+                        return status(401, "Unauthorized")
+                    }
+                const decoded = await jwt.verify(auth) as unknown as JwtPayload
+                    if (decoded.username !== body.username) {
+                        return status(401, "Unauthorized")
+                    }
+                return status(200, "OK")
+            }, {
+                body: t.Object({
+                    username: t.String()
+                })
+            })
     )
     .group('/api/v1', (app) =>
         app
