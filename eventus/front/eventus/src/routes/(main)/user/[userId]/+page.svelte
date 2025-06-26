@@ -9,11 +9,11 @@
     <div class="content">
         <div class="contentbox">
             <h1 class="bigtopic">สวัสดีคุณ {data.name} {data.surname}</h1>
-            <p>ID : {data.studentId}</p>
+            <p>มีฐานทั้งหมด {data.baseNum} ฐาน</p>
         </div>
         <div class="contentbox">
             <div class="centerdiv">
-                <img src={qr} alt="qrcode">
+                <img src={qr} alt="qrcode" width="180">
             </div>
         </div>
         {#each data.events as event}
@@ -21,7 +21,11 @@
                 <h3>{event.name}</h3>
                 <p>{event.desc}</p>
                 <p>ฐานอยู่ที่ : {event.location}</p>
-                <p>สถานะการทำ : {event.completed}</p>
+                {#if event.completed == true}
+                <p>สถานะการทำ : ✔️</p>
+                {:else}
+                <p>สถานะการทำ : ❌</p>
+                {/if}
             </div>
         {/each}
     </div>

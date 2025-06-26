@@ -86,6 +86,15 @@ body {
     align-items: center;
 }
 
+.loginformdiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
+    margin: 0px;
+    padding: 0px;
+}
+
 .loginform {
     background-color: var(--teritary);
     font-family: "Sarabun", Arial;
@@ -107,7 +116,6 @@ body {
     -webkit-transition: 0.3s;
     border: 2px solid var(--accent);
 }
-
 
 .loginsubmit {
     background-color: var(--teritary);
@@ -137,3 +145,4 @@ body {
     bottom: 0;
     padding: 4px;
 }
+

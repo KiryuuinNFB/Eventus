@@ -64,8 +64,8 @@ export const load: PageLoad = async ({ fetch, params }) => {
         "studentId": user.studentId,
         "name": user.name,
         "surname": user.surname,
-        "events": completedBase
+        "events": completedBase,
+        "baseNum": completedBase.length 
     }
-
     return data
 }
