@@ -64,7 +64,8 @@ export const load: PageLoad = async ({ fetch, params }) => {
         "name": user.name,
         "surname": user.surname,
         "events": completedBase,
-        "baseNum": completedBase.length 
+        "baseNum": completedBase.length,
+        "doneNum": user.events.length
     }
     return data
 }

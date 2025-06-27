@@ -8,12 +8,13 @@
 <div class="centerdiv">
     <div class="content">
         <div class="contentbox">
-            <h1 class="bigtopic">สวัสดีคุณ {data.name} {data.surname}</h1>
-            <p>มีฐานทั้งหมด {data.baseNum} ฐาน</p>
-        </div>
-        <div class="contentbox">
-            <div class="centerdiv">
-                <img src={qr} alt="qrcode" width="180">
+            <h2 class="bigtopic">สวัสดีคุณ {data.name} {data.surname}</h2>
+            <p>มีฐานทั้งหมด {data.baseNum} ฐาน ทำไปแล้ว {data.doneNum} ฐาน</p>
+            <p>เหลืออีก {data.baseNum - data.doneNum} ฐาน</p>
+            <div class="menubuttondiv">
+                <button class="menubutton">เช็คอินฐาน</button>
+                <button class="menubutton">เกี่ยวกับ</button>
+                <button class="menubutton">ออกจากระบบ</button>
             </div>
         </div>
         {#each data.events as event}
