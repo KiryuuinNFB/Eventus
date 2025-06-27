@@ -1,7 +1,18 @@
 <script lang="ts">
-    import qr from "$lib/assets/download.png";
+    import { goto } from '$app/navigation';
+
 
     export let data
+
+    const logout = async () => {
+        const res = await fetch("/api/logout", {
+            method: "GET",
+            headers: {}
+        })
+        if (res) {
+            goto("/")
+        }
+    }
 
 </script>
 
@@ -14,7 +25,7 @@
             <div class="menubuttondiv">
                 <button class="menubutton">เช็คอินฐาน</button>
                 <button class="menubutton">เกี่ยวกับ</button>
-                <button class="menubutton">ออกจากระบบ</button>
+                <button on:click={logout} class="menubutton">ออกจากระบบ</button>
             </div>
         </div>
         {#each data.events as event}

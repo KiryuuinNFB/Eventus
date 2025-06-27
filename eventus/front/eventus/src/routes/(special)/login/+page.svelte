@@ -23,7 +23,7 @@
 <div>
     <div class="centerdiv">
         <div class="loginbox">
-            <img src={logo} width="80px" alt="bodindecha2" />
+            <img src={logo} width="70px" alt="bodindecha2" />
             <h2 class="logintopic">เข้าสู่ระบบ</h2>
             <div class="loginformlists">
                 <input
@@ -42,5 +42,5 @@
             </div>
         </div>
     </div>
-    <div class="watermark">จัดทำโดยเฟมบอยนิรนามเพื่อเพื่อนๆทุกคน ♡</div>
+    <a href="https://github.com/KiryuuinNFB" class="watermark">จัดทำโดยเฟมบอยนิรนามเพื่อเพื่อนๆทุกคน ♡</a>
 </div>

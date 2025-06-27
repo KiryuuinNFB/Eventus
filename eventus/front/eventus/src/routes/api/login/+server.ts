@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { API_ELYSIA } from "$lib/config";
 
 export async function POST({ request, cookies, fetch }) {
@@ -11,7 +12,7 @@ export async function POST({ request, cookies, fetch }) {
     });
     
     if (!res.ok) {
-        return json({ status: res.status });
+        error(res.status)
     }
 
     const { token } = await res.json();
@@ -21,7 +22,7 @@ export async function POST({ request, cookies, fetch }) {
         secure: false,
 		path: '/',
 		sameSite: 'strict',
-		maxAge: 60 * 60
+		maxAge: 60 * 15 //60 seconds * 15 = 15 minutes
 	});
 
     return json({ "token": token });
