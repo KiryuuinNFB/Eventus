@@ -98,8 +98,16 @@ const app = new Elysia()
                         return status(401, "Unauthorized")
                 }
             })
-            .get('/:username', async ({ params: { username } }) => {
+            .get('/user/:username', async ({ jwt, params: { username }, headers: { authorization } }) => {
 
+                const decoded = await jwt.verify(authorization) as unknown as JwtPayload
+                const decodeduser = await prisma.user.findUnique({
+                    where: {
+                        username: decoded?.username!
+                    }
+                });
+                if (!decoded || decodeduser?.username !== username)
+                    return status(401, "Unauthorized")
                 const getuser = await prisma.user.findUnique({
                     where: {
                         username: username
@@ -119,6 +127,7 @@ const app = new Elysia()
                     "role": getuser?.role
                 }
             })
+            
     )
 
     .listen(3000);
