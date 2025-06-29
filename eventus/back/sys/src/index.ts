@@ -127,6 +127,11 @@ const app = new Elysia()
                     "role": getuser?.role
                 }
             })
+            .get('/base', async () => {
+                const getbases = await prisma.base.findMany()
+
+                return getbases
+            })
             
     )
 

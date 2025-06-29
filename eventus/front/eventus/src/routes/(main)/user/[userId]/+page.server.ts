@@ -38,18 +38,24 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     }
 
     const getuser = async (id: string) => {
-        const response = await fetch(`${API_ELYSIA}/dev/user/${id}`, {
+        const response = await fetch(`${API_ELYSIA}/api/v1/user/${id}`, {
             method: "GET",
-            headers: {}
+            headers: { 
+            "Content-Type": "application/json", 
+            "authorization": token
+        },
         })
         const data = await response.json()
         return data
     }
 
     const getbase = async () => {
-        const response = await fetch(`${API_ELYSIA}/dev/base/`, {
+        const response = await fetch(`${API_ELYSIA}/api/v1/base/`, {
             method: "GET",
-            headers: {}
+            headers: { 
+            "Content-Type": "application/json", 
+            "authorization": token
+        },
         })
         const data = await response.json()
         return data
