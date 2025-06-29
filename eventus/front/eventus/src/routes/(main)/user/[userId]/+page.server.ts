@@ -88,7 +88,5 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         "role": user.role
     }
 
-    console.log(data)
-
     return data
 }

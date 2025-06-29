@@ -1,7 +1,6 @@
 <script>
     let sitetitle = page.status + " " + page.error?.message;
     import { page } from "$app/state";
-
 </script>
 
 <title>{sitetitle}</title>
