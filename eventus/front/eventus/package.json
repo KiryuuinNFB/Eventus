@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@kuiper/svelte-scan-qrcode": "^0.0.5",
 		"html5-qrcode": "^2.3.8",
-		"jsqr": "^1.4.0"
+		"jsqr": "^1.4.0",
+		"vite-plugin-mkcert": "^1.17.8"
 	}
 }
