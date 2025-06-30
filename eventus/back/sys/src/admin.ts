@@ -17,21 +17,21 @@ export const admin = new Elysia({ prefix: '/admin' })
         })
     )
     .guard({
-        beforeHandle: async({ jwt, headers, status }) => {
+        beforeHandle: async ({ jwt, headers, status }) => {
             const auth = headers.authorization
             if (!auth) {
                 return status(401, "Unauthorized")
             }
             const decoded = await jwt.verify(auth) as unknown as JwtPayload
 
-                const decodeduser = await prisma.user.findUnique({
-                    where: {
-                        username: decoded?.username!
-                    }
-                });
+            const decodeduser = await prisma.user.findUnique({
+                where: {
+                    username: decoded?.username!
+                }
+            });
 
-                if (!decoded || decodeduser?.role !== 'ADMIN')
-                    return status(401, "Unauthorized")
+            if (!decoded || decodeduser?.role !== 'ADMIN')
+                return status(401, "Unauthorized")
         }
     })
     .group('', (app) =>
@@ -114,7 +114,7 @@ export const admin = new Elysia({ prefix: '/admin' })
                 })
             })
     )
-    .post('/approve/:user/:base', async ({ params: { user, base }}) => {
+    .post('/approve/:user/:base', async ({ params: { user, base } }) => {
         await prisma.completion.create({
             data: {
                 completedOn: new Date(),

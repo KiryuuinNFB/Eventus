@@ -18,7 +18,7 @@
         goto('/authentication')
     }
 
-    const adminhandle = () => {
+    const approve = () => {
         goto('/approve')
     }
 
@@ -30,6 +30,11 @@
             <h2 class="bigtopic">สวัสดีคุณ {data.name} {data.surname}</h2>
             <p>มีฐานทั้งหมด {data.baseNum} ฐาน ทำไปแล้ว {data.doneNum} ฐาน</p>
             <p>เหลืออีก {data.baseNum - data.doneNum} ฐาน</p>
+            {#if data.role == "ADMIN"}
+                <button on:click={approve} class="menubutton">ตรวจฐาน</button>
+            {:else}
+                <div></div>
+            {/if}
             <div class="menubuttondiv">
                 <button on:click={authenticator} class="menubutton">เช็คอินฐาน</button>
                 <button class="menubutton">เกี่ยวกับ</button>

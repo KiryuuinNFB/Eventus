@@ -77,6 +77,23 @@ const app = new Elysia()
                     username: t.String()
                 })
             })
+            .get('/veriadmin', async ({ jwt, headers, status }) => {
+                const auth = headers.authorization
+                if (!auth) {
+                    return status(401, "Unauthorized")
+                }
+                const decoded = await jwt.verify(auth) as unknown as JwtPayload
+
+                const decodeduser = await prisma.user.findUnique({
+                    where: {
+                        username: decoded?.username!
+                    }
+                });
+
+                if (!decoded || decodeduser?.role !== 'ADMIN')
+                    return status(401, "Unauthorized")
+                return status(200, "OK")
+            })
     )
     .group('/api/v1', (app) =>
         app
@@ -88,13 +105,13 @@ const app = new Elysia()
                     }
                     const decoded = await jwt.verify(auth) as unknown as JwtPayload
 
-                    const decodeduser = await prisma.user.findUnique({
+                    await prisma.user.findUnique({
                         where: {
                             username: decoded?.username!
                         }
                     });
 
-                    if (!decoded || decodeduser?.role !== 'ADMIN')
+                    if (!decoded)
                         return status(401, "Unauthorized")
                 }
             })
@@ -132,7 +149,6 @@ const app = new Elysia()
 
                 return getbases
             })
-            
     )
 
     .listen(3000);

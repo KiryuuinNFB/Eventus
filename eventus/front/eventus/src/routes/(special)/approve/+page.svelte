@@ -39,7 +39,7 @@
     }
 
     function onScanFailure(error: any) {
-        console.warn(`Code scan error = ${error}`)
+        console.log('no qr found')
     }
 
 
