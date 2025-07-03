@@ -1,27 +1,24 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
-
-
-    export let data
+    import { goto } from "$app/navigation";
+    import { Modal, Content, Trigger } from "sv-popup";
+    import { qr } from "@svelte-put/qr/svg";
+    export let data;
 
     const logout = async () => {
         const res = await fetch("/api/logout", {
             method: "GET",
-            headers: {}
-        })
+            headers: {},
+        });
         if (res) {
-            goto("/")
+            goto("/");
         }
-    }
-
-    const authenticator = () => {
-        goto('/authentication')
-    }
+    };
 
     const approve = () => {
-        goto('/approve')
-    }
+        goto("/approve");
+    };
 
+    
 </script>
 
 <div class="centerdiv">
@@ -36,7 +33,25 @@
                 <div></div>
             {/if}
             <div class="menubuttondiv">
-                <button on:click={authenticator} class="menubutton">เช็คอินฐาน</button>
+                <Modal basic>
+                    <Content>
+                        <div class="centerdiv">
+                            <div class="content">
+                                <p>นำ QR Code ไปสแกนที่ฐาน</p>
+                            <svg width="500" use:qr={{
+                            data: data.studentId + data.name + data.surname,
+                            shape: "square",
+                        }}
+                        />
+                            </div>
+                        </div>
+                        
+                    </Content>
+                    <Trigger>
+                        <button class="menubutton">เช็คอินฐาน</button>
+                    </Trigger>
+                </Modal>
+
                 <button class="menubutton">เกี่ยวกับ</button>
                 <button on:click={logout} class="menubutton">ออกจากระบบ</button>
             </div>
@@ -47,9 +62,9 @@
                 <p>{event.desc}</p>
                 <p>ฐานอยู่ที่ : {event.location}</p>
                 {#if event.completed == true}
-                <p>สถานะการทำ : ✔️</p>
+                    <p>สถานะการทำ : ✔️</p>
                 {:else}
-                <p>สถานะการทำ : ❌</p>
+                    <p>สถานะการทำ : ❌</p>
                 {/if}
             </div>
         {/each}
