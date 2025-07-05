@@ -39,7 +39,7 @@
                             <div class="content">
                                 <p>นำ QR Code ไปสแกนที่ฐาน</p>
                             <svg width="500" use:qr={{
-                            data: data.studentId + data.name + data.surname,
+                            data: data.studentId + " " + Date.now().toString(),
                             shape: "square",
                         }}
                         />
