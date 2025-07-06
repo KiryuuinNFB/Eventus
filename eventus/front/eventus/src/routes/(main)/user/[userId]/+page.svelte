@@ -12,7 +12,7 @@
         if (res) {
             goto("/");
         }
-    };
+    }; 
 
     const approve = () => {
         goto("/approve");

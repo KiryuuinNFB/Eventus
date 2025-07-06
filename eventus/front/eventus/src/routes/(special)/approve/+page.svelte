@@ -34,8 +34,7 @@
     }
 
     function onScanSuccess(decodedText: any, decodedResult: any) {
-        alert(decodedText)
-        console.log(decodedResult)
+        
     }
 
     function onScanFailure(error: any) {
@@ -52,6 +51,9 @@
     {:else}
         <button on:click={start}>start</button>
     {/if}
+    <div>
+        
+    </div>
 </main>
 
 <style>
