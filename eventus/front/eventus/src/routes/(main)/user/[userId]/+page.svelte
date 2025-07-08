@@ -12,13 +12,11 @@
         if (res) {
             goto("/");
         }
-    }; 
+    };
 
     const approve = () => {
         goto("/approve");
     };
-
-    
 </script>
 
 <div class="centerdiv">
@@ -27,25 +25,33 @@
             <h2 class="bigtopic">สวัสดีคุณ {data.name} {data.surname}</h2>
             <p>มีฐานทั้งหมด {data.baseNum} ฐาน ทำไปแล้ว {data.doneNum} ฐาน</p>
             <p>เหลืออีก {data.baseNum - data.doneNum} ฐาน</p>
+
             {#if data.role == "ADMIN"}
-                <button on:click={approve} class="menubutton">ตรวจฐาน</button>
+                <div class="centeradiv">
+                    <button on:click={approve} class="menubutton">ตรวจฐาน</button>
+                </div>
             {:else}
                 <div></div>
             {/if}
+
             <div class="menubuttondiv">
-                <Modal basic>
+                <Modal basic button={false}>
                     <Content>
                         <div class="centerdiv">
                             <div class="content">
                                 <p>นำ QR Code ไปสแกนที่ฐาน</p>
-                            <svg width="500" use:qr={{
-                            data: data.studentId + " " + Date.now().toString(),
-                            shape: "square",
-                        }}
-                        />
+                                <svg
+                                    width="500"
+                                    use:qr={{
+                                        data: JSON.stringify({
+                                            id: data.studentId,
+                                            created: Date.now().toString(),
+                                        }),
+                                        shape: "square",
+                                    }}
+                                />
                             </div>
                         </div>
-                        
                     </Content>
                     <Trigger>
                         <button class="menubutton">เช็คอินฐาน</button>
@@ -53,21 +59,21 @@
                 </Modal>
 
                 <button class="menubutton">เกี่ยวกับ</button>
-                <Modal basic small button={false}>
+                <Modal basic button={false}>
                     <Content>
                         <div class="centerdiv">
                             <div class="content">
                                 <p>คุณแน่ใจหรือไม่ว่าจะออกจากระบบ</p>
-                                <button on:click={logout} class="menubutton">ออกจากระบบ</button>
+                                <button on:click={logout} class="menubutton"
+                                    >ออกจากระบบ</button
+                                >
                             </div>
                         </div>
-                        
                     </Content>
                     <Trigger>
                         <button class="menubutton">ออกจากระบบ</button>
                     </Trigger>
                 </Modal>
-                
             </div>
         </div>
         {#each data.events as event}

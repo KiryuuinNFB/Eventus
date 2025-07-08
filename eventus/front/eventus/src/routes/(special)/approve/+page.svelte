@@ -1,8 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { Html5Qrcode } from "html5-qrcode";
+    import { Modal, Content, Trigger } from "sv-popup";
 
     let scanning = false
+
+    let close = true
 
     let html5Qrcode: Html5Qrcode
 
@@ -34,7 +37,8 @@
     }
 
     function onScanSuccess(decodedText: any, decodedResult: any) {
-        
+        const parsedText = JSON.parse(decodedText)
+        alert(parsedText.id + parsedText.created)
     }
 
     function onScanFailure(error: any) {
@@ -47,9 +51,9 @@
 <main class="content">
     <reader id="reader"></reader>
     {#if scanning}
-        <button on:click={stop}>stop</button>
+        <button on:click={stop} class="menubutton">stop</button>
     {:else}
-        <button on:click={start}>start</button>
+        <button on:click={start} class="menubutton">start</button>
     {/if}
     <div>
         
@@ -65,8 +69,9 @@
         gap: 20px;
     }
     reader {
-        width: 100%;
+        width: 80vw;
+        height: 80vw;
         min-height: 500px;
-        background-color: black;
+        background-color: rgb(66, 66, 66);
     }
 </style>
