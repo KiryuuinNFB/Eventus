@@ -53,7 +53,21 @@
                 </Modal>
 
                 <button class="menubutton">เกี่ยวกับ</button>
-                <button on:click={logout} class="menubutton">ออกจากระบบ</button>
+                <Modal basic small button={false}>
+                    <Content>
+                        <div class="centerdiv">
+                            <div class="content">
+                                <p>คุณแน่ใจหรือไม่ว่าจะออกจากระบบ</p>
+                                <button on:click={logout} class="menubutton">ออกจากระบบ</button>
+                            </div>
+                        </div>
+                        
+                    </Content>
+                    <Trigger>
+                        <button class="menubutton">ออกจากระบบ</button>
+                    </Trigger>
+                </Modal>
+                
             </div>
         </div>
         {#each data.events as event}
