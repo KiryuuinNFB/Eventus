@@ -5,8 +5,6 @@
 
     let scanning = false
 
-    let close = true
-
     let html5Qrcode: Html5Qrcode
 
     onMount(init)
