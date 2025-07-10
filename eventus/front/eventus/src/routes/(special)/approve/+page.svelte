@@ -152,7 +152,7 @@
             <AlertDialogContent class="w-75">
                 <AlertDialogHeader>
                     <AlertDialogTitle class="text-center"
-                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} หรือไม่</AlertDialogTitle
+                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} ( ฐานหมายเลข {value}) หรือไม่ </AlertDialogTitle
                     >
                 </AlertDialogHeader>
                 <AlertDialogFooter>
