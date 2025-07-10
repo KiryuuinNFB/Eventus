@@ -1,10 +1,16 @@
-<script>
-    import { qr } from '@svelte-put/qr/svg';
+<script lang="ts">
+	import * as Card from "$lib/components/ui/card/index.js";
 </script>
-<h1>authenticate</h1>
 
-<svg
-	use:qr={{
-		data: '22621:erwehirjjiorhoijhior',
-	}}
-/>
+<Card.Root>
+  <Card.Header>
+    <Card.Title>Card Title</Card.Title>
+    <Card.Description>Card Description</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <p>Card Content</p>
+  </Card.Content>
+  <Card.Footer>
+    <p>Card Footer</p>
+  </Card.Footer>
+</Card.Root>
