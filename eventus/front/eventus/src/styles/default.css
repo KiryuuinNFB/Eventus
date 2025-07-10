@@ -5,6 +5,7 @@
 }
 
 body {
+    font-family: "Sarabun", Arial;
     min-height: 60vh;
     background-color: var(--main);
     margin: 0px;

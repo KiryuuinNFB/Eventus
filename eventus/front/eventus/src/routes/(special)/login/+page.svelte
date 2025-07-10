@@ -1,8 +1,32 @@
-<script>
+<script lang="ts">
+    import { Input } from "$lib/components/ui/input/index.js";
+    import { Label } from "$lib/components/ui/label/index.js";
+    import { Button } from "$lib/components/ui/button/index.js";
+    import * as Card from "$lib/components/ui/card/index.js";
+    import {
+        AlertDialog,
+        AlertDialogAction,
+        AlertDialogCancel,
+        AlertDialogContent,
+        AlertDialogDescription,
+        AlertDialogFooter,
+        AlertDialogHeader,
+        AlertDialogTitle,
+        AlertDialogTrigger,
+    } from "$lib/components/ui/alert-dialog";
+
     import logo from "$lib/assets/logo.png";
     import { goto } from "$app/navigation";
-    let username = "";
-    let password = "";
+    let username: string = "";
+    let password: string = "";
+
+    let alertstatus: string = "what";
+
+    let showalert: boolean = false;
+
+    const reset = () => {
+        showalert = false
+    }
 
     const login = async () => {
         const res = await fetch("/api/login", {
@@ -11,36 +35,76 @@
             body: JSON.stringify({ username, password }),
         });
         if (res.status === 401) {
-            alert("Invalid Credentials");
+            showalert = true;
+            alertstatus = "รหัสผ่านไม่ถูกต้อง"
         } else if (res.status === 404) {
-            alert(`User ${username} not found`);
+            showalert = true;
+            alertstatus = `ไม่พบผู้ใช้ ${username}`;
         } else if (res.status === 200) {
             goto(`/user/${username}`);
         }
     };
 </script>
 
-<div>
-    <div class="centerdiv">
-        <div class="loginbox">
-            <img src={logo} width="70px" alt="bodindecha2" />
-            <h2 class="logintopic">เข้าสู่ระบบ</h2>
-            <div class="loginformlists">
-                <input
-                    bind:value={username}
-                    placeholder="เลขประจำตัวนักเรียน"
-                    class="loginform"
-                />
-                <input
-                    bind:value={password}
-                    placeholder="รหัสผ่าน"
-                    type="password"
-                    class="loginform"
-                />
-                <button on:click={login} class="loginsubmit">เข้าสู่ระบบ</button
-                >
-            </div>
-        </div>
-    </div>
-    <a href="https://github.com/KiryuuinNFB" class="watermark">จัดทำโดยเฟมบอยนิรนามเพื่อเพื่อนๆทุกคน ♡</a>
+<div class="flex text-center justify-center">
+    <Card.Root class="flex p-6 m-16 border-accent">
+        <Card.Header class="flex flex-col items-center">
+            <img src={logo} width="60" alt="bodindecha 2" />
+            <Card.Title class="font-medium text-xl">เข้าสู่ระบบ</Card.Title>
+        </Card.Header>
+        <Card.Content>
+            <form>
+                <div class="flex flex-col gap-6">
+                    <div class="grid gap-2">
+                        <Label for="text">ชื่อผู้ใช้</Label>
+                        <Input
+                            id="text"
+                            type="text"
+                            placeholder="รหัสนักเรียน"
+                            class="max-w-xs"
+                            bind:value={username}
+                        />
+                    </div>
+                    <div class="grid gap-2">
+                        <Label for="password">รหัสผ่าน</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            placeholder="รหัสผ่าน"
+                            class="max-w-xs"
+                            bind:value={password}
+                        />
+                    </div>
+                </div>
+            </form>
+        </Card.Content>
+        <Card.Footer>
+            <Button
+                onclick={login}
+                variant="default"
+                type="submit"
+                class="w-full">เข้าสู่ระบบ</Button
+            >
+        </Card.Footer>
+    </Card.Root>
+    <AlertDialog open={showalert}>
+        <AlertDialogContent class="w-75">
+            <AlertDialogHeader>
+                <AlertDialogTitle class="text-center">{alertstatus}</AlertDialogTitle>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <Button
+                onclick={reset}
+                variant="default"
+                type="submit"
+                class="w-full">Ok</Button
+            >
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+    <a
+        href="https://github.com/KiryuuinNFB"
+        class="transition duration-300 fixed hover:text-blue-500 text-center w-full left-0 bottom-0 p-1"
+        >จัดทำโดยเฟมบอยนิรนามเพื่อเพื่อนๆทุกคน ♡</a
+    >
 </div>
