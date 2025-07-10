@@ -18,4 +18,22 @@ export const load: PageServerLoad = async ({ cookies }) => {
     if (!res.ok) {
         redirect(303, "/")
     }
+
+    const getbase = async () => {
+        const response = await fetch(`${API_ELYSIA}/api/v1/base/`, {
+            method: "GET",
+            headers: { 
+            "Content-Type": "application/json", 
+            "authorization": token
+        },
+        })
+        const data = await response.json()
+        return data
+    }
+    const basesArray = await getbase()
+    const data = {
+        "bases": basesArray
+    }
+    console.log(data["bases"])
+    return data
 }

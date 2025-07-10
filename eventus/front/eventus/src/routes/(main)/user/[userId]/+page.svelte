@@ -17,6 +17,8 @@
     const approve = () => {
         goto("/approve");
     };
+
+    import "../../../../styles/default.css"
 </script>
 
 <div class="centerdiv">
