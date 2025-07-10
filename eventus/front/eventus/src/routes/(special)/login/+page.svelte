@@ -25,8 +25,8 @@
     let showalert: boolean = false;
 
     const reset = () => {
-        showalert = false
-    }
+        showalert = false;
+    };
 
     const login = async () => {
         const res = await fetch("/api/login", {
@@ -36,7 +36,7 @@
         });
         if (res.status === 401) {
             showalert = true;
-            alertstatus = "รหัสผ่านไม่ถูกต้อง"
+            alertstatus = "รหัสผ่านไม่ถูกต้อง";
         } else if (res.status === 404) {
             showalert = true;
             alertstatus = `ไม่พบผู้ใช้ ${username}`;
@@ -45,68 +45,73 @@
         }
     };
 </script>
-<div class="h-screen bg-secondary">
-    <div class="flex text-center justify-center">
-    <Card.Root class="flex p-6 m-16 border-accent bg-card">
-        <Card.Header class="flex flex-col items-center">
-            <img src={logo} width="60" alt="bodindecha 2" />
-            <Card.Title class="font-medium text-xl">เข้าสู่ระบบ</Card.Title>
-        </Card.Header>
-        <Card.Content>
-            <form>
-                <div class="flex flex-col gap-6">
-                    <div class="grid gap-2">
-                        <Label for="text">ชื่อผู้ใช้</Label>
-                        <Input
-                            id="text"
-                            type="text"
-                            placeholder="รหัสนักเรียน"
-                            class="max-w-xs"
-                            bind:value={username}
-                        />
-                    </div>
-                    <div class="grid gap-2">
-                        <Label for="password">รหัสผ่าน</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            placeholder="รหัสผ่าน"
-                            class="max-w-xs"
-                            bind:value={password}
-                        />
-                    </div>
-                </div>
-            </form>
-        </Card.Content>
-        <Card.Footer>
-            <Button
-                onclick={login}
-                variant="default"
-                type="submit"
-                class="w-full bg-chart-3 hover:bg-chart-2">เข้าสู่ระบบ</Button
-            >
-        </Card.Footer>
-    </Card.Root>
-    <AlertDialog open={showalert}>
-        <AlertDialogContent class="w-75">
-            <AlertDialogHeader>
-                <AlertDialogTitle class="text-center">{alertstatus}</AlertDialogTitle>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <Button
-                onclick={reset}
-                variant="default"
-                type="submit"
-                class="w-full bg-chart-3 hover:bg-chart-2">Ok</Button
-            >
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
-    <a
-        href="https://github.com/KiryuuinNFB"
-        class="transition duration-300 fixed hover:text-chart-2 text-center w-full left-0 bottom-0 p-1"
-        >จัดทำโดยเฟมบอยนิรนามเพื่อเพื่อนๆทุกคน ♡</a
-    >
-</div>
-</div>
 
+<div class="h-screen bg-border font-[sarabun]">
+    <div class="flex text-center justify-center">
+        <Card.Root class="flex p-6 m-16 bg-card border-ring">
+            <Card.Header class="flex flex-col items-center">
+                <img src={logo} width="60" alt="bodindecha 2" />
+                <Card.Title class="font-medium text-2xl">เข้าสู่ระบบ</Card.Title
+                >
+            </Card.Header>
+            <Card.Content>
+                <form>
+                    <div class="flex flex-col gap-6">
+                        <div class="grid gap-2">
+                            <Label for="text">ชื่อผู้ใช้</Label>
+                            <Input
+                                id="text"
+                                type="text"
+                                placeholder="รหัสนักเรียน"
+                                class="max-w-xs border-ring"
+                                bind:value={username}
+                            />
+                        </div>
+                        <div class="grid gap-2">
+                            <Label for="password">รหัสผ่าน</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                placeholder="รหัสผ่าน"
+                                class="max-w-xs border-ring"
+                                bind:value={password}
+                            />
+                        </div>
+                    </div>
+                </form>
+            </Card.Content>
+            <Card.Footer>
+                <Button
+                    onclick={login}
+                    variant="default"
+                    type="submit"
+                    class="w-full transition duration-300 bg-teal-700 hover:bg-teal-500 border-ring"
+                    >เข้าสู่ระบบ</Button
+                >
+            </Card.Footer>
+        </Card.Root>
+        <AlertDialog open={showalert}>
+            <AlertDialogContent class="w-55">
+                <AlertDialogHeader>
+                    <AlertDialogTitle class="text-center"
+                        >{alertstatus}</AlertDialogTitle
+                    >
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <Button
+                        onclick={reset}
+                        variant="default"
+                        type="submit"
+                        class="w-full transition duration-300 bg-teal-700 hover:bg-teal-500"
+                        >Ok</Button
+                    >
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+        <a
+            href="https://github.com/KiryuuinNFB"
+            class="transition duration-300 fixed hover:text-emerald-500 text-center w-full left-0 bottom-0 p-1"
+            >จัดทำโดยเฟมบอยนิรนามเพื่อเพื่อนๆทุกคน ♡</a
+        >
+    </div>
+</div>
