@@ -45,9 +45,9 @@
         }
     };
 </script>
-
-<div class="flex text-center justify-center">
-    <Card.Root class="flex p-6 m-16 border-accent">
+<div class="h-screen bg-secondary">
+    <div class="flex text-center justify-center">
+    <Card.Root class="flex p-6 m-16 border-accent bg-card">
         <Card.Header class="flex flex-col items-center">
             <img src={logo} width="60" alt="bodindecha 2" />
             <Card.Title class="font-medium text-xl">เข้าสู่ระบบ</Card.Title>
@@ -83,7 +83,7 @@
                 onclick={login}
                 variant="default"
                 type="submit"
-                class="w-full">เข้าสู่ระบบ</Button
+                class="w-full bg-chart-3 hover:bg-chart-2">เข้าสู่ระบบ</Button
             >
         </Card.Footer>
     </Card.Root>
@@ -97,14 +97,16 @@
                 onclick={reset}
                 variant="default"
                 type="submit"
-                class="w-full">Ok</Button
+                class="w-full bg-chart-3 hover:bg-chart-2">Ok</Button
             >
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
     <a
         href="https://github.com/KiryuuinNFB"
-        class="transition duration-300 fixed hover:text-blue-500 text-center w-full left-0 bottom-0 p-1"
+        class="transition duration-300 fixed hover:text-chart-2 text-center w-full left-0 bottom-0 p-1"
         >จัดทำโดยเฟมบอยนิรนามเพื่อเพื่อนๆทุกคน ♡</a
     >
 </div>
+</div>
+
