@@ -109,7 +109,7 @@
                     </reader>
                 </div>
             </Card.Content>
-            <Card.Footer>
+            <Card.Footer class="p-2 justify-between">
                 {#if scanning}
                     <Button
                         onclick={stop}
@@ -125,7 +125,11 @@
                 {/if}
                 <Select.Root type="single" bind:value>
                     <Select.Trigger class="w-[180px]">
-                        {triggerContent}
+                        <div
+                            class="truncate overflow-hidden whitespace-nowrap w-full"
+                        >
+                            {triggerContent}
+                        </div>
                     </Select.Trigger>
                     <Select.Content>
                         <Select.Group>
@@ -133,8 +137,11 @@
                             {#each data.bases as base}
                                 <Select.Item
                                     value={base.id.toString()}
-                                    label={base.name}>{base.name}</Select.Item
+                                    label={base.name}
+                                    class="w-[180px]"
                                 >
+                                    {base.name}
+                                </Select.Item>
                             {/each}
                         </Select.Group>
                     </Select.Content>
@@ -145,7 +152,7 @@
             <AlertDialogContent class="w-75">
                 <AlertDialogHeader>
                     <AlertDialogTitle class="text-center"
-                        >ยืนยันนักเรียน {scanres.id} {triggerContent} หรือไม่</AlertDialogTitle
+                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} หรือไม่</AlertDialogTitle
                     >
                 </AlertDialogHeader>
                 <AlertDialogFooter>
