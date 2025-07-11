@@ -30,7 +30,10 @@
 
     const { data } = $props();
 
+    let user: string = $state("");
+
     let value = $state("");
+
     const baseArr: Base[] = data["bases"];
     const triggerContent = $derived(
         baseArr.find((f: any) => f.id.toString() === value)?.name ?? "เลือกฐาน",
@@ -38,6 +41,7 @@
 
     let scanning: boolean = $state(false);
     let showalert: boolean = $state(false);
+    let showalert2: boolean = $state(false);
 
     let html5Qrcode: Html5Qrcode;
 
@@ -46,14 +50,28 @@
         created: "",
     });
 
+    const approve = async () => {
+        await fetch('api/approve', {
+            method: "POST",
+            headers: {},
+            body: JSON.stringify({ "user": user, "base": value}),
+        }) 
+    }
+
     onMount(init);
 
     const reset = () => {
         showalert = false;
     };
 
+    const reset2 = () => {
+        showalert2 = false;
+    };
+
     const approve_and_reset = () => {
         showalert = false;
+        approve()
+        showalert2 = true;
     };
 
     function init() {
@@ -85,6 +103,7 @@
         showalert = true;
         const parsedText = JSON.parse(decodedText);
         scanres = parsedText;
+        user = scanres.id;
     }
 
     function onScanFailure(error: any) {
@@ -124,7 +143,7 @@
                     >
                 {/if}
                 <Select.Root type="single" bind:value>
-                    <Select.Trigger class="w-[180px]">
+                    <Select.Trigger class="w-[180px] border-ring">
                         <div
                             class="truncate overflow-hidden whitespace-nowrap w-full"
                         >
@@ -148,27 +167,49 @@
                 </Select.Root>
             </Card.Footer>
         </Card.Root>
+
         <AlertDialog open={showalert}>
             <AlertDialogContent class="w-75">
                 <AlertDialogHeader>
                     <AlertDialogTitle class="text-center"
-                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} ( ฐานหมายเลข {value}) หรือไม่ </AlertDialogTitle
+                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} ( ID: {value}) หรือไม่
+                    </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <div class="flex flex-row justify-around">
+                        <Button
+                            onclick={approve_and_reset}
+                            variant="default"
+                            type="submit"
+                            class="w-[60] transition duration-300 bg-teal-700 hover:bg-teal-500"
+                            >Ok</Button
+                        >
+                        <Button
+                            onclick={reset}
+                            variant="default"
+                            type="submit"
+                            class="w-[60] transition duration-300 bg-rose-700 hover:bg-rose-500"
+                            >Cancel</Button
+                        >
+                    </div>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={showalert2}>
+            <AlertDialogContent class="w-55">
+                <AlertDialogHeader>
+                    <AlertDialogTitle class="text-center"
+                        >ยืนยันนักเรียนเรียบร้อยแล้ว</AlertDialogTitle
                     >
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <Button
-                        onclick={reset}
+                        onclick={reset2}
                         variant="default"
                         type="submit"
-                        class="w-full transition duration-300 bg-teal-700 hover:bg-teal-500"
+                        class="w-[60] transition duration-300 bg-teal-700 hover:bg-teal-500"
                         >Ok</Button
-                    >
-                    <Button
-                        onclick={approve_and_reset}
-                        variant="default"
-                        type="submit"
-                        class="w-full transition duration-300 bg-rose-700 hover:bg-rose-500"
-                        >Cancel</Button
                     >
                 </AlertDialogFooter>
             </AlertDialogContent>

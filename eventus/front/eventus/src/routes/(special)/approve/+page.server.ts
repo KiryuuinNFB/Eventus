@@ -34,6 +34,5 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const data = {
         "bases": basesArray
     }
-    console.log(data["bases"])
     return data
 }

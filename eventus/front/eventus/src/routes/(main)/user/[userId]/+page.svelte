@@ -56,7 +56,7 @@
                         </div>
                     </Content>
                     <Trigger>
-                        <button class="menubutton">เช็คอินฐาน</button>
+                        <button class="menubutton">เช็กอินฐาน</button>
                     </Trigger>
                 </Modal>
 
