@@ -30,7 +30,11 @@
         LogOut,
         ChartBarBig,
         Stamp,
-        TicketCheck,
+        ShieldUser,
+        Mars,
+        Star,
+        User,
+        
     } from "@lucide/svelte";
 
     export let data;
@@ -55,9 +59,9 @@
 </script>
 
 <div class="min-h-screen bg-border font-[sarabun]">
-    <div class="sticky top-0 p-2 backdrop-blur-sm">
+    <div class="sticky top-0 p-2 backdrop-blur-sm flex flex-row-reverse border-slate-200 border-1">
         <Sheet.Root>
-            <Sheet.Trigger><Menu size={32} /></Sheet.Trigger>
+            <Sheet.Trigger><Menu size={36} /></Sheet.Trigger>
 
             <Sheet.Content side="right" class="font-[sarabun]">
                 <Sheet.Header>
@@ -124,25 +128,34 @@
                 <Card.Title class="font-medium text-4xl"
                     >สวัสดี, {data.name} {data.surname}</Card.Title
                 >
-                <div class="justify-between">
+                <div class="justify-between gap-2">
                     {#if data.role == "ADMIN"}
                         <Badge
                             class="bg-amber-200 text-amber-700 border-amber-700 m-4"
                         >
-                            ผู้ดูแลระบบ
+                            <ShieldUser />ผู้ดูแลระบบ
                         </Badge>
                     {:else}
                         <Badge
                             class="bg-cyan-200 text-cyan-700 border-cyan-700 m-4"
                         >
-                            นักเรียน
+                            <User />นักเรียน
                         </Badge>
+                    {/if}
+                    {#if data.studentId == "22621"}
+                        <Badge
+                            class="bg-pink-200 text-pink-700 border-pink-700 m-4"
+                        >
+                            <Mars />เฟมบอย
+                        </Badge>
+                    {:else}
+                        <div></div>
                     {/if}
                     {#if data.baseNum == data.doneNum}
                         <Badge
                             class="bg-emerald-200 text-emerald-700 border-emerald-700 m-4"
                         >
-                            ทำครบทุกฐาน
+                            <Star /> ทำครบทุกฐาน
                         </Badge>
                     {:else}
                         <Badge
