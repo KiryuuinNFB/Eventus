@@ -191,14 +191,14 @@
                             onclick={approve_and_reset}
                             variant="default"
                             type="submit"
-                            class="w-[60] transition duration-300 bg-teal-700 hover:bg-teal-500"
+                            class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
                             >Ok</Button
                         >
                         <Button
                             onclick={reset}
                             variant="default"
                             type="submit"
-                            class="w-[60] transition duration-300 bg-rose-700 hover:bg-rose-500"
+                            class="transition border-1 border-rose-800 duration-300 text-rose-800 bg-rose-200 hover:bg-rose-500"
                             >Cancel</Button
                         >
                     </div>
@@ -218,7 +218,7 @@
                         onclick={reset2}
                         variant="default"
                         type="submit"
-                        class="w-[60] transition duration-300 bg-teal-700 hover:bg-teal-500"
+                        class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
                         >Ok</Button
                     >
                 </AlertDialogFooter>
