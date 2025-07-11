@@ -115,13 +115,32 @@ export const admin = new Elysia({ prefix: '/admin' })
             })
     )
     .post('/approve/:user/:base', async ({ params: { user, base } }) => {
-        await prisma.completion.create({
-            data: {
-                completedOn: new Date(),
-                baseId: base,
-                userId: user,
+        const completionCheck = await prisma.completion.findMany({
+            where: {
+                AND: [{
+                    userId: {
+                        equals: user
+                    },
+                    baseId: {
+                        equals: base
+                    }
+                }]
             }
         })
+
+        if (completionCheck.length === 0) {
+            await prisma.completion.create({
+                data: {
+                    completedOn: new Date(),
+                    baseId: base,
+                    userId: user,
+                }
+            })
+        } else {
+            return status(403, "Forbidden")
+        }
+
+
     }, {
         params: t.Object({
             user: t.String(),

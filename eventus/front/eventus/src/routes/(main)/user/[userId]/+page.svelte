@@ -1,8 +1,43 @@
 <script lang="ts">
+    import * as Card from "$lib/components/ui/card/index.js";
+    import * as Accordion from "$lib/components/ui/accordion/index.js";
+    import { Badge } from "$lib/components/ui/badge/index.js";
+    import { Button } from "$lib/components/ui/button/index.js";
+    import * as Sheet from "$lib/components/ui/sheet/index.js";
+    import { Separator } from "$lib/components/ui/separator/index.js";
+    import {
+        AlertDialog,
+        AlertDialogAction,
+        AlertDialogCancel,
+        AlertDialogContent,
+        AlertDialogDescription,
+        AlertDialogFooter,
+        AlertDialogHeader,
+        AlertDialogTitle,
+        AlertDialogTrigger,
+    } from "$lib/components/ui/alert-dialog";
+
     import { goto } from "$app/navigation";
-    import { Modal, Content, Trigger } from "sv-popup";
     import { qr } from "@svelte-put/qr/svg";
+
+    let showalert: boolean = false;
+    let showqr: boolean = false;
+
+    import {
+        Check,
+        X,
+        Menu,
+        LogOut,
+        ChartBarBig,
+        Stamp,
+        TicketCheck,
+    } from "@lucide/svelte";
+
     export let data;
+
+    const reset = () => {
+        showalert = false;
+    };
 
     const logout = async () => {
         const res = await fetch("/api/logout", {
@@ -15,80 +50,227 @@
     };
 
     const approve = () => {
-        goto("/approve");
+        goto(`/approve`);
     };
-
-    import "../../../../styles/default.css"
 </script>
 
-<div class="centerdiv">
-    <div class="content">
-        <div class="contentbox">
-            <h2 class="bigtopic">สวัสดีคุณ {data.name} {data.surname}</h2>
-            <p>มีฐานทั้งหมด {data.baseNum} ฐาน ทำไปแล้ว {data.doneNum} ฐาน</p>
-            <p>เหลืออีก {data.baseNum - data.doneNum} ฐาน</p>
+<div class="min-h-screen bg-border font-[sarabun]">
+    <div class="sticky top-0 p-2 backdrop-blur-sm">
+        <Sheet.Root>
+            <Sheet.Trigger><Menu size={32} /></Sheet.Trigger>
 
-            {#if data.role == "ADMIN"}
-                <div class="centeradiv">
-                    <button on:click={approve} class="menubutton">ตรวจฐาน</button>
+            <Sheet.Content side="right" class="font-[sarabun]">
+                <Sheet.Header>
+                    <Sheet.Title>EVENTUS x ALiCE</Sheet.Title>
+                    <Sheet.Description>
+                        Authenticated Log in Checker For Eventus
+                    </Sheet.Description>
+                    {#if data.role == "ADMIN"}
+                        <Separator />
+                        <div
+                            class="flex flex-row text-left justify-center gap-2"
+                        >
+                            <Button
+                                variant="default"
+                                class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
+                                onclick={approve}
+                            >
+                                <Stamp /> ตรวจฐาน
+                            </Button>
+                            <Button
+                                variant="default"
+                                class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
+                                onclick={approve}
+                            >
+                                <ChartBarBig /> สถิติ
+                            </Button>
+                        </div>
+                    {:else}
+                        <div></div>
+                    {/if}
+
+                    <Separator />
+                    <div class="flex flex-col text-left">
+                        <Button
+                            variant="link"
+                            size="lg"
+                            onclick={() => {
+                                showqr = true;
+                            }}>เช็กอินฐาน</Button
+                        >
+                        <Button variant="link" size="lg">เกี่ยวกับ</Button>
+                        <Button variant="link" size="lg">เกียรติบัตร</Button>
+                    </div>
+                    <Separator />
+                    <div class="absolute bottom-0 p-2">
+                        <Button
+                            variant="default"
+                            class="w-full transition border-1 border-rose-800 duration-300 text-rose-800 bg-rose-200 hover:bg-rose-500"
+                            onclick={() => {
+                                showalert = true;
+                            }}
+                        >
+                            <LogOut />ออกจากระบบ
+                        </Button>
+                    </div>
+                </Sheet.Header>
+            </Sheet.Content>
+        </Sheet.Root>
+    </div>
+    <div class="flex flex-col max-w-[400px] justify-self-center">
+        <div></div>
+        <Card.Root class="flex p-8 m-4 bg-card border-ring">
+            <Card.Header class="flex flex-col items-center text-center">
+                <Card.Title class="font-medium text-4xl"
+                    >สวัสดี, {data.name} {data.surname}</Card.Title
+                >
+                <div class="justify-between">
+                    {#if data.role == "ADMIN"}
+                        <Badge
+                            class="bg-amber-200 text-amber-700 border-amber-700 m-4"
+                        >
+                            ผู้ดูแลระบบ
+                        </Badge>
+                    {:else}
+                        <Badge
+                            class="bg-cyan-200 text-cyan-700 border-cyan-700 m-4"
+                        >
+                            นักเรียน
+                        </Badge>
+                    {/if}
+                    {#if data.baseNum == data.doneNum}
+                        <Badge
+                            class="bg-emerald-200 text-emerald-700 border-emerald-700 m-4"
+                        >
+                            ทำครบทุกฐาน
+                        </Badge>
+                    {:else}
+                        <Badge
+                            class="bg-rose-200 text-rose-700 border-rose-700 m-4"
+                        >
+                            ยังทำไม่ครบ
+                        </Badge>
+                    {/if}
                 </div>
-            {:else}
-                <div></div>
-            {/if}
+            </Card.Header>
+            <Card.Content>
+                มีทั้งหมด {data.baseNum} ฐาน ทำไปแล้ว {data.doneNum} ฐาน เหลืออีก
+                {data.baseNum - data.doneNum} ฐาน
+            </Card.Content>
+        </Card.Root>
 
-            <div class="menubuttondiv">
-                <Modal basic button={false}>
-                    <Content>
-                        <div class="centerdiv">
-                            <div class="content">
-                                <p>นำ QR Code ไปสแกนที่ฐาน</p>
-                                <svg
-                                    width="500"
-                                    use:qr={{
-                                        data: JSON.stringify({
-                                            id: data.studentId,
-                                            created: Date.now().toString(),
-                                        }),
-                                        shape: "square",
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </Content>
-                    <Trigger>
-                        <button class="menubutton">เช็คอินฐาน</button>
-                    </Trigger>
-                </Modal>
+        <Card.Root class="flex p-4 m-4 bg-card border-ring">
+            <Card.Content>
+                <Accordion.Root type="multiple" class="w-full">
+                    <h1 class="text-lg">ฐาน</h1>
+                    {#each data.events as event}
+                        <Accordion.Item
+                            value={event.id.toString()}
+                            class="text-left"
+                        >
+                            <Accordion.Trigger>
+                                <div class="text-lg flex flex-row gap-2">
+                                    {#if event.completed == true}
+                                        <Badge
+                                            class="bg-emerald-200 text-emerald-700 border-emerald-700 m-1 w-8 h-8"
+                                        >
+                                            <Check size={8} />
+                                        </Badge>
+                                    {:else}
+                                        <Badge
+                                            class="bg-rose-200 text-rose-700 border-rose-700 m-1 w-8 h-8"
+                                        >
+                                            <X size={8} />
+                                        </Badge>
+                                    {/if}
+                                    {event.name}
+                                </div>
+                            </Accordion.Trigger>
+                            <Accordion.Content
+                                class="flex flex-col gap-4 text-balance"
+                            >
+                                <Card.Root>
+                                    <Card.Content>
+                                        <div class="text-lg">
+                                            ฐาน {event.name}
+                                        </div>
 
-                <button class="menubutton">เกี่ยวกับ</button>
-                <Modal basic button={false}>
-                    <Content>
-                        <div class="centerdiv">
-                            <div class="content">
-                                <p>คุณแน่ใจหรือไม่ว่าจะออกจากระบบ</p>
-                                <button on:click={logout} class="menubutton"
-                                    >ออกจากระบบ</button
-                                >
-                            </div>
-                        </div>
-                    </Content>
-                    <Trigger>
-                        <button class="menubutton">ออกจากระบบ</button>
-                    </Trigger>
-                </Modal>
-            </div>
-        </div>
-        {#each data.events as event}
-            <div class="contentbox">
-                <h3>{event.name}</h3>
-                <p>{event.desc}</p>
-                <p>ฐานอยู่ที่ : {event.location}</p>
-                {#if event.completed == true}
-                    <p>สถานะการทำ : ✔️</p>
-                {:else}
-                    <p>สถานะการทำ : ❌</p>
-                {/if}
-            </div>
-        {/each}
+                                        <p>{event.desc}</p>
+                                        <p>อยู่ที่ : {event.location}</p>
+                                    </Card.Content>
+                                    <Card.Footer>
+                                        <p class="text-muted-foreground">
+                                            ID: {event.id}
+                                        </p>
+                                    </Card.Footer>
+                                </Card.Root>
+                            </Accordion.Content>
+                        </Accordion.Item>
+                    {/each}
+                </Accordion.Root>
+            </Card.Content>
+        </Card.Root>
+        <AlertDialog open={showalert}>
+            <AlertDialogContent class="w-75 font-[sarabun]">
+                <AlertDialogHeader>
+                    <AlertDialogTitle class="text-center">
+                        คุณต้องการที่จะออกจากระบบหรือไม่
+                    </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <div class="flex flex-row justify-around gap-2">
+                        <Button
+                            onclick={logout}
+                            variant="default"
+                            type="submit"
+                            class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
+                            >Ok</Button
+                        >
+                        <Button
+                            onclick={reset}
+                            variant="default"
+                            type="submit"
+                            class="transition border-1 border-rose-800 duration-300 text-rose-800 bg-rose-200 hover:bg-rose-500"
+                            >Cancel</Button
+                        >
+                    </div>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={showqr}>
+            <AlertDialogContent class="w-75 font-[sarabun]">
+                <AlertDialogHeader>
+                    <AlertDialogTitle class="text-center">
+                        เอาอันนี้ให้พี่ฐานดู
+                    </AlertDialogTitle>
+                </AlertDialogHeader>
+                <div>
+                    <svg
+                        width="250"
+                        use:qr={{
+                            data: JSON.stringify({
+                                id: data.studentId,
+                                created: Date.now().toString(),
+                            }),
+                            shape: "circle",
+                        }}
+                    />
+                </div>
+                <AlertDialogFooter>
+                    <div class="flex flex-row justify-around gap-2">
+                        <Button
+                            onclick={() => {
+                                showqr = false;
+                            }}
+                            variant="default"
+                            type="submit"
+                            class="transition border-1 border-slate-800 duration-300 text-slate-800 bg-slate-200 hover:bg-slate-500"
+                            >Close</Button
+                        >
+                    </div>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     </div>
 </div>

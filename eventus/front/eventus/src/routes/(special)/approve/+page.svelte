@@ -30,7 +30,10 @@
 
     const { data } = $props();
 
+    let user: string = $state("");
+
     let value = $state("");
+
     const baseArr: Base[] = data["bases"];
     const triggerContent = $derived(
         baseArr.find((f: any) => f.id.toString() === value)?.name ?? "เลือกฐาน",
@@ -38,6 +41,7 @@
 
     let scanning: boolean = $state(false);
     let showalert: boolean = $state(false);
+    let showalert2: boolean = $state(false);
 
     let html5Qrcode: Html5Qrcode;
 
@@ -46,14 +50,38 @@
         created: "",
     });
 
+    const approve = async () => {
+        const res = await fetch('api/approve', {
+            method: "POST",
+            headers: {},
+            body: JSON.stringify({ "user": user, "base": value}),
+        })
+        const data = await res.json()
+        return data
+    }
+
     onMount(init);
 
     const reset = () => {
         showalert = false;
     };
 
-    const approve_and_reset = () => {
+    const reset2 = () => {
+        showalert2 = false;
+    };
+
+    let success: string = $state("")
+
+    const approve_and_reset = async () => {
         showalert = false;
+        const res = await approve()
+        if(res.status !== 200) {
+            success = "เคยยืนยันไปแล้ว"
+            showalert2 = true;
+            return
+        }
+        success = "ยืนยันนักเรียนเรียบร้อยแล้ว"
+        showalert2 = true;
     };
 
     function init() {
@@ -85,6 +113,7 @@
         showalert = true;
         const parsedText = JSON.parse(decodedText);
         scanres = parsedText;
+        user = scanres.id;
     }
 
     function onScanFailure(error: any) {
@@ -92,7 +121,7 @@
     }
 </script>
 
-<div class="h-screen bg-border font-[sarabun]">
+<div class="min-h-screen bg-border font-[sarabun]">
     <div class="flex text-center justify-center">
         <Card.Root class="flex p-2 ml-25vw mr-25vw mt-16 bg-card border-ring">
             <Card.Header>
@@ -113,18 +142,18 @@
                 {#if scanning}
                     <Button
                         onclick={stop}
-                        class="transition duration-300 bg-rose-700 hover:bg-rose-500 border-ring"
+                        class="transition border-1 border-rose-800 duration-300 text-rose-800 bg-rose-200 hover:bg-rose-500"
                         >Stop</Button
                     >
                 {:else}
                     <Button
                         onclick={start}
-                        class="transition duration-300 bg-teal-700 hover:bg-teal-500 border-ring"
+                        class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
                         >Start</Button
                     >
                 {/if}
                 <Select.Root type="single" bind:value>
-                    <Select.Trigger class="w-[180px]">
+                    <Select.Trigger class="w-[180px] border-ring">
                         <div
                             class="truncate overflow-hidden whitespace-nowrap w-full"
                         >
@@ -148,27 +177,49 @@
                 </Select.Root>
             </Card.Footer>
         </Card.Root>
+
         <AlertDialog open={showalert}>
             <AlertDialogContent class="w-75">
                 <AlertDialogHeader>
                     <AlertDialogTitle class="text-center"
-                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} ( ฐานหมายเลข {value}) หรือไม่ </AlertDialogTitle
+                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} ( ID: {value}) หรือไม่
+                    </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <div class="flex flex-row justify-around">
+                        <Button
+                            onclick={approve_and_reset}
+                            variant="default"
+                            type="submit"
+                            class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
+                            >Ok</Button
+                        >
+                        <Button
+                            onclick={reset}
+                            variant="default"
+                            type="submit"
+                            class="transition border-1 border-rose-800 duration-300 text-rose-800 bg-rose-200 hover:bg-rose-500"
+                            >Cancel</Button
+                        >
+                    </div>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={showalert2}>
+            <AlertDialogContent class="w-55">
+                <AlertDialogHeader>
+                    <AlertDialogTitle class="text-center"
+                        >{success}</AlertDialogTitle
                     >
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <Button
-                        onclick={reset}
+                        onclick={reset2}
                         variant="default"
                         type="submit"
-                        class="w-full transition duration-300 bg-teal-700 hover:bg-teal-500"
+                        class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
                         >Ok</Button
-                    >
-                    <Button
-                        onclick={approve_and_reset}
-                        variant="default"
-                        type="submit"
-                        class="w-full transition duration-300 bg-rose-700 hover:bg-rose-500"
-                        >Cancel</Button
                     >
                 </AlertDialogFooter>
             </AlertDialogContent>
