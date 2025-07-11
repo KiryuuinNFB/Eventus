@@ -46,7 +46,7 @@
     };
 </script>
 
-<div class="h-screen bg-border font-[sarabun]">
+<div class="min-h-screen bg-border font-[sarabun]">
     <div class="flex text-center justify-center">
         <Card.Root class="flex p-6 m-16 bg-card border-ring">
             <Card.Header class="flex flex-col items-center">
@@ -85,7 +85,7 @@
                     onclick={login}
                     variant="default"
                     type="submit"
-                    class="w-full transition duration-300 bg-teal-700 hover:bg-teal-500 border-ring"
+                    class="w-full transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
                     >เข้าสู่ระบบ</Button
                 >
             </Card.Footer>
@@ -102,7 +102,7 @@
                         onclick={reset}
                         variant="default"
                         type="submit"
-                        class="w-full transition duration-300 bg-teal-700 hover:bg-teal-500"
+                        class="w-full transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
                         >Ok</Button
                     >
                 </AlertDialogFooter>
