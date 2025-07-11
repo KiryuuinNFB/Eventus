@@ -25,6 +25,7 @@ const app = new Elysia()
     )
     //admin commands for adding, removing and reading users
     .use(admin)
+    //DO NOT USE DEV IN PRODUCTION
     .use(dev)
     .onError(({ error }) => {
         return new Response(error.toString())

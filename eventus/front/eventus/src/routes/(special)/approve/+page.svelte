@@ -51,11 +51,13 @@
     });
 
     const approve = async () => {
-        await fetch('api/approve', {
+        const res = await fetch('api/approve', {
             method: "POST",
             headers: {},
             body: JSON.stringify({ "user": user, "base": value}),
-        }) 
+        })
+        const data = await res.json()
+        return data
     }
 
     onMount(init);
@@ -68,9 +70,17 @@
         showalert2 = false;
     };
 
-    const approve_and_reset = () => {
+    let success: string = $state("")
+
+    const approve_and_reset = async () => {
         showalert = false;
-        approve()
+        const res = await approve()
+        if(res.status !== 200) {
+            success = "เคยยืนยันไปแล้ว"
+            showalert2 = true;
+            return
+        }
+        success = "ยืนยันนักเรียนเรียบร้อยแล้ว"
         showalert2 = true;
     };
 
@@ -200,7 +210,7 @@
             <AlertDialogContent class="w-55">
                 <AlertDialogHeader>
                     <AlertDialogTitle class="text-center"
-                        >ยืนยันนักเรียนเรียบร้อยแล้ว</AlertDialogTitle
+                        >{success}</AlertDialogTitle
                     >
                 </AlertDialogHeader>
                 <AlertDialogFooter>

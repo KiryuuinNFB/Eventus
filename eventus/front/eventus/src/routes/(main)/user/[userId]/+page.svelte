@@ -15,7 +15,7 @@
     };
 
     const approve = () => {
-        goto("/approve");
+        goto(`/approve`);
     };
 
     import "../../../../styles/default.css"
