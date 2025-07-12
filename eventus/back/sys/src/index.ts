@@ -8,7 +8,6 @@ import { dev } from "./dev"
 
 interface JwtPayload {
     username: string
-
 }
 
 const prisma = new PrismaClient()
@@ -49,11 +48,12 @@ const app = new Elysia()
                 const jwttoken = await jwt.sign(
                     {
                         username: login?.username!,
-                        exp: '15m'
+                        exp: '30m'
                     },
                 )
 
                 return { "token": jwttoken }
+
             }, {
                 body: t.Object({
                     username: t.String(),

@@ -22,7 +22,7 @@ export async function POST({ request, cookies, fetch }) {
         secure: false,
 		path: '/',
 		sameSite: 'strict',
-		maxAge: 60 * 15 //60 seconds * 15 = 15 minutes
+		maxAge: 60 * 30 //60 seconds * 15 = 15 minutes
 	});
 
     return json({ "token": token });

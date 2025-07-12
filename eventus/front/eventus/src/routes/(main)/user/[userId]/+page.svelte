@@ -128,7 +128,7 @@
                 <Card.Title class="font-medium text-4xl"
                     >สวัสดี, {data.name} {data.surname}</Card.Title
                 >
-                <div class="justify-between gap-2">
+                <div class="justify-between flex flex-row gap-2">
                     {#if data.role == "ADMIN"}
                         <Badge
                             class="bg-amber-200 text-amber-700 border-amber-700 m-4"
@@ -142,15 +142,7 @@
                             <User />นักเรียน
                         </Badge>
                     {/if}
-                    {#if data.studentId == "22621"}
-                        <Badge
-                            class="bg-pink-200 text-pink-700 border-pink-700 m-4"
-                        >
-                            <Mars />เฟมบอย
-                        </Badge>
-                    {:else}
-                        <div></div>
-                    {/if}
+                    
                     {#if data.baseNum == data.doneNum}
                         <Badge
                             class="bg-emerald-200 text-emerald-700 border-emerald-700 m-4"

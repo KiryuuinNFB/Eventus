@@ -31,6 +31,7 @@
     const { data } = $props();
 
     let user: string = $state("");
+    let time: string = $state("");
 
     let value = $state("");
 
@@ -51,14 +52,14 @@
     });
 
     const approve = async () => {
-        const res = await fetch('api/approve', {
+        const res = await fetch("api/approve", {
             method: "POST",
             headers: {},
-            body: JSON.stringify({ "user": user, "base": value}),
-        })
-        const data = await res.json()
-        return data
-    }
+            body: JSON.stringify({ user: user, base: value }),
+        });
+        const data = await res.json();
+        return data;
+    };
 
     onMount(init);
 
@@ -70,17 +71,32 @@
         showalert2 = false;
     };
 
-    let success: string = $state("")
+    let success: string = $state("");
+
+    const check_qr_age = (age: string) => {
+        const ageInt = Number(age);
+        const currentTime = Date.now();
+        if (currentTime - ageInt <= 300000) { //qr code expires in 5 minutes
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     const approve_and_reset = async () => {
         showalert = false;
-        const res = await approve()
-        if(res.status !== 200) {
-            success = "เคยยืนยันไปแล้ว"
+        if (!check_qr_age(time)) {
+            success = "QR Code หมดอายุ";
             showalert2 = true;
-            return
+            return;
         }
-        success = "ยืนยันนักเรียนเรียบร้อยแล้ว"
+        const res = await approve();
+        if (res.status !== 200) {
+            success = "เคยยืนยันไปแล้ว";
+            showalert2 = true;
+            return;
+        }
+        success = "ยืนยันนักเรียนเรียบร้อยแล้ว";
         showalert2 = true;
     };
 
@@ -114,6 +130,7 @@
         const parsedText = JSON.parse(decodedText);
         scanres = parsedText;
         user = scanres.id;
+        time = scanres.created;
     }
 
     function onScanFailure(error: any) {
@@ -182,7 +199,8 @@
             <AlertDialogContent class="w-75">
                 <AlertDialogHeader>
                     <AlertDialogTitle class="text-center"
-                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} ( ID: {value}) หรือไม่
+                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} ( ID: {value})
+                        หรือไม่
                     </AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
