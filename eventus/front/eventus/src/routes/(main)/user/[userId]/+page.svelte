@@ -34,7 +34,7 @@
         Mars,
         Star,
         User,
-        
+        CircleDashed,
     } from "@lucide/svelte";
 
     export let data;
@@ -59,7 +59,9 @@
 </script>
 
 <div class="min-h-screen bg-border font-[sarabun]">
-    <div class="sticky top-0 p-2 backdrop-blur-sm flex flex-row-reverse border-slate-200 border-1">
+    <div
+        class="sticky top-0 p-2 backdrop-blur-sm flex flex-row-reverse border-slate-200 border-1"
+    >
         <Sheet.Root>
             <Sheet.Trigger><Menu size={36} /></Sheet.Trigger>
 
@@ -142,7 +144,7 @@
                             <User />นักเรียน
                         </Badge>
                     {/if}
-                    
+
                     {#if data.baseNum == data.doneNum}
                         <Badge
                             class="bg-emerald-200 text-emerald-700 border-emerald-700 m-4"
@@ -153,7 +155,7 @@
                         <Badge
                             class="bg-rose-200 text-rose-700 border-rose-700 m-4"
                         >
-                            ยังทำไม่ครบ
+                            <CircleDashed /> ยังทำไม่ครบ
                         </Badge>
                     {/if}
                 </div>
@@ -249,6 +251,9 @@
                     <AlertDialogTitle class="text-center">
                         เอาอันนี้ให้พี่ฐานดู
                     </AlertDialogTitle>
+                    <AlertDialogDescription class="text-center">
+                            กรุณาปรับหน้าจอให้สว่าง
+                    </AlertDialogDescription>
                 </AlertDialogHeader>
                 <div>
                     <svg
@@ -264,6 +269,9 @@
                 </div>
                 <AlertDialogFooter>
                     <div class="flex flex-row justify-around gap-2">
+                        <AlertDialogDescription>
+                            QR Code มีอายุ 5 นาที
+                        </AlertDialogDescription>
                         <Button
                             onclick={() => {
                                 showqr = false;

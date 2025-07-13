@@ -19,10 +19,18 @@ export async function POST({ request, cookies, fetch }) {
 
     cookies.set('jwt', token, {
 		httpOnly: true,
-        secure: false,
+        secure: true,
 		path: '/',
 		sameSite: 'strict',
-		maxAge: 60 * 30 //60 seconds * 15 = 15 minutes
+		maxAge: 60 * 30 //60 seconds * 30 = 30 minutes
+	});
+
+    cookies.set('user', username, {
+		httpOnly: true,
+        secure: true,
+		path: '/',
+		sameSite: 'strict',
+		maxAge: 60 * 30 //60 seconds * 30 = 30 minutes
 	});
 
     return json({ "token": token });

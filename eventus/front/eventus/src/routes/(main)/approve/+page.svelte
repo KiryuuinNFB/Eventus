@@ -16,6 +16,11 @@
 
     import { onMount } from "svelte";
     import { Html5Qrcode } from "html5-qrcode";
+    import {
+        House
+    } from "@lucide/svelte";
+
+    import { goto } from "$app/navigation";
     type qrdata = {
         id: string;
         created: string;
@@ -71,12 +76,17 @@
         showalert2 = false;
     };
 
+    const home = () => {
+        goto(`/user/${data.user}`)
+    };
+
     let success: string = $state("");
 
     const check_qr_age = (age: string) => {
         const ageInt = Number(age);
         const currentTime = Date.now();
-        if (currentTime - ageInt <= 300000) { //qr code expires in 5 minutes
+        if (currentTime - ageInt <= 300000) {
+            //qr code expires in 5 minutes
             return true;
         } else {
             return false;
@@ -140,6 +150,17 @@
 
 <div class="min-h-screen bg-border font-[sarabun]">
     <div class="flex text-center justify-center">
+        <div
+        class="absolute top-0 p-2 backdrop-blur-sm flex flex-row border-slate-200 border-1"
+    ><Button 
+            onclick={home}
+            variant="default"
+            type="submit"
+            class="transition border-1 border-slate-800 duration-300 text-slate-800 bg-slate-200 hover:bg-slate-500"
+            ><House />Home</Button
+        ></div>
+        
+
         <Card.Root class="flex p-2 ml-25vw mr-25vw mt-16 bg-card border-ring">
             <Card.Header>
                 <Card.Title class="font-medium text-2xl">Approve ฐาน</Card.Title
