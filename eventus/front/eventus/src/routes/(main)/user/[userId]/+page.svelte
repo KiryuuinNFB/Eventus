@@ -53,8 +53,8 @@
         }
     };
 
-    const approve = () => {
-        goto(`/approve`);
+    const navigate = (page: string) => {
+        goto(`/${page}`);
     };
 </script>
 
@@ -79,14 +79,14 @@
                             <Button
                                 variant="default"
                                 class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
-                                onclick={approve}
+                                onclick={() => {navigate("approve")}}
                             >
                                 <Stamp /> ตรวจฐาน
                             </Button>
                             <Button
                                 variant="default"
                                 class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
-                                onclick={approve}
+                                onclick={() => {navigate("approve")}}
                             >
                                 <ChartBarBig /> สถิติ
                             </Button>
@@ -104,7 +104,7 @@
                                 showqr = true;
                             }}>เช็กอินฐาน</Button
                         >
-                        <Button variant="link" size="lg">เกี่ยวกับ</Button>
+                        <Button variant="link" size="lg" onclick={() => {navigate("about")}}>เกี่ยวกับ</Button>
                         <Button variant="link" size="lg">เกียรติบัตร</Button>
                     </div>
                     <Separator />
@@ -278,8 +278,8 @@
                             }}
                             variant="default"
                             type="submit"
-                            class="transition border-1 border-slate-800 duration-300 text-slate-800 bg-slate-200 hover:bg-slate-500"
-                            >Close</Button
+                            class="transition border-1 border-slate-600 duration-300 text-slate-600 bg-slate-200 hover:bg-slate-400"
+                            >ปิด</Button
                         >
                     </div>
                 </AlertDialogFooter>
