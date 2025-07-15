@@ -106,7 +106,8 @@ export const dev = new Elysia({ prefix: '/dev' })
                     surname: t.String(),
                     role: t.Optional(t.Enum({
                         USER: 'USER',
-                        ADMIN: 'ADMIN'
+                        ADMIN: 'ADMIN',
+                        MOD: 'MOD'
                     })),
                 })
             })
@@ -138,7 +139,8 @@ export const dev = new Elysia({ prefix: '/dev' })
                     surname: t.String(),
                     role: t.Optional(t.Enum({
                         USER: 'USER',
-                        ADMIN: 'ADMIN'
+                        ADMIN: 'ADMIN',
+                        MOD: 'MOD'
                     })),
                 })
             })

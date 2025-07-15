@@ -91,7 +91,7 @@ const app = new Elysia()
                     }
                 });
 
-                if (!decoded || decodeduser?.role !== 'ADMIN')
+                if (!decoded || decodeduser?.role === 'USER')
                     return status(401, "Unauthorized")
                 return status(200, "OK")
             })

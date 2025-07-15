@@ -30,7 +30,7 @@ export const admin = new Elysia({ prefix: '/admin' })
                 }
             });
 
-            if (!decoded || decodeduser?.role !== 'ADMIN')
+            if (!decoded || decodeduser?.role === 'USER')
                 return status(401, "Unauthorized")
         }
     })
@@ -62,7 +62,8 @@ export const admin = new Elysia({ prefix: '/admin' })
                     surname: t.String(),
                     role: t.Optional(t.Enum({
                         USER: 'USER',
-                        ADMIN: 'ADMIN'
+                        ADMIN: 'ADMIN',
+                        MOD: 'MOD'
                     })),
                 }),
             })

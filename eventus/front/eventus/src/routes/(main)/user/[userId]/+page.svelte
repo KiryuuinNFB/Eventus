@@ -32,6 +32,7 @@
         Stamp,
         ShieldUser,
         Mars,
+        Lectern,
         Star,
         User,
         CircleDashed,
@@ -71,7 +72,7 @@
                     <Sheet.Description>
                         Authenticated Log in Checker For Eventus
                     </Sheet.Description>
-                    {#if data.role == "ADMIN"}
+                    {#if data.role == "ADMIN" || data.role == "MOD"}
                         <Separator />
                         <div
                             class="flex flex-row text-left justify-center gap-2"
@@ -124,7 +125,6 @@
         </Sheet.Root>
     </div>
     <div class="flex flex-col max-w-[400px] justify-self-center">
-        <div></div>
         <Card.Root class="flex p-8 m-4 bg-card border-ring">
             <Card.Header class="flex flex-col items-center text-center">
                 <Card.Title class="font-medium text-4xl"
@@ -136,6 +136,12 @@
                             class="bg-amber-200 text-amber-700 border-amber-700 m-4"
                         >
                             <ShieldUser />ผู้ดูแลระบบ
+                        </Badge>
+                    {:else if data.role == "MOD"}
+                        <Badge
+                            class="bg-teal-200 text-teal-700 border-teal-700 m-4"
+                        >
+                            <Lectern />พี่ฐาน
                         </Badge>
                     {:else}
                         <Badge
