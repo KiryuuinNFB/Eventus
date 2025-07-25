@@ -37,7 +37,7 @@ export const admin = new Elysia({ prefix: '/admin' })
     .group('', (app) =>
         app
             .put('/user', async ({ body }) => {
-                const { username, password, name, surname, role } = body;
+                const { username, password, name, surname, role, prefix } = body;
                 const hashed = await Bun.password.hash(password)
 
                 const user = await prisma.user.create({
@@ -46,7 +46,8 @@ export const admin = new Elysia({ prefix: '/admin' })
                         password: hashed,
                         name,
                         surname,
-                        role: role ?? 'USER'
+                        role: role ?? 'USER',
+                        prefix: prefix ?? 'Other',
                     },
                 });
 
@@ -64,6 +65,15 @@ export const admin = new Elysia({ prefix: '/admin' })
                         USER: 'USER',
                         ADMIN: 'ADMIN',
                         MOD: 'MOD'
+                    })),
+                    prefix: t.Optional(t.Enum({
+                        Other: 'Other',
+                        DekChai: 'DekChai',
+                        DekYing: 'DekYing',
+                        Nai: 'Nai',
+                        NangSao: 'NangSao',
+                        Nang: 'Nang'
+
                     })),
                 }),
             })
@@ -106,7 +116,8 @@ export const admin = new Elysia({ prefix: '/admin' })
                     "name": getuser?.name,
                     "surname": getuser?.surname,
                     "events": getevents,
-                    "role": getuser?.role
+                    "role": getuser?.role,
+                    "prefix": getuser?.prefix
                 }
 
             }, {

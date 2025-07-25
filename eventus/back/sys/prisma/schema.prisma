@@ -18,6 +18,7 @@ model User {
     name      String
     surname   String
     role      Role         @default(USER)
+    prefix    Prefix       @default(Other)
     completed Completion[]
 }
 
@@ -42,4 +43,13 @@ enum Role {
     USER
     ADMIN
     MOD
+}
+
+enum Prefix {
+    Other
+    DekChai
+    DekYing
+    Nai
+    NangSao
+    Nang
 }
