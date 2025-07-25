@@ -83,6 +83,26 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
         return baseArr
     }
+
+    console.log(user.prefix)
+
+    const prefixHandle = () => {
+        switch (user.prefix) {
+            case "DekChai":
+                return "ด.ช."
+            case "DekYing":
+                return "ด.ญ."
+            case "NangSao":
+                return "นางสาว"
+            case "Nang":
+                return "นาง"
+            case "Nai":
+                return "นาย"
+            default:
+                return "อื่นๆ"
+        }
+    }
+
     const completedBase = checkUserCompletion(user.events, bases)
     const data = {
         "studentId": user.studentId,
@@ -91,7 +111,8 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         "events": completedBase,
         "baseNum": completedBase.length,
         "doneNum": user.events.length,
-        "role": user.role
+        "role": user.role,
+        "prefix": prefixHandle()
     }
 
     return data

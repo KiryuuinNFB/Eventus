@@ -122,7 +122,7 @@ export const dev = new Elysia({ prefix: '/dev' })
                 }),
             })
             .patch('/user', async ({ body }) => {
-                const { username, password, name, surname, role } = body;
+                const { username, password, name, surname, role, prefix } = body;
                 const hashed = await Bun.password.hash(password, { algorithm: "argon2id", memoryCost: 4, timeCost: 3 })
 
                 const user = await prisma.user.update({
@@ -133,7 +133,8 @@ export const dev = new Elysia({ prefix: '/dev' })
                         password: hashed,
                         name,
                         surname,
-                        role: role ?? 'USER'
+                        role: role ?? 'USER',
+                        prefix: prefix ?? 'Other'
                     },
                 });
 

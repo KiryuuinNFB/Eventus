@@ -128,7 +128,7 @@
         <Card.Root class="flex p-8 m-4 bg-card border-ring">
             <Card.Header class="flex flex-col items-center text-center">
                 <Card.Title class="font-medium text-4xl"
-                    >สวัสดี, {data.name} {data.surname}</Card.Title
+                    >สวัสดี, {data.prefix} {data.name} {data.surname}</Card.Title
                 >
                 <div class="justify-between flex flex-row gap-2">
                     {#if data.role == "ADMIN"}

@@ -142,7 +142,8 @@ const app = new Elysia()
                     "name": getuser?.name,
                     "surname": getuser?.surname,
                     "events": getevents,
-                    "role": getuser?.role
+                    "role": getuser?.role,
+                    "prefix": getuser?.prefix
                 }
             })
             .get('/base', async () => {
