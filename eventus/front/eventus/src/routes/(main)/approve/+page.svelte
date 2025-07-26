@@ -204,7 +204,7 @@
                                 <Select.Item
                                     value={base.id.toString()}
                                     label={base.name}
-                                    class="w-[180px]"
+                                    class="w-[180px] font-[sarabun]"
                                 >
                                     {base.name}
                                 </Select.Item>
