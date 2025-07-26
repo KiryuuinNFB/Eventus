@@ -84,8 +84,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         return baseArr
     }
 
-    console.log(user.prefix)
-
     const prefixHandle = () => {
         switch (user.prefix) {
             case "DekChai":
