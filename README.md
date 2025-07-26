@@ -8,9 +8,11 @@ After finishing each events, The events UI will update showing that they've done
 
 - Error handling
 - Better API Endpoints
-- Actual good looking UI/UX
+- Certificate generation
+- About page
 
 ## To do
 - Reorganize code structure according to Elysia docs
+- Migrate to Postgres
 - Optimization
 - Clear documentation for reusing the system
