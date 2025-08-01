@@ -127,6 +127,15 @@ export const admin = new Elysia({ prefix: '/admin' })
             })
     )
     .post('/approve/:user/:base', async ({ params: { user, base } }) => {
+        const userExists = await prisma.user.findUnique({
+            where: {
+                username: user
+            }
+        });
+        if (!userExists) {
+            return status(404 ,'Not Found')
+        }
+
         const completionCheck = await prisma.completion.findMany({
             where: {
                 AND: [{

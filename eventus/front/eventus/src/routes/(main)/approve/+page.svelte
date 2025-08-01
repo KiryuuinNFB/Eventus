@@ -44,7 +44,8 @@
 
     const baseArr: Base[] = data["bases"];
     const triggerContent = $derived(
-        baseArr.find((f: any) => f.id.toString() === value)?.name ?? "เลือกกิจกรรม",
+        baseArr.find((f: any) => f.id.toString() === value)?.name ??
+            "เลือกกิจกรรม",
     );
 
     let scanning: boolean = $state(false);
@@ -104,6 +105,11 @@
         }
         const res = await approve();
         if (res.status !== 200) {
+            if (res.status === 404) {
+                success = "ไม่พบผู้ใช้";
+                showalert2 = true;
+                return;
+            }
             success = "เคยยืนยันไปแล้ว";
             showalert2 = true;
             return;
@@ -151,9 +157,8 @@
 
     function manualApprove() {
         showalert = true;
-        time = Date.now().toString()
+        time = Date.now().toString();
     }
-
 </script>
 
 <div class="min-h-screen bg-border font-[sarabun]">
@@ -171,8 +176,10 @@
         </div>
 
         <Tabs.Root value="scan">
-            <Tabs.List class="absolute top-14 p-1 backdrop-blur-sm flex flex-row border-1 border-ring">
-                <Tabs.Trigger value="scan" >Scan</Tabs.Trigger>
+            <Tabs.List
+                class="absolute top-14 p-1 backdrop-blur-sm flex flex-row border-1 border-ring"
+            >
+                <Tabs.Trigger value="scan">Scan</Tabs.Trigger>
                 <Tabs.Trigger value="manual">Manual</Tabs.Trigger>
             </Tabs.List>
             <Tabs.Content value="scan">
@@ -246,53 +253,51 @@
                         <Card.Title class="font-medium text-2xl"
                             >กรอกกิจกรรม</Card.Title
                         >
-                        <Card.Description
-                            >กรุณากด้หำกพ้กห้</Card.Description
-                        >
+                        <Card.Description>กรุณากด้หำกพ้กห้</Card.Description>
                     </Card.Header>
                     <Card.Content class="p-8 pl-14 pr-14">
                         <div class="flex flex-col gap-6">
-                        <div class="grid gap-2">
-                            <Label for="text">ผู้ใช้ที่ต้องการยืนยัน</Label>
-                            <Input
-                                id="text"
-                                type="text"
-                                placeholder="รหัสนักเรียน"
-                                class="w-[180px] border-ring"
-                                bind:value={user}
-                            />
+                            <div class="grid gap-2">
+                                <Label for="text">ผู้ใช้ที่ต้องการยืนยัน</Label>
+                                <Input
+                                    id="text"
+                                    type="text"
+                                    placeholder="รหัสนักเรียน"
+                                    class="w-[180px] border-ring"
+                                    bind:value={user}
+                                />
+                            </div>
+                            <Select.Root type="single" bind:value>
+                                <Select.Trigger class="w-[180px] border-ring">
+                                    <div
+                                        class="truncate overflow-hidden whitespace-nowrap w-full"
+                                    >
+                                        {triggerContent}
+                                    </div>
+                                </Select.Trigger>
+                                <Select.Content id="bases">
+                                    <Select.Group>
+                                        <Select.Label>กิจกรรม</Select.Label>
+                                        {#each data.bases as base}
+                                            <Select.Item
+                                                value={base.id.toString()}
+                                                label={base.name}
+                                                class="w-[180px] font-[sarabun]"
+                                            >
+                                                {base.name}
+                                            </Select.Item>
+                                        {/each}
+                                    </Select.Group>
+                                </Select.Content>
+                            </Select.Root>
                         </div>
-                        <Select.Root type="single" bind:value>
-                            <Select.Trigger class="w-[180px] border-ring">
-                                <div
-                                    class="truncate overflow-hidden whitespace-nowrap w-full"
-                                >
-                                    {triggerContent}
-                                </div>
-                            </Select.Trigger>
-                            <Select.Content id="bases">
-                                <Select.Group>
-                                    <Select.Label>กิจกรรม</Select.Label>
-                                    {#each data.bases as base}
-                                        <Select.Item
-                                            value={base.id.toString()}
-                                            label={base.name}
-                                            class="w-[180px] font-[sarabun]"
-                                        >
-                                            {base.name}
-                                        </Select.Item>
-                                    {/each}
-                                </Select.Group>
-                            </Select.Content>
-                        </Select.Root>
-                    </div>
                     </Card.Content>
                     <Card.Footer class="p-2 justify-center flex flex-row">
                         <Button
-                                onclick={manualApprove}
-                                class="transition border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
-                                >Approve</Button
-                            >
+                            onclick={manualApprove}
+                            class="transition border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
+                            >Approve</Button
+                        >
                     </Card.Footer>
                 </Card.Root>
             </Tabs.Content>
