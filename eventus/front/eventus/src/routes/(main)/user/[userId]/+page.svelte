@@ -23,6 +23,8 @@
     let showalert: boolean = false;
     let showqr: boolean = false;
 
+    let threshold: number = 4;
+
     import {
         Check,
         X,
@@ -36,6 +38,7 @@
         Star,
         User,
         CircleDashed,
+        TicketCheck,
     } from "@lucide/svelte";
 
     export let data;
@@ -156,6 +159,13 @@
                             class="bg-emerald-200 text-emerald-700 border-emerald-700 m-4"
                         >
                             <Star /> ทำครบทุกฐาน
+                        </Badge>
+
+                    {:else if data.doneNum >= threshold}
+                    <Badge
+                            class="bg-indigo-200 text-indigo-700 border-indigo-700 m-4"
+                        >
+                            <TicketCheck /> ได้รับเกียรติบัตร
                         </Badge>
                     {:else}
                         <Badge
