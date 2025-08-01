@@ -1,1 +1,1 @@
-export const API_ELYSIA = "http://192.168.1.36:3000"
+export const API_ELYSIA = "http://172.50.87.37:3000"
