@@ -25,6 +25,10 @@
 
     let threshold: number = 4;
 
+    export let data;
+
+    let qrcode: string = generateQrData()
+
     import {
         Check,
         X,
@@ -39,9 +43,10 @@
         User,
         CircleDashed,
         TicketCheck,
+        RotateCw
     } from "@lucide/svelte";
 
-    export let data;
+    
 
     const reset = () => {
         showalert = false;
@@ -60,6 +65,17 @@
     const navigate = (page: string) => {
         goto(`/${page}`);
     };
+
+    function generateQrData() {
+        return JSON.stringify({
+            id: data.studentId,
+            created: Date.now().toString(),
+        });
+    }
+
+    function refreshQR() {
+        qrcode = generateQrData()
+    }
 </script>
 
 <div class="min-h-screen bg-border font-[sarabun]">
@@ -82,15 +98,19 @@
                         >
                             <Button
                                 variant="default"
-                                class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
-                                onclick={() => {navigate("approve")}}
+                                class="border-1 border-teal-800 duration-300 text-teal-800 bg-teal-200 hover:bg-teal-500"
+                                onclick={() => {
+                                    navigate("approve");
+                                }}
                             >
                                 <Stamp /> ตรวจฐาน
                             </Button>
                             <Button
                                 variant="default"
                                 class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
-                                onclick={() => {navigate("approve")}}
+                                onclick={() => {
+                                    navigate("approve");
+                                }}
                             >
                                 <ChartBarBig /> สถิติ
                             </Button>
@@ -108,7 +128,13 @@
                                 showqr = true;
                             }}>เช็กอินฐาน</Button
                         >
-                        <Button variant="link" size="lg" onclick={() => {navigate("about")}}>เกี่ยวกับ</Button>
+                        <Button
+                            variant="link"
+                            size="lg"
+                            onclick={() => {
+                                navigate("about");
+                            }}>เกี่ยวกับ</Button
+                        >
                         <Button variant="link" size="lg">เกียรติบัตร</Button>
                     </div>
                     <Separator />
@@ -131,7 +157,9 @@
         <Card.Root class="flex p-8 m-4 bg-card border-ring">
             <Card.Header class="flex flex-col items-center text-center">
                 <Card.Title class="font-medium text-4xl"
-                    >สวัสดี, {data.prefix} {data.name} {data.surname}</Card.Title
+                    >สวัสดี, {data.prefix}
+                    {data.name}
+                    {data.surname}</Card.Title
                 >
                 <div class="justify-between flex flex-row gap-2">
                     {#if data.role == "ADMIN"}
@@ -160,9 +188,8 @@
                         >
                             <Star /> ทำครบทุกฐาน
                         </Badge>
-
                     {:else if data.doneNum >= threshold}
-                    <Badge
+                        <Badge
                             class="bg-indigo-200 text-indigo-700 border-indigo-700 m-4"
                         >
                             <TicketCheck /> ได้รับเกียรติบัตร
@@ -177,6 +204,18 @@
                 </div>
             </Card.Header>
             <Card.Content>
+                <p class="text-muted-foreground text-sm text-center">QR Code มีอายุ 5 นาที</p>
+                <div>
+                    <svg
+                        width="250"
+                        use:qr={{
+                            data: qrcode,
+                            shape: "circle",
+                        }}
+                    />
+                </div>
+                
+                <Button variant="ghost" onclick={refreshQR}><RotateCw />Refresh</Button>
                 มีทั้งหมด {data.baseNum} ฐาน ทำไปแล้ว {data.doneNum} ฐาน เหลืออีก
                 {data.baseNum - data.doneNum} ฐาน
             </Card.Content>
@@ -185,7 +224,7 @@
         <Card.Root class="flex p-4 m-4 bg-card border-ring">
             <Card.Content>
                 <Accordion.Root type="multiple" class="w-full">
-                    <h1 class="text-lg">ฐาน</h1>
+                    <h1 class="text-lg">กิจกรรม</h1>
                     {#each data.events as event}
                         <Accordion.Item
                             value={event.id.toString()}
@@ -215,7 +254,7 @@
                                 <Card.Root>
                                     <Card.Content>
                                         <div class="text-lg">
-                                            ฐาน {event.name}
+                                            {event.name}
                                         </div>
 
                                         <p>{event.desc}</p>
@@ -268,7 +307,7 @@
                         เอาอันนี้ให้พี่ฐานดู
                     </AlertDialogTitle>
                     <AlertDialogDescription class="text-center">
-                            กรุณาปรับหน้าจอให้สว่าง
+                        กรุณาปรับหน้าจอให้สว่าง
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <div>
