@@ -22,7 +22,6 @@
     import { House } from "@lucide/svelte";
 
     import { goto } from "$app/navigation";
-    import { Content } from "sv-popup";
     type qrdata = {
         id: string;
         created: string;
@@ -307,7 +306,7 @@
             <AlertDialogContent class="w-75">
                 <AlertDialogHeader>
                     <AlertDialogTitle class="text-center"
-                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} ( ID: {value})
+                        >ยืนยันนักเรียน {scanres.id} ฐาน {triggerContent} 
                         หรือไม่
                     </AlertDialogTitle>
                 </AlertDialogHeader>

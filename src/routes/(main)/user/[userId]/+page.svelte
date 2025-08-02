@@ -204,6 +204,11 @@
                 </div>
             </Card.Header>
             <Card.Content>
+                <div>
+                    <h1 class="text-2xl text-center">
+                        กิจกรรม {data.doneNum}/{data.baseNum}
+                    </h1>
+                </div>
                 <p class="text-muted-foreground text-sm text-center">QR Code มีอายุ 5 นาที</p>
                 <div>
                     <svg
@@ -216,8 +221,6 @@
                 </div>
                 
                 <Button variant="ghost" onclick={refreshQR}><RotateCw />Refresh</Button>
-                มีทั้งหมด {data.baseNum} ฐาน ทำไปแล้ว {data.doneNum} ฐาน เหลืออีก
-                {data.baseNum - data.doneNum} ฐาน
             </Card.Content>
         </Card.Root>
 
