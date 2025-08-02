@@ -1,18 +1,38 @@
-# Eventus Overview
+# sv
 
-Eventus is a basic event tracker system made to be used in school fairs. 
-User could login to a premade account to participate in the fair and see how many events there are, With their locations and descriptions.
-After finishing each events, The events UI will update showing that they've done an event. After finishing all of them, The user will get a certificate.
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-## Currently doing
+## Creating a project
 
-- Error handling
-- Better API Endpoints
-- Certificate generation
-- About page
+If you're seeing this, you've probably already done this step. Congrats!
 
-## To do
-- Reorganize code structure according to Elysia docs
-- Migrate to Postgres
-- Optimization
-- Clear documentation for reusing the system
+```bash
+# create a new project in the current directory
+npx sv create
+
+# create a new project in my-app
+npx sv create my-app
+```
+
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+
+```bash
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
+
+## Building
+
+To create a production version of your app:
+
+```bash
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
