@@ -13,10 +13,6 @@
         goto(`/user/${data.user}`);
     };
 
-    
-
-    
-
 </script>
 
 <div class="min-h-screen bg-border font-[sarabun]">
@@ -32,8 +28,9 @@
                 ><House />Home</Button
             >
         </div>
+        
         <div class="flex flex-col max-w-[400px] justify-self-center">
-            <img src={`${API_ELYSIA}/`} alt="cert" width="800" />
+            <img src={"/api/cert"} alt="cert" width="800" class="mt-16"/>
         </div>
     </div>
 </div>

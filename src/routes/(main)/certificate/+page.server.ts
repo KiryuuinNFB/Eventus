@@ -8,8 +8,10 @@ export const load: PageServerLoad = async ( {cookies} ) => {
     if (!token) {
         redirect(307, "/")
     }
+
     const data = {
-        "user": user
+        "user": user,
     }
+
     return data
 }
