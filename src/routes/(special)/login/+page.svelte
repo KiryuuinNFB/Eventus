@@ -1,4 +1,7 @@
 <script lang="ts">
+    let sitetitle = "ลงชื่อเข้าใช้";
+	import Heading from "../../head.svelte"
+    
     import { Input } from "$lib/components/ui/input/index.js";
     import { Label } from "$lib/components/ui/label/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
@@ -45,6 +48,8 @@
         }
     };
 </script>
+
+<Heading SiteHead={sitetitle}/>
 
 <div class="min-h-screen bg-border font-[sarabun]">
     <div class="flex text-center justify-center">

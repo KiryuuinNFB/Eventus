@@ -1,4 +1,7 @@
 <script lang="ts">
+    let sitetitle = "ยืนยันฐาน";
+	import Heading from "../../head.svelte"
+
     import * as Card from "$lib/components/ui/card/index.js";
     import * as Tabs from "$lib/components/ui/tabs/index.js";
     import { Input } from "$lib/components/ui/input/index.js";
@@ -159,6 +162,9 @@
         time = Date.now().toString();
     }
 </script>
+
+<Heading SiteHead={sitetitle}/>
+
 
 <div class="min-h-screen bg-border font-[sarabun]">
     <div class="flex text-center justify-center">

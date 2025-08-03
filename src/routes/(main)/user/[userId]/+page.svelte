@@ -1,4 +1,7 @@
 <script lang="ts">
+    let sitetitle = "งานวันวิทยาศาสตร์";
+	import Heading from "../../../head.svelte"
+
     import home from "$lib/assets/home.png";
     import * as Card from "$lib/components/ui/card/index.js";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
@@ -91,6 +94,8 @@
     };
 </script>
 
+<Heading SiteHead={sitetitle}/>
+
 <div class="min-h-screen bg-border font-[sarabun]">
     <div
         class="sticky top-0 p-2 backdrop-blur-sm flex flex-row-reverse border-slate-200 border-1"
@@ -139,7 +144,7 @@
                             size="lg"
                             onclick={() => {
                                 showqr = true;
-                            }}>ไปยังหน้า Home</Button
+                            }}>หน้า Home</Button
                         >
                         <Button
                             variant="link"

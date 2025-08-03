@@ -1,4 +1,7 @@
 <script lang="ts">
+    let sitetitle = "เกี่ยวกับ";
+	import Heading from "../../head.svelte"
+
     import * as Card from "$lib/components/ui/card/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import { House } from "@lucide/svelte";
@@ -12,6 +15,9 @@
         goto(`/user/${data.user}`);
     };
 </script>
+
+<Heading SiteHead={sitetitle}/>
+
 
 <div class="min-h-screen bg-border font-[sarabun]">
     <div class="flex text-center justify-center">

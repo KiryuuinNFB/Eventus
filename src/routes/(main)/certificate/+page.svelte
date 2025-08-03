@@ -1,11 +1,11 @@
 <script lang="ts">
-    import * as Card from "$lib/components/ui/card/index.js";
+    let sitetitle = "เกียรติบัตร";
+	import Heading from "../../head.svelte"
+
     import { Button } from "$lib/components/ui/button/index.js";
     import { House } from "@lucide/svelte";
-    import { Separator } from "$lib/components/ui/separator/index.js";
 
     import { goto } from "$app/navigation";
-    import { API_ELYSIA } from "$lib/config.js";
 
     export let data;
 
@@ -14,6 +14,8 @@
     };
 
 </script>
+
+<Heading SiteHead={sitetitle}/>
 
 <div class="min-h-screen bg-border font-[sarabun]">
     <div class="flex text-center justify-center">
