@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { toast } from "svelte-sonner";
+    import home from "$lib/assets/home.png";
     import * as Card from "$lib/components/ui/card/index.js";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
     import { Badge } from "$lib/components/ui/badge/index.js";
@@ -22,9 +22,10 @@
     import { qr } from "@svelte-put/qr/svg";
 
     let showalert: boolean = false;
+    let showalert2: boolean = false;
     let showqr: boolean = false;
 
-    let threshold: number = 2;
+    let threshold: number = 5;
 
     export let data;
 
@@ -50,6 +51,10 @@
     const reset = () => {
         showalert = false;
     };
+
+    const reset2 = () => {
+        showalert2 = false
+    }
 
     const logout = async () => {
         const res = await fetch("/api/logout", {
@@ -80,6 +85,7 @@
         if (data.doneNum >= threshold) {
             goto("/certificate");
         } else {
+            showalert2 = true
             return;
         }
     };
@@ -133,7 +139,7 @@
                             size="lg"
                             onclick={() => {
                                 showqr = true;
-                            }}>เช็กอินฐาน</Button
+                            }}>ไปยังหน้า Home</Button
                         >
                         <Button
                             variant="link"
@@ -322,31 +328,11 @@
 
         <AlertDialog open={showqr}>
             <AlertDialogContent class="w-75 font-[sarabun]">
-                <AlertDialogHeader>
-                    <AlertDialogTitle class="text-center">
-                        เอาอันนี้ให้พี่ฐานดู
-                    </AlertDialogTitle>
-                    <AlertDialogDescription class="text-center">
-                        กรุณาปรับหน้าจอให้สว่าง
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
                 <div>
-                    <svg
-                        width="250"
-                        use:qr={{
-                            data: JSON.stringify({
-                                id: data.studentId,
-                                created: Date.now().toString(),
-                            }),
-                            shape: "circle",
-                        }}
-                    />
+                    <img src={home} alt="home">
                 </div>
                 <AlertDialogFooter>
                     <div class="flex flex-row justify-around gap-2">
-                        <AlertDialogDescription>
-                            QR Code มีอายุ 5 นาที
-                        </AlertDialogDescription>
                         <Button
                             onclick={() => {
                                 showqr = false;
@@ -357,6 +343,25 @@
                             >ปิด</Button
                         >
                     </div>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={showalert2}>
+            <AlertDialogContent class="w-55">
+                <AlertDialogHeader>
+                    <AlertDialogTitle class="text-center"
+                        >ยังทำกิจกรรมไม่ครบ</AlertDialogTitle
+                    >
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <Button
+                        onclick={reset2}
+                        variant="default"
+                        type="submit"
+                        class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
+                        >Ok</Button
+                    >
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
