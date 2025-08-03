@@ -33,6 +33,7 @@
 		"@kuiper/svelte-scan-qrcode": "^0.0.5",
 		"@svelte-put/qr": "^2.1.0",
 		"@tailwindcss/vite": "^4.1.11",
+		"@vercel/analytics": "^1.5.0",
 		"html5-qrcode": "^2.3.8",
 		"jsqr": "^1.4.0",
 		"sv-popup": "^0.5.3",
