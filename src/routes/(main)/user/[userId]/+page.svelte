@@ -25,9 +25,9 @@
     let showalert2: boolean = false;
     let showqr: boolean = false;
 
-    let threshold: number = 5;
-
     export let data;
+
+    let threshold: number = Math.round(data.baseNum/2);
 
     let qrcode: string = generateQrData();
 
