@@ -122,7 +122,7 @@
                                 variant="default"
                                 class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
                                 onclick={() => {
-                                    navigate("approve");
+                                    navigate("dashboard");
                                 }}
                             >
                                 <ChartBarBig /> สถิติ
