@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { toast } from "svelte-sonner";
     import * as Card from "$lib/components/ui/card/index.js";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
     import { Badge } from "$lib/components/ui/badge/index.js";
@@ -23,11 +24,11 @@
     let showalert: boolean = false;
     let showqr: boolean = false;
 
-    let threshold: number = 4;
+    let threshold: number = 2;
 
     export let data;
 
-    let qrcode: string = generateQrData()
+    let qrcode: string = generateQrData();
 
     import {
         Check,
@@ -43,10 +44,8 @@
         User,
         CircleDashed,
         TicketCheck,
-        RotateCw
+        RotateCw,
     } from "@lucide/svelte";
-
-    
 
     const reset = () => {
         showalert = false;
@@ -74,8 +73,16 @@
     }
 
     function refreshQR() {
-        qrcode = generateQrData()
+        qrcode = generateQrData();
     }
+
+    const certificateCheck = () => {
+        if (data.doneNum >= threshold) {
+            goto("/certificate");
+        } else {
+            return;
+        }
+    };
 </script>
 
 <div class="min-h-screen bg-border font-[sarabun]">
@@ -89,7 +96,7 @@
                 <Sheet.Header>
                     <Sheet.Title>EVENTUS x ALiCE</Sheet.Title>
                     <Sheet.Description>
-                        Authenticated Log in Checker For Eventus
+                        Authenticated Log in Checker for Eventus
                     </Sheet.Description>
                     {#if data.role == "ADMIN" || data.role == "MOD"}
                         <Separator />
@@ -98,7 +105,7 @@
                         >
                             <Button
                                 variant="default"
-                                class="border-1 border-teal-800 duration-300 text-teal-800 bg-teal-200 hover:bg-teal-500"
+                                class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
                                 onclick={() => {
                                     navigate("approve");
                                 }}
@@ -135,7 +142,13 @@
                                 navigate("about");
                             }}>เกี่ยวกับ</Button
                         >
-                        <Button variant="link" size="lg">เกียรติบัตร</Button>
+                        <Button
+                            variant="link"
+                            size="lg"
+                            onclick={() => {
+                                certificateCheck();
+                            }}>เกียรติบัตร</Button
+                        >
                     </div>
                     <Separator />
                     <div class="absolute bottom-0 p-2">
@@ -209,7 +222,9 @@
                         กิจกรรม {data.doneNum}/{data.baseNum}
                     </h1>
                 </div>
-                <p class="text-muted-foreground text-sm text-center">QR Code มีอายุ 5 นาที</p>
+                <p class="text-muted-foreground text-sm text-center">
+                    QR Code มีอายุ 5 นาที
+                </p>
                 <div>
                     <svg
                         width="250"
@@ -219,8 +234,10 @@
                         }}
                     />
                 </div>
-                
-                <Button variant="ghost" onclick={refreshQR}><RotateCw />Refresh</Button>
+
+                <Button variant="ghost" onclick={refreshQR}
+                    ><RotateCw />Refresh</Button
+                >
             </Card.Content>
         </Card.Root>
 
