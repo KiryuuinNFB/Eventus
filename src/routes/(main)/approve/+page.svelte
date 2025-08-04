@@ -130,8 +130,8 @@
             {
                 fps: 12,
                 qrbox: {
-                    width: 180,
-                    height: 180,
+                    width: 250,
+                    height: 250,
                 },
             },
             onScanSuccess,
@@ -189,28 +189,25 @@
             </Tabs.List>
             <Tabs.Content value="scan">
                 <Card.Root
-                    class="flex p-2 ml-25vw mr-25vw mt-26 bg-card border-ring"
+                    class="flex p-2 ml-20vw mr-20vw mt-26 bg-card border-ring"
                 >
                     <Card.Header>
                         <Card.Title class="font-medium text-2xl"
                             >สแกนกิจกรรม</Card.Title
                         >
-                        <Card.Description
-                            >กรุณาปรับหน้าจอให้สว่าง</Card.Description
-                        >
                     </Card.Header>
-                    <Card.Content class="p-12">
+                    <Card.Content class="p-2">
                         <div
                             class="flex flex-col items-center justify-center gap-20px"
                         >
                             <reader
                                 id="reader"
-                                class="w-80vw h-80vw bg-slate-950 min-h-500px"
+                                class="w-[500px] h-[500px] bg-slate-950 min-h-500px"
                             >
                             </reader>
                         </div>
                     </Card.Content>
-                    <Card.Footer class="p-2 justify-between">
+                    <Card.Footer class="justify-between space-x-4">
                         {#if scanning}
                             <Button
                                 onclick={stop}
@@ -258,7 +255,6 @@
                         <Card.Title class="font-medium text-2xl"
                             >กรอกกิจกรรม</Card.Title
                         >
-                        <Card.Description>กรุณากด้หำกพ้กห้</Card.Description>
                     </Card.Header>
                     <Card.Content class="p-8 pl-14 pr-14">
                         <div class="flex flex-col gap-6">
