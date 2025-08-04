@@ -119,7 +119,7 @@
                                 variant="default"
                                 class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
                                 onclick={() => {
-                                    navigate("approve");
+                                    navigate("database");
                                 }}
                             >
                                 <Database /> ฐานข้อมูล
@@ -261,10 +261,13 @@
                         }}
                     />
                 </div>
-
+                <p class="text-muted-foreground text-sm text-center">
+                    กรุณาปรับหน้าจอให้สว่าง
+                </p>
                 <Button variant="ghost" onclick={refreshQR}
                     ><RotateCw />Refresh</Button
                 >
+                
             </Card.Content>
         </Card.Root>
 

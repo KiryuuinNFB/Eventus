@@ -10,11 +10,12 @@ export const load: PageServerLoad = async ({ cookies }) => {
     }
     const res = await fetch(`${API_ELYSIA}/auth/veriadmin`, {
         method: "GET",
-        headers: { 
-            "Content-Type": "application/json", 
+        headers: {
+            "Content-Type": "application/json",
             "authorization": token
         },
     })
+
 
     if (!res.ok) {
         redirect(303, "/")
@@ -23,11 +24,12 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const getbase = async () => {
         const response = await fetch(`${API_ELYSIA}/api/v1/base/`, {
             method: "GET",
-            headers: { 
-            "Content-Type": "application/json", 
-            "authorization": token
-        },
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": token
+            },
         })
+
         const data = await response.json()
         return data
     }
