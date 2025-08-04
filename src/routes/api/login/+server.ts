@@ -22,7 +22,7 @@ export async function POST({ request, cookies, fetch }) {
         secure: true,
 		path: '/',
 		sameSite: 'strict',
-		maxAge: 60 * 30 //60 seconds * 30 = 30 minutes
+		maxAge: 60 * 60 * 24 //60 seconds * 60 minutes * 24 hrs = 1 day
 	});
 
     cookies.set('user', username, {
@@ -30,7 +30,7 @@ export async function POST({ request, cookies, fetch }) {
         secure: true,
 		path: '/',
 		sameSite: 'strict',
-		maxAge: 60 * 30 //60 seconds * 30 = 30 minutes
+		maxAge: 60 * 60 * 24
 	});
 
     return json({ "token": token });

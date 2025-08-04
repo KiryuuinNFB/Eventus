@@ -1,7 +1,7 @@
 <script lang="ts">
     let sitetitle = "งานวันวิทยาศาสตร์";
-	import Heading from "../../../head.svelte"
-
+    import Heading from "../../../head.svelte";
+    import * as Tabs from "$lib/components/ui/tabs/index.js";
     import home from "$lib/assets/home.png";
     import * as Card from "$lib/components/ui/card/index.js";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
@@ -30,7 +30,7 @@
 
     export let data;
 
-    let threshold: number = Math.round(data.baseNum/2);
+    let threshold: number = Math.round(data.baseNum / 2);
 
     let qrcode: string = generateQrData();
 
@@ -49,6 +49,7 @@
         CircleDashed,
         TicketCheck,
         RotateCw,
+        Database
     } from "@lucide/svelte";
 
     const reset = () => {
@@ -56,8 +57,8 @@
     };
 
     const reset2 = () => {
-        showalert2 = false
-    }
+        showalert2 = false;
+    };
 
     const logout = async () => {
         const res = await fetch("/api/logout", {
@@ -88,13 +89,13 @@
         if (data.doneNum >= threshold) {
             goto("/certificate");
         } else {
-            showalert2 = true
+            showalert2 = true;
             return;
         }
     };
 </script>
 
-<Heading SiteHead={sitetitle}/>
+<Heading SiteHead={sitetitle} />
 
 <div class="min-h-screen bg-border font-[sarabun]">
     <div
@@ -109,8 +110,8 @@
                     <Sheet.Description>
                         Authenticated Log in Checker for Eventus
                     </Sheet.Description>
-                    {#if data.role == "ADMIN" || data.role == "MOD"}
-                        <Separator />
+                    <Separator />
+                    {#if data.role == "ADMIN"}
                         <div
                             class="flex flex-row text-left justify-center gap-2"
                         >
@@ -121,11 +122,26 @@
                                     navigate("approve");
                                 }}
                             >
+                                <Database /> ฐานข้อมูล
+                            </Button>
+                        </div>
+                    {/if}
+                    {#if data.role == "ADMIN" || data.role == "MOD"}
+                        <div
+                            class="flex flex-row text-left justify-center gap-2"
+                        >
+                            <Button
+                                variant="default"
+                                class="border-1 border-teal-800 duration-300 text-teal-800 bg-teal-200 hover:bg-teal-500"
+                                onclick={() => {
+                                    navigate("approve");
+                                }}
+                            >
                                 <Stamp /> ตรวจฐาน
                             </Button>
                             <Button
                                 variant="default"
-                                class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
+                                class="border-1 border-teal-800 duration-300 text-teal-800 bg-teal-200 hover:bg-teal-500"
                                 onclick={() => {
                                     navigate("dashboard");
                                 }}
@@ -334,7 +350,7 @@
         <AlertDialog open={showqr}>
             <AlertDialogContent class="w-75 font-[sarabun]">
                 <div>
-                    <img src={home} alt="home">
+                    <img src={home} alt="home" />
                 </div>
                 <AlertDialogFooter>
                     <div class="flex flex-row justify-around gap-2">

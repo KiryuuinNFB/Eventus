@@ -20,7 +20,7 @@
 <div class="min-h-screen bg-border font-[sarabun]">
     <div class="flex text-center justify-center">
         <div
-            class="absolute top-0 p-2 backdrop-blur-sm flex flex-row border-slate-200 border-1"
+            class="absolute top-0 p-2 flex flex-row"
         >
             <Button
                 onclick={home}
