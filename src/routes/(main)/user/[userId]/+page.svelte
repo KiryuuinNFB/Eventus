@@ -51,6 +51,7 @@
         RotateCw,
         Database
     } from "@lucide/svelte";
+    import { PRISMA_STUDIO } from "$lib/config";
 
     const reset = () => {
         showalert = false;
@@ -73,6 +74,10 @@
     const navigate = (page: string) => {
         goto(`/${page}`);
     };
+
+    const gotoprisma = () => {
+        window.location.href = PRISMA_STUDIO;
+    }
 
     function generateQrData() {
         return JSON.stringify({
@@ -119,7 +124,7 @@
                                 variant="default"
                                 class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
                                 onclick={() => {
-                                    navigate("database");
+                                    gotoprisma();
                                 }}
                             >
                                 <Database /> ฐานข้อมูล
