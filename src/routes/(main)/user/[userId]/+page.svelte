@@ -1,5 +1,5 @@
 <script lang="ts">
-    let sitetitle = "งานวันวิทยาศาสตร์";
+    
     import Heading from "../../../head.svelte";
     import * as Tabs from "$lib/components/ui/tabs/index.js";
     import home from "$lib/assets/home.png";
@@ -98,6 +98,8 @@
             return;
         }
     };
+
+    let sitetitle = "งานวันวิทยาศาสตร์";
 </script>
 
 <Heading SiteHead={sitetitle} />
@@ -115,8 +117,9 @@
                     <Sheet.Description>
                         Authenticated Log in Checker for Eventus
                     </Sheet.Description>
-                    <Separator />
+                    
                     {#if data.role == "ADMIN"}
+                    <Separator />
                         <div
                             class="flex flex-row text-left justify-center gap-2"
                         >
@@ -124,7 +127,7 @@
                                 variant="default"
                                 class="border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
                                 onclick={() => {
-                                    gotoprisma();
+                                    navigate("database");
                                 }}
                             >
                                 <Database /> ฐานข้อมูล
