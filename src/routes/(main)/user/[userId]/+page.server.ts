@@ -16,6 +16,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         name: string;
         desc: string;
         location: string;
+        teacher: string;
         completed: boolean;
     };
 
@@ -76,6 +77,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
                 name: base.name,
                 desc: base.desc,
                 location: base.location,
+                teacher: base.teacher,
                 completed: userCompleted.includes(base.id)
             }
             baseArr.push(eachBase)
@@ -110,7 +112,9 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         "baseNum": completedBase.length,
         "doneNum": user.events.length,
         "role": user.role,
-        "prefix": prefixHandle()
+        "prefix": prefixHandle(),
+        "grade": user.grade,
+        "room": user.room
     }
 
     return data

@@ -49,7 +49,7 @@
         CircleDashed,
         TicketCheck,
         RotateCw,
-        Database
+        Database,
     } from "@lucide/svelte";
     import { PRISMA_STUDIO } from "$lib/config";
 
@@ -77,7 +77,7 @@
 
     const gotoprisma = () => {
         window.location.href = PRISMA_STUDIO;
-    }
+    };
 
     function generateQrData() {
         return JSON.stringify({
@@ -206,7 +206,7 @@
                     {data.name}
                     {data.surname}</Card.Title
                 >
-                <div class="justify-between flex flex-row gap-2">
+                <div class="justify-between flex flex-row ">
                     {#if data.role == "ADMIN"}
                         <Badge
                             class="bg-amber-200 text-amber-700 border-amber-700 m-4"
@@ -246,6 +246,15 @@
                             <CircleDashed /> ยังทำไม่ครบ
                         </Badge>
                     {/if}
+                    {#if data.studentId == "22621"}
+                        <Badge
+                            class="bg-pink-200 text-pink-700 border-pink-700 m-4"
+                        >
+                            <Mars />เฟมบอย
+                        </Badge>
+                    {:else}
+                        <div></div>
+                    {/if}
                 </div>
             </Card.Header>
             <Card.Content>
@@ -272,7 +281,6 @@
                 <Button variant="ghost" onclick={refreshQR}
                     ><RotateCw />Refresh</Button
                 >
-                
             </Card.Content>
         </Card.Root>
 
@@ -314,6 +322,7 @@
 
                                         <p>{event.desc}</p>
                                         <p>อยู่ที่ : {event.location}</p>
+                                        <p>อาจารย์ : {event.teacher}</p>
                                     </Card.Content>
                                     <Card.Footer>
                                         <p class="text-muted-foreground">
