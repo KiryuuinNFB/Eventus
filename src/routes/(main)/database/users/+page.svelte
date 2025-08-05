@@ -17,8 +17,13 @@
     }
 </script>
 
+<div class="text-4xl">
+    ข้อมูลผู้ใช้
+</div>
+
 <div class="flex flex-row justify-center">
     <DataTable data={data.data} {columns} />
+    
 </div>
 
 
