@@ -23,8 +23,13 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
     })
 
     const data = await res.json()
-    console.log(data)
 
-    return data
+    return {
+        "data": data.data,
+        "page": data.page,
+        "total":data.total,
+        "pageCount": data.pageCount,
+        "token": token
+    }
 
 }
