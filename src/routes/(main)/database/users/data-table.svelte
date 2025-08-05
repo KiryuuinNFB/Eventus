@@ -22,7 +22,7 @@
   });
 </script>
  
-<div class="rounded-md border justify-around">
+<div class="rounded-md border">
   <Table.Root>
     <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
@@ -55,7 +55,7 @@
       {:else}
         <Table.Row>
           <Table.Cell colspan={columns.length} class="h-24 text-center">
-            No results.
+            ไม่พบ
           </Table.Cell>
         </Table.Row>
       {/each}

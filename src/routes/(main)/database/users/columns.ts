@@ -1,23 +1,37 @@
 import type { ColumnDef } from "@tanstack/table-core";
 
 export type User = {
-    username: string;
-    name: string;
-    role: "USER" | "MOD" | "ADMIN";
-
-}
+  username: string,
+  name: string,
+  surname: string,
+  role: "ADMIN" | "USER" | "MOD",
+  grade: number,
+  room: number
+};
 
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "username",
-    header: "ID",
+    header: "รหัสนักเรียน",
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "ชื่อ",
+  },
+  {
+    accessorKey: "surname",
+    header: "นามสกุล",
   },
   {
     accessorKey: "role",
-    header: "Role",
+    header: "ตำแหน่ง",
+  },
+  {
+    accessorKey: "grade",
+    header: "ระดับชั้น",
+  },
+  {
+    accessorKey: "room",
+    header: "ห้อง",
   },
 ];
