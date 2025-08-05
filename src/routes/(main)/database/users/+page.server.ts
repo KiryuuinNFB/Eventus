@@ -2,13 +2,19 @@ import { API_ELYSIA } from "$lib/config";
 import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ cookies }) => {
-    const page = 1
+export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
     const token = cookies.get('jwt')
     if (!token) {
         redirect(307, "/")
     }
-    const res = await fetch(`${API_ELYSIA}/admin/database/user/${page}`, {
+
+    const page = Number(url.searchParams.get('page')) || 1;
+
+    const params = new URLSearchParams({
+        page: page.toString(),
+    });
+
+    const res = await fetch(`${API_ELYSIA}/admin/database/user?${params.toString()}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -18,7 +24,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
     const data = await res.json()
     console.log(data)
-    
-    return {"result" : data}
-    
+
+    return data
+
 }
