@@ -4,15 +4,15 @@
 
     const items = [
         {
-            title: "Home",
+            title: "บ้าน",
             url: "/database",
         },
         {
-            title: "Users",
+            title: "ผู้ใช้",
             url: "/database/users",
         },
         {
-            title: "Bases",
+            title: "กิจกรรม",
             url: "/database/bases",
         },
     ];

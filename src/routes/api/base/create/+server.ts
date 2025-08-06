@@ -1,10 +1,12 @@
 import { json } from '@sveltejs/kit';
 import { API_ELYSIA } from "$lib/config";
 
-export async function DELETE({ request, cookies, fetch }) {
+export async function PUT({ request, cookies, fetch }) {
     const {
-        username,
-        password
+        name,
+        desc,
+        location,
+        teacher
     } = await request.json()
     const token = cookies.get('jwt')
 
@@ -12,15 +14,17 @@ export async function DELETE({ request, cookies, fetch }) {
         return json({ "status": 401 })
     }
 
-    const res = await fetch(`${API_ELYSIA}/admin/user`, {
-        method: "DELETE",
+    const res = await fetch(`${API_ELYSIA}/admin/base`, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "authorization": token,
         },
         body: JSON.stringify({
-            username,
-            password
+            name,
+            desc,
+            location,
+            teacher
         }),
     });
 

@@ -3,14 +3,10 @@ import { API_ELYSIA } from "$lib/config";
 
 export async function PATCH({ request, cookies, fetch }) {
     const {
-        username,
-        password,
         name,
-        surname,
-        role,
-        prefix,
-        grade,
-        room
+        desc,
+        location,
+        teacher
     } = await request.json()
     const token = cookies.get('jwt')
 
@@ -18,21 +14,17 @@ export async function PATCH({ request, cookies, fetch }) {
         return json({ "status": 401 })
     }
 
-    const res = await fetch(`${API_ELYSIA}/admin/user`, {
+    const res = await fetch(`${API_ELYSIA}/admin/base`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             "authorization": token,
         },
         body: JSON.stringify({
-            username,
-            password,
             name,
-            surname,
-            role,
-            prefix,
-            grade,
-            room
+            desc,
+            location,
+            teacher
         }),
     });
 

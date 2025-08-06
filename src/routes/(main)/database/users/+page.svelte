@@ -1,7 +1,12 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import DataTable from "./data-table.svelte";
+    import DataTable from "../data-table.svelte";
     import { columns } from "./columns.js";
+
+    import PrefixSelect from "./PrefixSelect.svelte";
+    import GradeSelect from "./GradeSelect.svelte";
+    import RoleSelect from "./RoleSelect.svelte";
+    import RoomSelect from "./RoomSelect.svelte";
 
     import * as Pagination from "$lib/components/ui/pagination/index.js";
     import * as Card from "$lib/components/ui/card/index.js";
@@ -9,70 +14,14 @@
     import { Label } from "$lib/components/ui/label/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
 
-    import { 
-        Plus,
-        PencilLine,
-        Trash2
-     } from "@lucide/svelte";
-    import { API_ELYSIA } from "$lib/config";
+    import { Plus, PencilLine } from "@lucide/svelte";
+    
 
     export let data;
 
     $: currentPage = data.page;
 
-    const create = async () => {
-        const res = await fetch("/api/user/create", {
-            method: "PUT",
-            headers: { 
-                "Content-Type": "application/json",
-                "authorization": data.token
-            },
-            body: JSON.stringify({ 
-                "username": createUsername,
-                "password": createPassword,
-                "name": createName,
-                "surname": createSurname,
-                "role": createRole,
-                "prefix": createPrefix,
-                "grade": createGrade,
-                "room": createRoom
-             }),
-        });
-    }
-
-    const edit = async () => {
-        const res = await fetch("/api/user/edit", {
-            method: "PATCH",
-            headers: { 
-                "Content-Type": "application/json",
-                "authorization": data.token
-            },
-            body: JSON.stringify({ 
-                "username": createUsername,
-                "password": createPassword,
-                "name": createName,
-                "surname": createSurname,
-                "role": createRole,
-                "prefix": createPrefix,
-                "grade": createGrade,
-                "room": createRoom
-             }),
-        });
-    }
-
-    const destroy = async () => {
-        const res = await fetch("/api/user/delete", {
-            method: "DELETE",
-            headers: { 
-                "Content-Type": "application/json",
-                "authorization": data.token
-            },
-            body: JSON.stringify({ 
-                "username": createUsername,
-                "password": createPassword,
-             }),
-        });
-    }
+    
 
     function changePage(newPage: number) {
         const params = new URLSearchParams({
@@ -82,14 +31,62 @@
         goto(`?${params.toString()}`);
     }
 
+    const create = async () => {
+        const res = await fetch("/api/user/create", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: data.token,
+            },
+            body: JSON.stringify({
+                username: createUsername,
+                password: createPassword,
+                name: createName,
+                surname: createSurname,
+                role: createRole,
+                prefix: createPrefix,
+                grade: parseInt(createGrade),
+                room: parseInt(createRoom)
+            }),
+        });
+
+        if (res.ok) {
+            changePage(currentPage);
+        }
+    };
+
+    const edit = async () => {
+        const res = await fetch("/api/user/edit", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: data.token,
+            },
+            body: JSON.stringify({
+                username: createUsername,
+                password: createPassword,
+                name: createName,
+                surname: createSurname,
+                role: createRole,
+                prefix: createPrefix,
+                grade: parseInt(createGrade),
+                room: parseInt(createRoom)
+            }),
+        });
+
+        if (res.ok) {
+            changePage(currentPage);
+        }
+    };
+
     let createUsername: string;
     let createPassword: string;
     let createName: string;
     let createSurname: string;
     let createRole: string;
     let createPrefix: string;
-    let createGrade: number;
-    let createRoom: number;
+    let createGrade: string;
+    let createRoom: string;
 </script>
 
 <div class="text-4xl">ข้อมูลผู้ใช้</div>
@@ -101,6 +98,8 @@
             <Card.Title>เพิ่มข้อมูล</Card.Title>
         </Card.Header>
         <Card.Content>
+            
+
             <form>
                 <div class="flex flex-row gap-6">
                     <div class="flex flex-col gap-6">
@@ -144,40 +143,20 @@
                     <div class="flex flex-col gap-6">
                         <div class="grid gap-2">
                             <Label for="prefix">คำนำหน้าชื่อ</Label>
-                            <Input
-                                id="prefix"
-                                type="text"
-                                class="max-w-16 border-ring"
-                                bind:value={createPrefix}
-                            />
+                            <PrefixSelect bind:value={createPrefix}/>
                         </div>
                         <div class="grid gap-2">
                             <Label for="role">ตำแหน่ง</Label>
-                            <Input
-                                id="role"
-                                type="text"
-                                class="max-w-16 border-ring"
-                                bind:value={createRole}
-                            />
+                            <RoleSelect bind:value={createRole}/>
                         </div>
 
                         <div class="grid gap-2">
-                            <Label for="grade">ชั้น</Label>
-                            <Input
-                                id="grade"
-                                type="number"
-                                class="max-w-16 border-ring"
-                                bind:value={createGrade}
-                            />
+                            <Label for="grade">ระดับชั้น</Label>
+                            <GradeSelect bind:value={createGrade}/>
                         </div>
                         <div class="grid gap-2">
                             <Label for="room">ห้อง</Label>
-                            <Input
-                                id="room"
-                                type="number"
-                                class="max-w-16 border-ring"
-                                bind:value={createRoom}
-                            />
+                            <RoomSelect bind:value={createRoom}/>
                         </div>
                     </div>
                 </div>
@@ -195,15 +174,11 @@
                     class="transition border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
                     ><PencilLine />แก้ไข</Button
                 >
-                <Button
-                    onclick={destroy}
-                    class="transition border-1 border-rose-800 duration-300 text-rose-800 bg-rose-200 hover:bg-rose-500"
-                    ><Trash2 />ลบ</Button
-                >
             </div>
         </Card.Footer>
     </Card.Root>
 </div>
+
 
 <div class="flex flex-row justify-center fixed bottom-8">
     <Pagination.Root count={data.total} perPage={10} class="">
