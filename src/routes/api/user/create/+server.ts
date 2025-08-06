@@ -37,5 +37,5 @@ export async function PUT({ request, cookies, fetch }) {
     });
 
 
-    return json({ "status": res.status })
+    return json({ "status" : res.status })
 }
