@@ -1,0 +1,33 @@
+import { json } from '@sveltejs/kit';
+import { API_ELYSIA } from "$lib/config";
+
+export async function PUT({ request, cookies, fetch }) {
+    const {
+        name,
+        desc,
+        location,
+        teacher
+    } = await request.json()
+    const token = cookies.get('jwt')
+
+    if (!token) {
+        return json({ "status": 401 })
+    }
+
+    const res = await fetch(`${API_ELYSIA}/admin/base`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": token,
+        },
+        body: JSON.stringify({
+            name,
+            desc,
+            location,
+            teacher
+        }),
+    });
+
+
+    return json({ "status": res.status })
+}

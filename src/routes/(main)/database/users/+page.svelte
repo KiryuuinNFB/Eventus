@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import DataTable from "./data-table.svelte";
+    import DataTable from "../data-table.svelte";
     import { columns } from "./columns.js";
 
     import PrefixSelect from "./PrefixSelect.svelte";
@@ -50,7 +50,7 @@
             }),
         });
 
-        if (res.status === 200) {
+        if (res.ok) {
             changePage(currentPage);
         }
     };
@@ -74,7 +74,7 @@
             }),
         });
 
-        if (res.status === 200) {
+        if (res.ok) {
             changePage(currentPage);
         }
     };

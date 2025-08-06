@@ -4,9 +4,9 @@
     export let value: string = "";
 
     const role = [
-        { value: "ADMIN", label: "Admin" },
-        { value: "MOD", label: "Mod" },
-        { value: "USER", label: "User" }
+        { value: "ADMIN", label: "ผู้ดูแลระบบ" },
+        { value: "MOD", label: "พี่ฐาน" },
+        { value: "USER", label: "ผู้ใช้" }
     ];
 
     $: triggerContent =
