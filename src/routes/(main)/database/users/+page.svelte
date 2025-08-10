@@ -14,18 +14,27 @@
     import { Label } from "$lib/components/ui/label/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
 
-    import { Plus, PencilLine } from "@lucide/svelte";
-    
+    import { Plus, PencilLine, Search } from "@lucide/svelte";
 
     export let data;
 
     $: currentPage = data.page;
 
-    
+    let searchGrade: string;
+    let searchRoom: string;
+    let searchText: string;
 
-    function changePage(newPage: number) {
+    function updateFetch(
+        newPage: number,
+        filterGrade?: string,
+        filterRoom?: string,
+        search?: string,
+    ) {
         const params = new URLSearchParams({
             page: newPage.toString(),
+            grade: filterGrade ?? "",
+            room: filterRoom ?? "",
+            search: search ?? "",
         });
 
         goto(`?${params.toString()}`);
@@ -46,12 +55,12 @@
                 role: createRole,
                 prefix: createPrefix,
                 grade: parseInt(createGrade),
-                room: parseInt(createRoom)
+                room: parseInt(createRoom),
             }),
         });
 
         if (res.ok) {
-            changePage(currentPage);
+            updateFetch(currentPage);
         }
     };
 
@@ -70,12 +79,12 @@
                 role: createRole,
                 prefix: createPrefix,
                 grade: parseInt(createGrade),
-                room: parseInt(createRoom)
+                room: parseInt(createRoom),
             }),
         });
 
         if (res.ok) {
-            changePage(currentPage);
+            updateFetch(currentPage);
         }
     };
 
@@ -90,16 +99,45 @@
 </script>
 
 <div class="text-4xl">ข้อมูลผู้ใช้</div>
+<div class="m-4">
+    <form class="flex flex-row gap-2">
+        <div>
+            <Label for="search">ค้นหาในฐานข้อมูล</Label>
+            <Input
+                id="search"
+                type="text"
+                class="max-w-64 border-ring"
+                placeholder="ชื่อ, นามสกุล, รหัสนักเรียน"
+                bind:value={searchText}
+            />
+        </div>
+        <div>
+            <Label for="grade">ระดับชั้น</Label>
+            <GradeSelect bind:value={searchGrade} />
+        </div>
+        <div>
+            <Label for="room">ห้อง</Label>
+            <RoomSelect bind:value={searchRoom} />
+        </div>
+        <div>
+            <Label for="room">⠀</Label>
+            <Button
+                onclick={() => {updateFetch(currentPage, searchGrade, searchRoom, searchText)}}
+                class="transition border-1 border-violet-800 duration-300 text-violet-800 bg-violet-200 hover:bg-violet-500"
+                ><Search />ค้นหา</Button
+            >
+        </div>
+    </form>
+</div>
 
 <div class="flex flex-row justify-center gap-4 m-4">
     <DataTable data={data.data} {columns} />
+
     <Card.Root>
         <Card.Header>
             <Card.Title>เพิ่มข้อมูล</Card.Title>
         </Card.Header>
         <Card.Content>
-            
-
             <form>
                 <div class="flex flex-row gap-6">
                     <div class="flex flex-col gap-6">
@@ -143,20 +181,20 @@
                     <div class="flex flex-col gap-6">
                         <div class="grid gap-2">
                             <Label for="prefix">คำนำหน้าชื่อ</Label>
-                            <PrefixSelect bind:value={createPrefix}/>
+                            <PrefixSelect bind:value={createPrefix} />
                         </div>
                         <div class="grid gap-2">
                             <Label for="role">ตำแหน่ง</Label>
-                            <RoleSelect bind:value={createRole}/>
+                            <RoleSelect bind:value={createRole} />
                         </div>
 
                         <div class="grid gap-2">
                             <Label for="grade">ระดับชั้น</Label>
-                            <GradeSelect bind:value={createGrade}/>
+                            <GradeSelect bind:value={createGrade} />
                         </div>
                         <div class="grid gap-2">
                             <Label for="room">ห้อง</Label>
-                            <RoomSelect bind:value={createRoom}/>
+                            <RoomSelect bind:value={createRoom} />
                         </div>
                     </div>
                 </div>
@@ -179,14 +217,13 @@
     </Card.Root>
 </div>
 
-
 <div class="flex flex-row justify-center fixed bottom-8">
     <Pagination.Root count={data.total} perPage={10} class="">
         {#snippet children({ pages, currentPage })}
             <Pagination.Content>
                 <Pagination.Item>
                     <Pagination.PrevButton
-                        onclick={() => changePage(currentPage - 1)}
+                        onclick={() => updateFetch(currentPage - 1, searchRoom, searchGrade, searchText)}
                         disabled={currentPage <= 1}
                     />
                 </Pagination.Item>
@@ -200,7 +237,7 @@
                             <Pagination.Link
                                 {page}
                                 isActive={currentPage === page.value}
-                                onclick={() => changePage(page.value)}
+                                onclick={() => updateFetch(page.value, searchRoom, searchGrade, searchText)}
                             >
                                 {page.value}
                             </Pagination.Link>
@@ -209,7 +246,7 @@
                 {/each}
                 <Pagination.Item>
                     <Pagination.NextButton
-                        onclick={() => changePage(currentPage + 1)}
+                        onclick={() => updateFetch(currentPage + 1, searchRoom, searchGrade, searchText)}
                         disabled={currentPage >= Math.ceil(data.total / 10)}
                     />
                 </Pagination.Item>

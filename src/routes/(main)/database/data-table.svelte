@@ -22,7 +22,7 @@
   });
 </script>
  
-<div class="rounded-md border">
+<div class="rounded-md border min-w-[50vw]">
   <Table.Root>
     <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
