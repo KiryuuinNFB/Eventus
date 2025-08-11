@@ -223,7 +223,7 @@
             <Pagination.Content>
                 <Pagination.Item>
                     <Pagination.PrevButton
-                        onclick={() => updateFetch(currentPage - 1, searchRoom, searchGrade, searchText)}
+                        onclick={() => updateFetch(currentPage - 1, searchGrade, searchRoom, searchText)}
                         disabled={currentPage <= 1}
                     />
                 </Pagination.Item>
@@ -237,7 +237,7 @@
                             <Pagination.Link
                                 {page}
                                 isActive={currentPage === page.value}
-                                onclick={() => updateFetch(page.value, searchRoom, searchGrade, searchText)}
+                                onclick={() => updateFetch(page.value, searchGrade, searchRoom, searchText)}
                             >
                                 {page.value}
                             </Pagination.Link>
@@ -246,7 +246,7 @@
                 {/each}
                 <Pagination.Item>
                     <Pagination.NextButton
-                        onclick={() => updateFetch(currentPage + 1, searchRoom, searchGrade, searchText)}
+                        onclick={() => updateFetch(currentPage + 1, searchGrade, searchRoom, searchText)}
                         disabled={currentPage >= Math.ceil(data.total / 10)}
                     />
                 </Pagination.Item>
