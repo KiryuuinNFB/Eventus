@@ -22,7 +22,7 @@
         { value: "16", label: "16" },
     ];
 
-    $: triggerContent = room.find((f) => f.value === value)?.label ?? "ห้อง";
+    $: triggerContent = room.find((f) => f.value === value)?.label ?? "เลือก";
 </script>
 
 <Select.Root type="single" name="room" bind:value>

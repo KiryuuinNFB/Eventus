@@ -3,6 +3,7 @@ import { API_ELYSIA } from "$lib/config";
 
 export async function PATCH({ request, cookies, fetch }) {
     const {
+        id,
         name,
         desc,
         location,
@@ -21,6 +22,7 @@ export async function PATCH({ request, cookies, fetch }) {
             "authorization": token,
         },
         body: JSON.stringify({
+            id,
             name,
             desc,
             location,

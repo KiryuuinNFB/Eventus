@@ -13,7 +13,7 @@
     ];
 
     $: triggerContent =
-        grade.find((f) => f.value === value)?.label ?? "ระดับชั้น";
+        grade.find((f) => f.value === value)?.label ?? "เลือก";
 </script>
 
 <Select.Root type="single" name="grade" bind:value>

@@ -51,6 +51,7 @@
                 authorization: data.token,
             },
             body: JSON.stringify({
+                id: createBaseid,
                 name: createName,
                 desc: createDesc,
                 location: createLocation,
@@ -67,20 +68,35 @@
     let createDesc: string;
     let createLocation: string;
     let createTeacher: string;
+    let createBaseid: number;
 </script>
 
-<div class="text-4xl">ข้อมูลกิจกรรม</div>
+<div>
+   <h1 class="text-4xl font-[Sarabun] m-4">
+      ข้อมูลกิจกรรม
+   </h1>
+</div>
 
-<div class="flex flex-row justify-center gap-4 m-4">
+<div class="flex flex-row justify-center gap-4 m-4 font-[sarabun]">
     <DataTable data={data.data} {columns} />
-    <Card.Root>
+    <Card.Root class="flex bg-card border-ring">
         <Card.Header>
             <Card.Title>เพิ่มข้อมูล</Card.Title>
         </Card.Header>
         <Card.Content>
             <form>
                 <div class="flex flex-row gap-6">
+                    <div class="grid gap-2">
+                            <Label for="text">ID กิจกรรม</Label>
+                            <Input
+                                id="text"
+                                type="number"
+                                class="max-w-16 border-ring"
+                                bind:value={createBaseid}
+                            />
+                        </div>
                     <div class="flex flex-col gap-6">
+                        
                         <div class="grid gap-2">
                             <Label for="text">ชื่อกิจกรรม</Label>
                             <Input
@@ -140,7 +156,7 @@
     </Card.Root>
 </div>
 
-<div class="flex flex-row justify-center fixed bottom-8">
+<div class="flex flex-row justify-center fixed bottom-8 font-[sarabun] backdrop-blur-xs border border-ring rounded-md p-2 gap-2">
     <Pagination.Root count={data.total} perPage={10} class="">
         {#snippet children({ pages, currentPage })}
             <Pagination.Content>

@@ -12,7 +12,7 @@
     ];
 
     $: triggerContent =
-        prefix.find((f) => f.value === value)?.label ?? "คำนำหน้า";
+        prefix.find((f) => f.value === value)?.label ?? "เลือก";
 </script>
 
 <Select.Root type="single" name="prefix" bind:value>

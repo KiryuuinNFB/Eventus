@@ -24,6 +24,17 @@
     let searchRoom: string;
     let searchText: string;
 
+    let selectedStudent: string = "";
+
+    const getStudent = async (student: string) => {
+        
+    }
+
+    function handleRowClick(row: any) {
+        selectedStudent = row.username
+
+    }
+
     function updateFetch(
         newPage: number,
         filterGrade?: string,
@@ -98,8 +109,10 @@
     let createRoom: string;
 </script>
 
-<div class="text-4xl">ข้อมูลผู้ใช้</div>
-<div class="m-4">
+<div>
+    <h1 class="text-4xl font-[Sarabun] m-4">ข้อมูลผู้ใช้</h1>
+</div>
+<div class="m-4 font-[sarabun]">
     <form class="flex flex-row gap-2">
         <div>
             <Label for="search">ค้นหาในฐานข้อมูล</Label>
@@ -122,7 +135,14 @@
         <div>
             <Label for="room">⠀</Label>
             <Button
-                onclick={() => {updateFetch(currentPage, searchGrade, searchRoom, searchText)}}
+                onclick={() => {
+                    updateFetch(
+                        currentPage,
+                        searchGrade,
+                        searchRoom,
+                        searchText,
+                    );
+                }}
                 class="transition border-1 border-violet-800 duration-300 text-violet-800 bg-violet-200 hover:bg-violet-500"
                 ><Search />ค้นหา</Button
             >
@@ -130,100 +150,127 @@
     </form>
 </div>
 
-<div class="flex flex-row justify-center gap-4 m-4">
-    <DataTable data={data.data} {columns} />
+<div>
+    <div class="flex flex-row justify-center gap-4 m-4 font-[sarabun]">
+        <DataTable data={data.data} {columns} onRowClick={handleRowClick} />
 
-    <Card.Root>
-        <Card.Header>
-            <Card.Title>เพิ่มข้อมูล</Card.Title>
-        </Card.Header>
-        <Card.Content>
-            <form>
-                <div class="flex flex-row gap-6">
-                    <div class="flex flex-col gap-6">
-                        <div class="grid gap-2">
-                            <Label for="text">รหัสนักเรียน</Label>
-                            <Input
-                                id="text"
-                                type="text"
-                                class="max-w-48 border-ring"
-                                bind:value={createUsername}
-                            />
+        <Card.Root class="flex bg-card border-ring">
+            <Card.Header>
+                <Card.Title>เพิ่มข้อมูล</Card.Title>
+            </Card.Header>
+            <Card.Content>
+                <form>
+                    <div class="flex flex-row gap-6">
+                        <div class="flex flex-col gap-6">
+                            <div class="grid gap-2">
+                                <Label for="text">รหัสนักเรียน</Label>
+                                <Input
+                                    id="text"
+                                    type="text"
+                                    class="max-w-48 border-ring"
+                                    bind:value={createUsername}
+                                />
+                            </div>
+                            <div class="grid gap-2">
+                                <Label for="password">รหัสผ่าน</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    class="max-w-48 border-ring"
+                                    bind:value={createPassword}
+                                />
+                            </div>
+                            <div class="grid gap-2">
+                                <Label for="name">ชื่อ</Label>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    class="max-w-48 border-ring"
+                                    bind:value={createName}
+                                />
+                            </div>
+                            <div class="grid gap-2">
+                                <Label for="surname">นามสกุล</Label>
+                                <Input
+                                    id="surname"
+                                    type="text"
+                                    class="max-w-48 border-ring"
+                                    bind:value={createSurname}
+                                />
+                            </div>
                         </div>
-                        <div class="grid gap-2">
-                            <Label for="password">รหัสผ่าน</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                class="max-w-48 border-ring"
-                                bind:value={createPassword}
-                            />
-                        </div>
-                        <div class="grid gap-2">
-                            <Label for="name">ชื่อ</Label>
-                            <Input
-                                id="name"
-                                type="text"
-                                class="max-w-48 border-ring"
-                                bind:value={createName}
-                            />
-                        </div>
-                        <div class="grid gap-2">
-                            <Label for="surname">นามสกุล</Label>
-                            <Input
-                                id="surname"
-                                type="text"
-                                class="max-w-48 border-ring"
-                                bind:value={createSurname}
-                            />
+                        <div class="flex flex-col gap-6">
+                            <div class="grid gap-2">
+                                <Label for="prefix">คำนำหน้าชื่อ</Label>
+                                <PrefixSelect bind:value={createPrefix} />
+                            </div>
+                            <div class="grid gap-2">
+                                <Label for="role">ตำแหน่ง</Label>
+                                <RoleSelect bind:value={createRole} />
+                            </div>
+
+                            <div class="grid gap-2">
+                                <Label for="grade">ระดับชั้น</Label>
+                                <GradeSelect bind:value={createGrade} />
+                            </div>
+                            <div class="grid gap-2">
+                                <Label for="room">ห้อง</Label>
+                                <RoomSelect bind:value={createRoom} />
+                            </div>
                         </div>
                     </div>
-                    <div class="flex flex-col gap-6">
-                        <div class="grid gap-2">
-                            <Label for="prefix">คำนำหน้าชื่อ</Label>
-                            <PrefixSelect bind:value={createPrefix} />
-                        </div>
-                        <div class="grid gap-2">
-                            <Label for="role">ตำแหน่ง</Label>
-                            <RoleSelect bind:value={createRole} />
-                        </div>
-
-                        <div class="grid gap-2">
-                            <Label for="grade">ระดับชั้น</Label>
-                            <GradeSelect bind:value={createGrade} />
-                        </div>
-                        <div class="grid gap-2">
-                            <Label for="room">ห้อง</Label>
-                            <RoomSelect bind:value={createRoom} />
-                        </div>
-                    </div>
+                </form>
+            </Card.Content>
+            <Card.Footer>
+                <div class="flex flex-row justify-around gap-2">
+                    <Button
+                        onclick={create}
+                        class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
+                        ><Plus />เพิ่ม</Button
+                    >
+                    <Button
+                        onclick={edit}
+                        class="transition border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
+                        ><PencilLine />แก้ไข</Button
+                    >
                 </div>
-            </form>
-        </Card.Content>
-        <Card.Footer>
-            <div class="flex flex-row justify-around gap-2">
-                <Button
-                    onclick={create}
-                    class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
-                    ><Plus />เพิ่ม</Button
-                >
-                <Button
-                    onclick={edit}
-                    class="transition border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
-                    ><PencilLine />แก้ไข</Button
-                >
-            </div>
-        </Card.Footer>
-    </Card.Root>
+            </Card.Footer>
+        </Card.Root>
+    </div>
+    <div class="flex flex-row m-4 font-[sarabun]">
+        <Card.Root class="flex bg-card border-ring w-full min-h-128">
+        {#if selectedStudent == ""}
+            <Card.Content class="text-center text-xl text-muted-foreground">
+                กรุณาเลือกนักเรียน
+            </Card.Content>
+        {:else}
+             <Card.Header>
+                <Card.Title>ข้อมูล</Card.Title>
+            </Card.Header>
+            <Card.Content>
+
+            </Card.Content>
+            <Card.Footer>
+
+            </Card.Footer>
+        {/if}
+        </Card.Root>
+    </div>
 </div>
 
-<div class="flex flex-row justify-center fixed bottom-8">
+<div class="flex flex-row justify-center fixed bottom-8 font-[sarabun] backdrop-blur-xs border border-ring rounded-md p-2 gap-2">
     <Pagination.Root count={data.total} perPage={10} class="">
         {#snippet children({ pages, currentPage })}
             <Pagination.Content>
                 <Pagination.Item>
                     <Pagination.PrevButton
-                        onclick={() => updateFetch(currentPage - 1, searchGrade, searchRoom, searchText)}
+                        onclick={() =>
+                            updateFetch(
+                                currentPage - 1,
+                                searchGrade,
+                                searchRoom,
+                                searchText,
+                            )}
                         disabled={currentPage <= 1}
                     />
                 </Pagination.Item>
@@ -237,7 +284,13 @@
                             <Pagination.Link
                                 {page}
                                 isActive={currentPage === page.value}
-                                onclick={() => updateFetch(page.value, searchGrade, searchRoom, searchText)}
+                                onclick={() =>
+                                    updateFetch(
+                                        page.value,
+                                        searchGrade,
+                                        searchRoom,
+                                        searchText,
+                                    )}
                             >
                                 {page.value}
                             </Pagination.Link>
@@ -246,7 +299,13 @@
                 {/each}
                 <Pagination.Item>
                     <Pagination.NextButton
-                        onclick={() => updateFetch(currentPage + 1, searchGrade, searchRoom, searchText)}
+                        onclick={() =>
+                            updateFetch(
+                                currentPage + 1,
+                                searchGrade,
+                                searchRoom,
+                                searchText,
+                            )}
                         disabled={currentPage >= Math.ceil(data.total / 10)}
                     />
                 </Pagination.Item>
