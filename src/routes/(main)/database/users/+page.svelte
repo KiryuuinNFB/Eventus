@@ -24,6 +24,10 @@
     let searchRoom: string;
     let searchText: string;
 
+    function handleRowClick(row: any) {
+        alert(row.username)
+    }
+
     function updateFetch(
         newPage: number,
         filterGrade?: string,
@@ -98,8 +102,12 @@
     let createRoom: string;
 </script>
 
-<div class="text-4xl">ข้อมูลผู้ใช้</div>
-<div class="m-4">
+<div>
+   <h1 class="text-4xl font-[Sarabun] m-4">
+      ข้อมูลผู้ใช้
+   </h1>
+</div>
+<div class="m-4 font-[sarabun]">
     <form class="flex flex-row gap-2">
         <div>
             <Label for="search">ค้นหาในฐานข้อมูล</Label>
@@ -130,8 +138,8 @@
     </form>
 </div>
 
-<div class="flex flex-row justify-center gap-4 m-4">
-    <DataTable data={data.data} {columns} />
+<div class="flex flex-row justify-center gap-4 m-4 font-[sarabun]">
+    <DataTable data={data.data} {columns} onRowClick={handleRowClick}/>
 
     <Card.Root>
         <Card.Header>
@@ -217,7 +225,7 @@
     </Card.Root>
 </div>
 
-<div class="flex flex-row justify-center fixed bottom-8">
+<div class="flex flex-row justify-center fixed bottom-8 font-[sarabun]">
     <Pagination.Root count={data.total} perPage={10} class="">
         {#snippet children({ pages, currentPage })}
             <Pagination.Content>
