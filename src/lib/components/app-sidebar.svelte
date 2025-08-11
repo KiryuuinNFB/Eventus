@@ -1,6 +1,5 @@
 <script lang="ts">
     import * as Sidebar from "$lib/components/ui/sidebar/index.js";
-    import { Header } from "./ui/alert-dialog";
 
     const items = [
         {
@@ -30,7 +29,6 @@
     <Sidebar.Content>
         <Sidebar.Group>
             <Sidebar.GroupLabel>
-                
                     เมนู
                 
                

@@ -10,7 +10,7 @@
     ];
 
     $: triggerContent =
-        role.find((f) => f.value === value)?.label ?? "ตำแหน่ง";
+        role.find((f) => f.value === value)?.label ?? "เลือก";
 </script>
 
 <Select.Root type="single" name="role" bind:value>

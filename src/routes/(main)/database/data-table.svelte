@@ -27,7 +27,7 @@
     }
 </script>
 
-<div class="rounded-md border min-w-[50vw] font-[sarabun]">
+<div class="rounded-md border min-w-[50vw] font-[sarabun] border-ring">
     <Table.Root>
         <Table.Header>
             {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}

@@ -79,7 +79,7 @@
 
 <div class="flex flex-row justify-center gap-4 m-4 font-[sarabun]">
     <DataTable data={data.data} {columns} />
-    <Card.Root>
+    <Card.Root class="flex bg-card border-ring">
         <Card.Header>
             <Card.Title>เพิ่มข้อมูล</Card.Title>
         </Card.Header>
@@ -156,7 +156,7 @@
     </Card.Root>
 </div>
 
-<div class="flex flex-row justify-center fixed bottom-8 font-[sarabun]">
+<div class="flex flex-row justify-center fixed bottom-8 font-[sarabun] backdrop-blur-xs border border-ring rounded-md p-2 gap-2">
     <Pagination.Root count={data.total} perPage={10} class="">
         {#snippet children({ pages, currentPage })}
             <Pagination.Content>
