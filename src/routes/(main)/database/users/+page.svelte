@@ -13,8 +13,10 @@
     import { Input } from "$lib/components/ui/input/index.js";
     import { Label } from "$lib/components/ui/label/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
+    import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
+    import { Badge } from "$lib/components/ui/badge/index.js";
 
-    import { Plus, PencilLine, Search } from "@lucide/svelte";
+    import { Plus, PencilLine, Search, Check, X } from "@lucide/svelte";
 
     export let data;
 
@@ -25,14 +27,24 @@
     let searchText: string;
 
     let selectedStudent: string = "";
+    let fetchedStudentData: any = {}
 
     const getStudent = async (student: string) => {
-        
-    }
+        const res = await fetch(`/api/user/completion/${student}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: data.token,
+            },
+        });
 
-    function handleRowClick(row: any) {
-        selectedStudent = row.username
+        return res.json()
+    };
 
+    const handleRowClick = async (row: any) => {
+        selectedStudent = row.username;
+        const studentData = await getStudent(selectedStudent)
+        fetchedStudentData = studentData
     }
 
     function updateFetch(
@@ -239,26 +251,53 @@
     </div>
     <div class="flex flex-row m-4 font-[sarabun]">
         <Card.Root class="flex bg-card border-ring w-full min-h-128">
-        {#if selectedStudent == ""}
-            <Card.Content class="text-center text-xl text-muted-foreground">
-                กรุณาเลือกนักเรียน
-            </Card.Content>
-        {:else}
-             <Card.Header>
-                <Card.Title>ข้อมูล</Card.Title>
-            </Card.Header>
-            <Card.Content>
-
-            </Card.Content>
-            <Card.Footer>
-
-            </Card.Footer>
-        {/if}
+            {#if !selectedStudent}
+                <Card.Content class="text-center text-xl text-muted-foreground">
+                    กรุณาเลือกนักเรียน
+                </Card.Content>
+            {:else}
+                <Card.Header>
+                    <Card.Title>ข้อมูล {fetchedStudentData.username}</Card.Title>
+                </Card.Header>
+                <Card.Content>
+                    <div>
+                        {fetchedStudentData.prefix} {fetchedStudentData.name} {fetchedStudentData.surname} ม.{fetchedStudentData.grade}/{fetchedStudentData.room}
+                    </div>
+                    <div>
+                        <ScrollArea class="h-72 w-48 rounded-md border">
+                            {#each fetchedStudentData.events as events}
+                               <div class="text-lg flex flex-row gap-2">
+                                    {#if events.completed == true}
+                                        <Badge
+                                            class="bg-emerald-200 text-emerald-700 border-emerald-700 m-1 w-8 h-8"
+                                        >
+                                            <Check size={8} />
+                                        </Badge>
+                                    {:else}
+                                        <Badge
+                                            class="bg-rose-200 text-rose-700 border-rose-700 m-1 w-8 h-8"
+                                        >
+                                            <X size={8} />
+                                        </Badge>
+                                    {/if}
+                                    <p>
+                                        {events.name}
+                                    </p>
+                                    
+                                </div>
+                            {/each}
+                        </ScrollArea>
+                    </div>
+                </Card.Content>
+                <Card.Footer></Card.Footer>
+            {/if}
         </Card.Root>
     </div>
 </div>
 
-<div class="flex flex-row justify-center fixed bottom-8 font-[sarabun] backdrop-blur-xs border border-ring rounded-md p-2 gap-2">
+<div
+    class="flex flex-row justify-center fixed bottom-8 font-[sarabun] backdrop-blur-xs border border-ring rounded-md p-2 gap-2"
+>
     <Pagination.Root count={data.total} perPage={10} class="">
         {#snippet children({ pages, currentPage })}
             <Pagination.Content>
