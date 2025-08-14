@@ -147,15 +147,7 @@
                             >
                                 <Stamp /> ตรวจฐาน
                             </Button>
-                            <Button
-                                variant="default"
-                                class="border-1 border-teal-800 duration-300 text-teal-800 bg-teal-200 hover:bg-teal-500"
-                                onclick={() => {
-                                    navigate("dashboard");
-                                }}
-                            >
-                                <ChartBarBig /> สถิติ
-                            </Button>
+            
                         </div>
                     {:else}
                         <div></div>
