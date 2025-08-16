@@ -1,7 +1,6 @@
 <script lang="ts">
-    
     import Heading from "../../../head.svelte";
-    import * as Tabs from "$lib/components/ui/tabs/index.js";
+    import * as Alert from "$lib/components/ui/alert/index.js";
     import home from "$lib/assets/home.png";
     import * as Card from "$lib/components/ui/card/index.js";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
@@ -117,9 +116,9 @@
                     <Sheet.Description>
                         Authenticated Log in Checker for Eventus
                     </Sheet.Description>
-                    
+
                     {#if data.role == "ADMIN"}
-                    <Separator />
+                        <Separator />
                         <div
                             class="flex flex-row text-left justify-center gap-2"
                         >
@@ -146,15 +145,6 @@
                                 }}
                             >
                                 <Stamp /> ตรวจฐาน
-                            </Button>
-                            <Button
-                                variant="default"
-                                class="border-1 border-teal-800 duration-300 text-teal-800 bg-teal-200 hover:bg-teal-500"
-                                onclick={() => {
-                                    navigate("dashboard");
-                                }}
-                            >
-                                <ChartBarBig /> สถิติ
                             </Button>
                         </div>
                     {:else}
@@ -209,7 +199,7 @@
                     {data.name}
                     {data.surname}</Card.Title
                 >
-                <div class="justify-between flex flex-row ">
+                <div class="justify-between flex flex-row">
                     {#if data.role == "ADMIN"}
                         <Badge
                             class="bg-amber-200 text-amber-700 border-amber-700 m-4"
@@ -259,6 +249,22 @@
                         <div></div>
                     {/if}
                 </div>
+                {#if data.doneNum >= threshold}
+                    <Alert.Root
+                        class="bg-indigo-200 text-indigo-700 border-indigo-700 m-4"
+                    >
+                        <Alert.Title>คุณได้รับเกียรติบัตรแล้ว</Alert.Title>
+                        <Alert.Description
+                            class="text-indigo-500 flex flex-row text-left"
+                        >
+                            กด <Menu /> แล้วไปที่ "เกียรติบัตร" เพื่อรับเกียรติบัตร
+                        </Alert.Description>
+                    </Alert.Root>
+                {:else}
+                <div>
+                    
+                </div>
+                {/if}
             </Card.Header>
             <Card.Content>
                 <div>
