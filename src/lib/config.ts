@@ -1,6 +1,4 @@
-// Use dynamic public env for runtime
-import { env } from '$env/dynamic/public';
+const HOSTNAME = 'http://127.0.0.1';
 
-const HOSTNAME = env.PUBLIC_HOSTNAME;
-export const API_ELYSIA = `${HOSTNAME}:${env.PUBLIC_API_PORT}`;
-export const PRISMA_STUDIO = `${HOSTNAME}:${env.PUBLIC_PRISMA_PORT}`;
+export const API_ELYSIA   = `${HOSTNAME}:8001`;
+export const PRISMA_STUDIO = `${HOSTNAME}:5555`;
