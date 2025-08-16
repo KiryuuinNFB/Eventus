@@ -1,4 +1,6 @@
-const HOSTNAME = "http://43.229.79.165"
+// Use dynamic public env for runtime
+import { env } from '$env/dynamic/public';
 
-export const API_ELYSIA = `${HOSTNAME}:8000`
-export const PRISMA_STUDIO = `${HOSTNAME}:5555`
+const HOSTNAME = env.PUBLIC_HOSTNAME;
+export const API_ELYSIA = `${HOSTNAME}:${env.PUBLIC_API_PORT}`;
+export const PRISMA_STUDIO = `${HOSTNAME}:${env.PUBLIC_PRISMA_PORT}`;
