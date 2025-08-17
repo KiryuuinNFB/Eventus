@@ -77,7 +77,7 @@
                             <Input
                                 id="password"
                                 type="password"
-                                placeholder="รหัสผ่าน"
+                                placeholder="ห้อง+เลขที่"
                                 class="max-w-xs border-ring"
                                 bind:value={password}
                             />
