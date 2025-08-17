@@ -250,20 +250,33 @@
                     {/if}
                 </div>
                 {#if data.doneNum >= threshold}
-                    <Alert.Root
-                        class="bg-indigo-200 text-indigo-700 border-indigo-700 m-4"
-                    >
-                        <Alert.Title>คุณได้รับเกียรติบัตรแล้ว</Alert.Title>
-                        <Alert.Description
-                            class="text-indigo-500 flex flex-row text-left"
-                        >
-                            กด <Menu /> แล้วไปที่ "เกียรติบัตร" เพื่อรับเกียรติบัตร
-                        </Alert.Description>
-                    </Alert.Root>
-                {:else}
-                <div>
                     
-                </div>
+                        <Alert.Root
+                            class="bg-indigo-200 text-indigo-700 border-indigo-700 m-1 p-1 gap-2"
+                        >
+                            <Alert.Title>คุณได้รับเกียรติบัตรแล้ว</Alert.Title>
+                            <Alert.Description
+                                class="text-indigo-500 flex flex-row text-left"
+                            >
+                                กด <Menu /> แล้วไปที่ "เกียรติบัตร" เพื่อรับเกียรติบัตร
+                            </Alert.Description>
+                        </Alert.Root>
+                        <Alert.Root
+                            class="bg-pink-200 text-pink-700 border-pink-700 m-1 p-1 gap-2"
+                            onclick={() => {
+                                window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSd08sHhKnP5YeiEThoXvZKneawxka6kV6aYgMn33fEki2r09A/viewform?usp=dialog"
+                            }}
+                        >
+                            <Alert.Title>แบบสอบถามความพึงพอใจ</Alert.Title>
+                            <Alert.Description
+                                class="text-pink-500 flex flex-row text-left"
+                            >
+                                คลิกที่นี่เพื่อทำแบบสอบถามความพึงพอใจของระบบ
+                            </Alert.Description>
+                        </Alert.Root>
+                    
+                {:else}
+                    <div></div>
                 {/if}
             </Card.Header>
             <Card.Content>

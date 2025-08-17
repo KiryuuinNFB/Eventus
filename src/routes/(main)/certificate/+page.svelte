@@ -3,7 +3,7 @@
 	import Heading from "../../head.svelte"
 
     import { Button } from "$lib/components/ui/button/index.js";
-    import { House } from "@lucide/svelte";
+    import { House, Download } from "@lucide/svelte";
 
     import { goto } from "$app/navigation";
 
@@ -12,6 +12,22 @@
     const home = () => {
         goto(`/user/${data.user}`);
     };
+
+
+    const downloadCert = async () => {
+        const res = await fetch(`/api/cert/${data.user}`);
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `cert-${data.user}.png`; // filename
+        link.click();
+
+        URL.revokeObjectURL(url);
+    };
+
+    
 
 </script>
 
@@ -31,8 +47,11 @@
             >
         </div>
         
-        <div class="flex flex-col max-w-[400px] justify-self-center">
-            <img src={"/api/cert"} alt="cert" width="800" class="mt-16"/>
+        <div class="flex flex-col max-w-[400px] justify-around">
+            <img src={"/api/cert"} alt="cert" width="800" class="mt-16 mb-4"/>
+            <Button onclick={downloadCert} variant="default" class="w-48 transition border-1 border-indigo-600 duration-300 text-indigo-600 bg-indigo-200 hover:bg-indigo-400"><Download />ดาวน์โหลดเกียรติบัตร</Button>
         </div>
+        
     </div>
+    
 </div>
