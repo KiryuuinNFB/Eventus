@@ -29,7 +29,7 @@
 
     export let data;
 
-    let threshold: number = Math.round(data.baseNum / 2);
+    let threshold: number = 3;
 
     let qrcode: string = generateQrData();
 
