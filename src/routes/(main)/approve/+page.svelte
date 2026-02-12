@@ -2,6 +2,171 @@
     let sitetitle = "ยืนยันฐาน";
     import Heading from "../../head.svelte";
 
+    import { onMount } from "svelte";
+    import * as faceapi from "face-api.js";
+
+    import { toast } from "svelte-sonner";
+
+    async function loadModels() {
+        const url = "/models";
+
+        await faceapi.nets.ssdMobilenetv1.loadFromUri(url);
+        await faceapi.nets.faceLandmark68Net.loadFromUri(url);
+        await faceapi.nets.faceRecognitionNet.loadFromUri(url);
+
+        console.log("Models loaded");
+    }
+
+    let video: HTMLVideoElement | null = null;
+
+    let overlay: HTMLCanvasElement | null = null;
+
+    let faceStream: MediaStream | null = null;
+    let faceTimer: any = null;
+
+    let labeledDescriptors: faceapi.LabeledFaceDescriptors[] = [];
+
+    let detectedUser = $state<string | null>(null);
+
+    let matcher: faceapi.FaceMatcher;
+
+    async function loadKnownFaces() {
+        const students = ["22621", "22588"]; // add more IDs here
+
+        const result: faceapi.LabeledFaceDescriptors[] = [];
+
+        for (const id of students) {
+            const descriptors: Float32Array[] = [];
+
+            // how many photos per student
+            for (let i = 1; i <= 2; i++) {
+                try {
+                    const img = await faceapi.fetchImage(
+                        `/faces/${id}/${i}.jpg`,
+                    );
+
+                    const detection = await faceapi
+                        .detectSingleFace(img)
+                        .withFaceLandmarks()
+                        .withFaceDescriptor();
+
+                    if (detection) {
+                        descriptors.push(detection.descriptor);
+                    }
+                } catch (err) {
+                    console.log(`Missing image: ${id}/${i}.jpg`);
+                }
+            }
+
+            if (descriptors.length > 0) {
+                result.push(
+                    new faceapi.LabeledFaceDescriptors(id, descriptors),
+                );
+            }
+        }
+
+        labeledDescriptors = result;
+
+        console.log("Faces loaded:", result);
+        matcher = new faceapi.FaceMatcher(labeledDescriptors, 0.5);
+    }
+
+    async function startCamera() {
+        faceStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+        });
+        if (!video) return;
+
+        video.srcObject = faceStream;
+        await video.play();
+
+        if (overlay && video) {
+            const rect = video.getBoundingClientRect();
+
+            overlay.width = rect.width;
+            overlay.height = rect.height;
+        }
+    }
+
+    function stopScan() {
+        aiscanning = false;
+
+        if (faceTimer) clearTimeout(faceTimer);
+
+        if (faceStream) {
+            faceStream.getTracks().forEach((t) => t.stop());
+            faceStream = null;
+        }
+        if (!video) return;
+        video.srcObject = null;
+    }
+
+    function scanLoop() {
+        if (!aiscanning) return;
+
+        faceTimer = setTimeout(async () => {
+            if (!video) return;
+            const result = await faceapi
+                .detectSingleFace(video)
+                .withFaceLandmarks()
+                .withFaceDescriptor();
+
+            if (overlay && video) {
+                const ctx = overlay.getContext("2d");
+                if (!ctx) return;
+
+                ctx.clearRect(0, 0, overlay.width, overlay.height);
+
+                if (result) {
+                    const dims = faceapi.matchDimensions(overlay, video, true);
+                    const resized = faceapi.resizeResults(result, dims);
+
+                    faceapi.draw.drawDetections(overlay, resized);
+                    faceapi.draw.drawFaceLandmarks(overlay, resized);
+                }
+            }
+            if (result) {
+                const match = matcher.findBestMatch(result.descriptor);
+
+                if (match.label !== "unknown") {
+                    detectedUser = match.label;
+                    console.log("Detected:", match.label);
+                }
+            }
+
+            scanLoop();
+        }, 800);
+    }
+
+    async function startScan() {
+        await startCamera();
+
+        aiscanning = true;
+
+        scanLoop();
+    }
+
+    onMount(async () => {
+        await loadModels();
+        await loadKnownFaces();
+    });
+
+    let lastApproved = "";
+
+    $effect(() => {
+        if (detectedUser && detectedUser !== lastApproved) {
+            lastApproved = detectedUser;
+            user = detectedUser;
+            insta_approve();
+        }
+    });
+
+    $effect(() => {
+        if (!detectedUser) {
+            lastApproved = "";
+        }
+    });
+
     import * as Card from "$lib/components/ui/card/index.js";
     import * as Tabs from "$lib/components/ui/tabs/index.js";
     import { Input } from "$lib/components/ui/input/index.js";
@@ -20,7 +185,6 @@
         AlertDialogTrigger,
     } from "$lib/components/ui/alert-dialog";
 
-    import { onMount } from "svelte";
     import { Html5Qrcode } from "html5-qrcode";
     import { House } from "@lucide/svelte";
 
@@ -51,6 +215,8 @@
     );
 
     let scanning: boolean = $state(false);
+    let aiscanning: boolean = $state(false);
+
     let showalert: boolean = $state(false);
     let showalert2: boolean = $state(false);
 
@@ -120,6 +286,38 @@
         showalert2 = true;
     };
 
+    const insta_approve_qr = async () => {
+        if (!check_qr_age(time)) {
+            toast("QR Code หมดอายุ");
+            return;
+        }
+        const res = await approve();
+        if (res.status !== 200) {
+            if (res.status === 404) {
+                toast("ไม่พบผู้ใช้");
+                return;
+            }
+            toast("เคยยืนยันไปแล้ว");
+
+            return;
+        }
+        toast("ยืนยันนักเรียนเรียบร้อยแล้ว");
+    };
+
+    const insta_approve = async () => {
+        const res = await approve();
+        if (res.status !== 200) {
+            if (res.status === 404) {
+                toast("ไม่พบผู้ใช้");
+                return;
+            }
+            toast("เคยยืนยันไปแล้ว");
+
+            return;
+        }
+        toast("ยืนยันนักเรียนเรียบร้อยแล้ว");
+    };
+
     function init() {
         html5Qrcode = new Html5Qrcode("reader");
     }
@@ -133,7 +331,7 @@
                     width: 250,
                     height: 250,
                 },
-                aspectRatio: 1
+                aspectRatio: 1,
             },
             onScanSuccess,
             onScanFailure,
@@ -147,7 +345,8 @@
     }
 
     function onScanSuccess(decodedText: any, decodedResult: any) {
-        showalert = true;
+        //showalert = true;
+        insta_approve_qr();
         const parsedText = JSON.parse(decodedText);
         scanres = parsedText;
         user = scanres.id;
@@ -169,9 +368,7 @@
 <div class="min-h-screen bg-border font-[sarabun]">
     <div>
         <div class="flex flex-row justify-around">
-            <div
-                class="text-center absolute top-0 p-2 flex flex-row "
-            >
+            <div class="text-center absolute top-0 p-2 flex flex-row">
                 <Button
                     onclick={home}
                     variant="default"
@@ -189,20 +386,18 @@
                 >
                     <Tabs.Trigger value="scan">Scan</Tabs.Trigger>
                     <Tabs.Trigger value="manual">Manual</Tabs.Trigger>
+                    <Tabs.Trigger value="ai">Face Recognize</Tabs.Trigger>
                 </Tabs.List>
             </div>
 
             <Tabs.Content value="scan">
                 <div>
-                    <h1 class="text-2xl flex justify-around mt-25">สแกนกิจกรรม</h1>
+                    <h1 class="text-2xl flex justify-around mt-25">
+                        สแกนกิจกรรม
+                    </h1>
                 </div>
                 <div class="flex flex-row justify-around mt-4">
-                    
-                    <reader
-                        id="reader"
-                        class="bg-slate-950"
-                    >
-                    </reader>
+                    <reader id="reader" class="bg-slate-950"> </reader>
                 </div>
                 <div class="p-2 flex flex-row justify-around">
                     {#if scanning}
@@ -219,30 +414,28 @@
                         >
                     {/if}
                     <Select.Root type="single" bind:value>
-                                    <Select.Trigger
-                                        class="w-[180px] border-ring"
+                        <Select.Trigger class="w-[180px] border-ring">
+                            <div
+                                class="truncate overflow-hidden whitespace-nowrap w-full"
+                            >
+                                {triggerContent}
+                            </div>
+                        </Select.Trigger>
+                        <Select.Content id="bases">
+                            <Select.Group>
+                                <Select.Label>กิจกรรม</Select.Label>
+                                {#each data.bases as base}
+                                    <Select.Item
+                                        value={base.id.toString()}
+                                        label={base.name}
+                                        class="w-[180px] font-[sarabun]"
                                     >
-                                        <div
-                                            class="truncate overflow-hidden whitespace-nowrap w-full"
-                                        >
-                                            {triggerContent}
-                                        </div>
-                                    </Select.Trigger>
-                                    <Select.Content id="bases">
-                                        <Select.Group>
-                                            <Select.Label>กิจกรรม</Select.Label>
-                                            {#each data.bases as base}
-                                                <Select.Item
-                                                    value={base.id.toString()}
-                                                    label={base.name}
-                                                    class="w-[180px] font-[sarabun]"
-                                                >
-                                                    {base.name}
-                                                </Select.Item>
-                                            {/each}
-                                        </Select.Group>
-                                    </Select.Content>
-                                </Select.Root>
+                                        {base.name}
+                                    </Select.Item>
+                                {/each}
+                            </Select.Group>
+                        </Select.Content>
+                    </Select.Root>
                 </div>
             </Tabs.Content>
             <Tabs.Content value="manual" class="text-center">
@@ -298,12 +491,77 @@
                         </Card.Content>
                         <Card.Footer class="p-2 justify-center flex flex-row">
                             <Button
-                                onclick={manualApprove}
+                                onclick={insta_approve}
                                 class="transition border-1 border-amber-800 duration-300 text-amber-800 bg-amber-200 hover:bg-amber-500"
                                 >Approve</Button
                             >
                         </Card.Footer>
                     </Card.Root>
+                </div>
+            </Tabs.Content>
+
+            <Tabs.Content value="ai">
+                <div>
+                    <h1 class="text-2xl flex justify-around mt-25">
+                        ตรวจจากใบหน้า
+                    </h1>
+                </div>
+                <div class="relative w-[90vw] max-w-md mx-auto aspect-video">
+                    <video
+                        bind:this={video}
+                        autoplay
+                        playsinline
+                        muted
+                        class="w-full h-full object-cover rounded-lg bg-slate-950"
+                    ></video>
+
+                    <canvas
+                        bind:this={overlay}
+                        class="absolute inset-0 pointer-events-none"
+                    ></canvas>
+                </div>
+                <div class="p-2 flex flex-row justify-around">
+                    {#if aiscanning}
+                        <Button
+                            onclick={stopScan}
+                            class="transition border-1 border-rose-800 duration-300 text-rose-800 bg-rose-200 hover:bg-rose-500"
+                            >Stop</Button
+                        >
+                    {:else}
+                        <Button
+                            onclick={startScan}
+                            class="transition border-1 border-emerald-800 duration-300 text-emerald-800 bg-emerald-200 hover:bg-emerald-500"
+                            >Start</Button
+                        >
+                    {/if}
+                    <Select.Root type="single" bind:value>
+                        <Select.Trigger class="w-[180px] border-ring">
+                            <div
+                                class="truncate overflow-hidden whitespace-nowrap w-full"
+                            >
+                                {triggerContent}
+                            </div>
+                        </Select.Trigger>
+                        <Select.Content id="bases">
+                            <Select.Group>
+                                <Select.Label>กิจกรรม</Select.Label>
+                                {#each data.bases as base}
+                                    <Select.Item
+                                        value={base.id.toString()}
+                                        label={base.name}
+                                        class="w-[180px] font-[sarabun]"
+                                    >
+                                        {base.name}
+                                    </Select.Item>
+                                {/each}
+                            </Select.Group>
+                        </Select.Content>
+                    </Select.Root>
+                    {#if detectedUser}
+                        <p class="mt-4 text-green-600">
+                            Detected: {detectedUser}
+                        </p>
+                    {/if}
                 </div>
             </Tabs.Content>
         </Tabs.Root>
@@ -362,6 +620,17 @@
     reader {
         width: 90vw;
         height: 90vw;
-        background-color: rgb(0, 0, 0);
+        border-radius: 12px;
+    }
+
+    video {
+        width: 90vw;
+        height: 90vw;
+        border-radius: 12px;
+    }
+
+    canvas {
+        width: 90vw;
+        height: 90vw;
     }
 </style>
