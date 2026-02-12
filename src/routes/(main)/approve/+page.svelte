@@ -557,12 +557,13 @@
                             </Select.Group>
                         </Select.Content>
                     </Select.Root>
-                    {#if detectedUser}
+                    
+                </div>
+                {#if detectedUser}
                         <p class="mt-4 text-green-600">
                             Detected: {detectedUser}
                         </p>
                     {/if}
-                </div>
             </Tabs.Content>
         </Tabs.Root>
 
