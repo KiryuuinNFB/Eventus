@@ -31,7 +31,7 @@
     let matcher: faceapi.FaceMatcher;
 
     async function loadKnownFaces() {
-        const students = ["22621", "22588"]; // add more IDs here
+        const students = ["22621", "22588", "22133", "22064"]; // add more IDs here
 
         const result: faceapi.LabeledFaceDescriptors[] = [];
 
